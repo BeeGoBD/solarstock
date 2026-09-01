@@ -683,20 +683,20 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
         </div>
 
         {/* ========================================================================= */}
-        {/* 3RD IMAGE / 3RD SECTION: Pure Video Player (Autoplay, Muted, Loop, No UI/Title) */}
+        {/* 3RD IMAGE / 3RD SECTION: SolarStock ESS 5-in-1 Video Showcase              */}
         {/* ========================================================================= */}
         <div className="relative rounded-2xl overflow-hidden bg-black border border-neutral-800 shadow-md hover:shadow-2xl hover:border-cyan-500/60 transition-all duration-300 min-h-[190px] sm:min-h-[210px] h-[190px] sm:h-[210px] w-full flex items-center justify-center group">
-          <div className="absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center pointer-events-none">
+          <div className="absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center bg-black">
             <iframe
-              src="https://www.youtube.com/embed/aJyEyZ3uZsU?autoplay=1&mute=1&loop=1&playlist=aJyEyZ3uZsU&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&iv_load_policy=3&disablekb=1&fs=0"
-              title="Solar System IPS Setup Video Demo"
-              className="w-[125%] h-[135%] min-w-[120%] min-h-[130%] object-cover border-0 scale-125 sm:scale-130 pointer-events-none"
+              src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F889945084161954%2F&show_text=false&autoplay=true&muted=true&width=500&height=280"
+              title="SolarStock ESS 5-in-1 1000W 2kWh Video Demo"
+              className="w-full h-full min-w-full min-h-full object-cover border-0 scale-105"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
             />
           </div>
-          {/* Transparent protective shield to ensure pure ambient video playback without click pauses */}
-          <div className="absolute inset-0 z-10 pointer-events-auto bg-transparent" />
+          {/* Transparent protective shield for clean ambient playback */}
+          <div className="absolute inset-0 z-10 pointer-events-none bg-transparent" />
         </div>
 
       </div>
