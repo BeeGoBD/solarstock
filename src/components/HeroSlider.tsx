@@ -46,24 +46,24 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
   const [banner2Hovered, setBanner2Hovered] = useState(false);
   const banner2TimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Top Hero Carousel timer (6 seconds)
+  // Top Hero Carousel timer (faster 4.2 seconds)
   useEffect(() => {
     if (isPaused) return;
 
     slideTimerRef.current = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % totalSlides);
-    }, 6000);
+    }, 4200);
 
     return () => {
       if (slideTimerRef.current) clearInterval(slideTimerRef.current);
     };
   }, [isPaused, totalSlides]);
 
-  // 2nd Image (Left Sub-Banner) automatic morphing animation cycle (every 3 seconds)
+  // 2nd Image (Left Sub-Banner) automatic morphing animation cycle (faster 2.3 seconds)
   useEffect(() => {
     banner2TimerRef.current = setInterval(() => {
       setBanner2ActiveIndex((prev) => (prev + 1) % 3);
-    }, 3200);
+    }, 2300);
 
     return () => {
       if (banner2TimerRef.current) clearInterval(banner2TimerRef.current);
@@ -222,7 +222,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
             <div className="relative z-10 w-full flex items-end justify-center gap-1.5 sm:gap-3 md:gap-4 mt-3 sm:mt-4 mb-1 max-w-3xl px-1">
               
               {/* SIDE 1 (Far Left Flank): Portable Solar Generator Power Station */}
-              <div className="hidden sm:block relative w-20 sm:w-24 md:w-28 transform -rotate-12 hover:rotate-0 transition-transform duration-300 drop-shadow-xl opacity-90 hover:opacity-100">
+              <div className="hidden sm:block relative w-20 sm:w-24 md:w-28 transform -rotate-2 hover:rotate-0 transition-transform duration-200 drop-shadow-lg opacity-90 hover:opacity-100">
                 <div className="rounded-xl sm:rounded-2xl bg-gradient-to-br from-neutral-900 via-slate-900 to-neutral-950 p-1.5 border border-amber-500/30 shadow-lg">
                   <div className="w-full aspect-[4/5] rounded-lg bg-gradient-to-b from-neutral-800 to-neutral-950 p-1.5 flex flex-col justify-between border border-neutral-700">
                     <div className="flex items-center justify-between">
@@ -247,7 +247,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
               </div>
 
               {/* SIDE 2 (Inner Left Flank): Smart Solar Screen / Hybrid Controller */}
-              <div className="relative w-22 sm:w-30 md:w-34 transform -rotate-6 hover:rotate-0 transition-transform duration-300 drop-shadow-xl">
+              <div className="relative w-22 sm:w-30 md:w-34 transform hover:scale-[1.02] transition-transform duration-200 drop-shadow-lg">
                 <div className="rounded-xl sm:rounded-2xl bg-gradient-to-br from-indigo-950 via-slate-900 to-black p-1.5 sm:p-2 border border-indigo-400/40 shadow-xl shadow-indigo-500/15">
                   <div className="w-full aspect-[4/5] rounded-lg bg-gradient-to-b from-indigo-900/80 to-neutral-950 p-1.5 flex flex-col justify-between border border-indigo-500/30">
                     <div className="flex items-center justify-between">
@@ -267,7 +267,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
               </div>
 
               {/* CENTER (Flagship Centerpiece): Felicity / Growatt Orange/Gold LiFePO4 Inverter */}
-              <div className="relative w-28 sm:w-40 md:w-46 z-20 transform scale-100 hover:scale-105 transition-transform duration-300 drop-shadow-2xl">
+              <div className="relative w-28 sm:w-40 md:w-46 z-20 transform scale-100 hover:scale-[1.03] transition-transform duration-200 drop-shadow-xl">
                 <div className="rounded-xl sm:rounded-2xl bg-gradient-to-b from-amber-500 via-orange-600 to-amber-700 p-2 sm:p-2.5 border-2 border-amber-300/80 shadow-xl shadow-amber-500/30">
                   <div className="w-full aspect-[3/4] rounded-lg sm:rounded-xl bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950 p-2 flex flex-col justify-between border border-amber-400/50">
                     <div className="flex items-center justify-center gap-1.5 pt-0.5">
@@ -306,7 +306,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
               </div>
 
               {/* SIDE 3 (Inner Right Flank): Bifacial Pure Sine Wave Inverter */}
-              <div className="relative w-22 sm:w-30 md:w-34 transform rotate-6 hover:rotate-0 transition-transform duration-300 drop-shadow-xl">
+              <div className="relative w-22 sm:w-30 md:w-34 transform hover:scale-[1.02] transition-transform duration-200 drop-shadow-lg">
                 <div className="rounded-xl sm:rounded-2xl bg-gradient-to-br from-slate-200 via-neutral-100 to-slate-300 p-1.5 sm:p-2 border border-white shadow-xl shadow-sky-500/15">
                   <div className="w-full aspect-[4/5] rounded-lg bg-gradient-to-b from-slate-900 to-neutral-950 p-1.5 flex flex-col justify-between border border-slate-700">
                     <div className="flex flex-col items-center gap-0.5 pt-0.5">
@@ -324,7 +324,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
               </div>
 
               {/* SIDE 4 (Far Right Flank): Tier-1 Monocrystalline Bifacial Solar Panel */}
-              <div className="hidden sm:block relative w-20 sm:w-24 md:w-28 transform rotate-12 hover:rotate-0 transition-transform duration-300 drop-shadow-xl opacity-90 hover:opacity-100">
+              <div className="hidden sm:block relative w-20 sm:w-24 md:w-28 transform rotate-2 hover:rotate-0 transition-transform duration-200 drop-shadow-lg opacity-90 hover:opacity-100">
                 <div className="rounded-xl sm:rounded-2xl bg-gradient-to-br from-slate-800 via-neutral-900 to-slate-950 p-1.5 border border-sky-400/40 shadow-lg">
                   <div className="w-full aspect-[4/5] rounded-lg bg-gradient-to-b from-blue-950 to-neutral-950 p-1.5 flex flex-col justify-between border border-sky-600/50">
                     <div className="flex items-center justify-between">
@@ -606,37 +606,34 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
           <div className="relative z-10 w-full my-2 h-24 sm:h-28 flex items-center justify-center overflow-hidden">
             {banner2Items.map((item, index) => {
               const isActive = banner2ActiveIndex === index;
-              const isPrev = (banner2ActiveIndex - 1 + banner2Items.length) % banner2Items.length === index;
               
               return (
                 <div
                   key={item.id}
-                  className={`absolute inset-0 flex items-center justify-center transition-all duration-700 ease-out pointer-events-none ${
+                  className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ease-out pointer-events-none ${
                     isActive
-                      ? 'opacity-100 scale-100 translate-y-0 rotate-0 z-20'
-                      : isPrev
-                      ? 'opacity-0 scale-75 -translate-y-4 -rotate-3 z-10'
-                      : 'opacity-0 scale-125 translate-y-4 rotate-3 z-0'
+                      ? 'opacity-100 scale-100 translate-y-0 z-20'
+                      : 'opacity-0 scale-[0.97] translate-y-1 z-0'
                   }`}
                 >
-                  {/* Outer Orbiting Visual Container that pops in from inside */}
+                  {/* Outer Orbiting Visual Container */}
                   <div className="w-full max-w-sm flex items-center justify-center gap-2 sm:gap-3 px-2">
                     
                     {/* Left Mini Companion Satellite */}
-                    <div className="w-14 sm:w-18 aspect-square rounded-lg bg-neutral-900/90 border border-neutral-700/80 p-1 flex flex-col items-center justify-center text-center shadow-md transform -rotate-6 transition-transform group-hover:rotate-0">
+                    <div className="w-14 sm:w-18 aspect-square rounded-lg bg-neutral-900/90 border border-neutral-700/80 p-1 flex flex-col items-center justify-center text-center shadow-md">
                       <Zap className="w-3.5 h-3.5 text-amber-400 mb-0.5" />
                       <span className="text-[7px] text-neutral-300 font-bold leading-tight line-clamp-1">Pure Sine</span>
                       <span className="text-[6px] text-amber-400 font-mono">0ms Sync</span>
                     </div>
 
-                    {/* Main Morphing Centerpiece Hero (Appears from inside with scaling & glow) */}
-                    <div className={`relative px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-gradient-to-r ${item.accentColor} p-[1.5px] shadow-xl shadow-black/60 transform transition-transform duration-500 ${banner2Hovered ? 'scale-105' : 'scale-100'}`}>
+                    {/* Main Morphing Centerpiece Hero */}
+                    <div className={`relative px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-gradient-to-r ${item.accentColor} p-[1.5px] shadow-xl shadow-black/60 transform transition-transform duration-200 ${banner2Hovered ? 'scale-[1.02]' : 'scale-100'}`}>
                       <div className="bg-neutral-950/95 rounded-[10px] sm:rounded-[14px] px-3 py-1.5 flex items-center gap-2.5 border border-neutral-800">
                         {/* Equipment Visual Icon / Indicator */}
                         <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-neutral-900 border border-amber-400/40 flex items-center justify-center relative shadow-inner">
-                          {item.visualType === 'growatt' && <Zap className="w-5 h-5 text-amber-400 animate-pulse" />}
-                          {item.visualType === 'neozl' && <Sparkles className="w-5 h-5 text-yellow-400 animate-bounce" />}
-                          {item.visualType === 'srne' && <Cpu className="w-5 h-5 text-blue-400 animate-pulse" />}
+                          {item.visualType === 'growatt' && <Zap className="w-5 h-5 text-amber-400" />}
+                          {item.visualType === 'neozl' && <Sparkles className="w-5 h-5 text-yellow-400" />}
+                          {item.visualType === 'srne' && <Cpu className="w-5 h-5 text-blue-400" />}
                           <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 border border-neutral-950 animate-ping" />
                         </div>
 
@@ -656,7 +653,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
                     </div>
 
                     {/* Right Mini Companion Satellite */}
-                    <div className="w-14 sm:w-18 aspect-square rounded-lg bg-neutral-900/90 border border-neutral-700/80 p-1 flex flex-col items-center justify-center text-center shadow-md transform rotate-6 transition-transform group-hover:rotate-0">
+                    <div className="w-14 sm:w-18 aspect-square rounded-lg bg-neutral-900/90 border border-neutral-700/80 p-1 flex flex-col items-center justify-center text-center shadow-md">
                       <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 mb-0.5" />
                       <span className="text-[7px] text-neutral-300 font-bold leading-tight line-clamp-1">SolarCare+</span>
                       <span className="text-[6px] text-emerald-400 font-mono">5Y Warranty</span>
@@ -677,7 +674,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
 
             <button
               type="button"
-              className="bg-amber-400 hover:bg-amber-300 text-neutral-950 px-3.5 py-1 rounded-lg text-[10px] sm:text-xs font-black tracking-wider uppercase shadow-xs transition-all duration-300 group-hover:scale-105 flex items-center gap-1"
+              className="bg-amber-400 hover:bg-amber-300 text-neutral-950 px-3.5 py-1 rounded-lg text-[10px] sm:text-xs font-black tracking-wider uppercase shadow-xs transition-all duration-200 hover:scale-105 flex items-center gap-1"
             >
               <span>{subBanners.leftBanner.buttonText || 'Buy Now'}</span>
               <ArrowRight className="w-3 h-3" />
@@ -686,15 +683,16 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
         </div>
 
         {/* ========================================================================= */}
-        {/* 3RD IMAGE / 3RD SECTION: Pure Video Player (Autoplay from 4:46, Muted, Loop, No UI/Title) */}
+        {/* 3RD IMAGE / 3RD SECTION: Pure Video Player (Autoplay, Muted, Loop, No UI/Title) */}
         {/* ========================================================================= */}
-        <div className="relative rounded-2xl overflow-hidden bg-black border border-neutral-800 shadow-md hover:shadow-2xl hover:border-cyan-500/60 transition-all duration-500 min-h-[190px] sm:min-h-[210px] h-[190px] sm:h-[210px] w-full flex items-center justify-center group">
+        <div className="relative rounded-2xl overflow-hidden bg-black border border-neutral-800 shadow-md hover:shadow-2xl hover:border-cyan-500/60 transition-all duration-300 min-h-[190px] sm:min-h-[210px] h-[190px] sm:h-[210px] w-full flex items-center justify-center group">
           <div className="absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center pointer-events-none">
             <iframe
-              src="https://www.youtube.com/embed/aJyEyZ3uZsU?autoplay=1&mute=1&loop=1&playlist=aJyEyZ3uZsU&start=286&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&iv_load_policy=3&disablekb=1&fs=0&origin=window.location.origin"
-              title="Solar Demo Video"
+              src="https://www.youtube.com/embed/aJyEyZ3uZsU?autoplay=1&mute=1&loop=1&playlist=aJyEyZ3uZsU&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&iv_load_policy=3&disablekb=1&fs=0"
+              title="Solar System IPS Setup Video Demo"
               className="w-[125%] h-[135%] min-w-[120%] min-h-[130%] object-cover border-0 scale-125 sm:scale-130 pointer-events-none"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
             />
           </div>
           {/* Transparent protective shield to ensure pure ambient video playback without click pauses */}
