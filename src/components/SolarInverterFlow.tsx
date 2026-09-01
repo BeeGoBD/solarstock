@@ -97,7 +97,7 @@ export const SolarInverterFlow: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         
         {/* ========================================================================= */}
-        {/* SLIDE 2: FULL BLUE WEATHER — VIBRANT SKY WITH MOVING CLOUDS & SOLAR PV     */}
+        {/* SLIDE 2: MODERN RESIDENTIAL HOUSE WITH ROOFTOP SOLAR FACING THE SUN       */}
         {/* ========================================================================= */}
         <div className="relative rounded-2xl overflow-hidden bg-gradient-to-b from-[#0284c7] via-[#0ea5e9] to-[#38bdf8] border-2 border-sky-300 shadow-xl min-h-[195px] sm:min-h-[220px] h-[195px] sm:h-[220px] w-full flex items-center justify-center select-none group">
           
@@ -110,7 +110,7 @@ export const SolarInverterFlow: React.FC = () => {
           {/* ======================================================================= */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
             {/* Layer 1: High Altitude Soft Cloud (Slow Drift) */}
-            <div className="absolute top-3 left-0 animate-cloud-slow opacity-60">
+            <div className="absolute top-2 left-0 animate-cloud-slow opacity-60">
               <svg width="110" height="42" viewBox="0 0 110 42" fill="none">
                 <path
                   d="M18 36h74a14 14 0 0 0 0-28 20 20 0 0 0-38-6 16 16 0 0 0-26 12 12 12 0 0 0-10 22z"
@@ -120,7 +120,7 @@ export const SolarInverterFlow: React.FC = () => {
             </div>
 
             {/* Layer 2: Mid Altitude Puffy Cumulus Cloud (Medium Drift) */}
-            <div className="absolute top-10 left-[-40px] animate-cloud-medium opacity-75">
+            <div className="absolute top-8 left-[-40px] animate-cloud-medium opacity-75">
               <svg width="135" height="50" viewBox="0 0 135 50" fill="none">
                 <path
                   d="M22 44h90a16 16 0 0 0 0-32 24 24 0 0 0-46-8 18 18 0 0 0-32 14 14 14 0 0 0-12 26z"
@@ -130,7 +130,7 @@ export const SolarInverterFlow: React.FC = () => {
             </div>
 
             {/* Layer 3: Lower Background Fluffy Cloud (Fast Drift) */}
-            <div className="absolute top-24 left-[-80px] animate-cloud-fast opacity-45">
+            <div className="absolute top-18 left-[-80px] animate-cloud-fast opacity-45">
               <svg width="95" height="36" viewBox="0 0 95 36" fill="none">
                 <path
                   d="M15 32h65a12 12 0 0 0 0-24 18 18 0 0 0-34-6 14 14 0 0 0-22 10 10 10 0 0 0-9 20z"
@@ -140,7 +140,7 @@ export const SolarInverterFlow: React.FC = () => {
             </div>
 
             {/* Layer 4: Distant Subtle Wispy Cloud (Slow Drift Staggered) */}
-            <div className="absolute top-5 left-[160px] animate-cloud-slow opacity-40">
+            <div className="absolute top-4 left-[180px] animate-cloud-slow opacity-40">
               <svg width="85" height="30" viewBox="0 0 85 30" fill="none">
                 <path
                   d="M12 26h60a10 10 0 0 0 0-20 15 15 0 0 0-28-4 12 12 0 0 0-20 8 9 9 0 0 0-12 16z"
@@ -150,7 +150,7 @@ export const SolarInverterFlow: React.FC = () => {
             </div>
           </div>
 
-          {/* SVG Sun, Photons & Solar Panel Isometric Stage */}
+          {/* SVG Sun, Photons, House Architecture & Rooftop Solar Stage */}
           <svg className="relative z-10 w-full h-full p-2" viewBox="0 0 420 220" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               {/* Day Mode Brilliant Sun Gradients */}
@@ -163,7 +163,7 @@ export const SolarInverterFlow: React.FC = () => {
               </radialGradient>
               
               <radialGradient id="daySunAura" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#ffffff" stopOpacity="0.8" />
+                <stop offset="0%" stopColor="#ffffff" stopOpacity="0.85" />
                 <stop offset="40%" stopColor="#fde047" stopOpacity="0.5" />
                 <stop offset="70%" stopColor="#f59e0b" stopOpacity="0.25" />
                 <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
@@ -172,8 +172,32 @@ export const SolarInverterFlow: React.FC = () => {
               {/* Day Mode High-Efficiency Monocrystalline Silicon Gradient */}
               <linearGradient id="monoSilCell" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#1e3a8a" />
-                <stop offset="45%" stopColor="#0f172a" />
+                <stop offset="40%" stopColor="#0f172a" />
                 <stop offset="100%" stopColor="#172554" />
+              </linearGradient>
+
+              {/* House Roof Gradient */}
+              <linearGradient id="roofBaseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#334155" />
+                <stop offset="100%" stopColor="#1e293b" />
+              </linearGradient>
+
+              {/* House Facade Gradient */}
+              <linearGradient id="houseFacadeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#f8fafc" />
+                <stop offset="100%" stopColor="#e2e8f0" />
+              </linearGradient>
+
+              {/* House Side Wall Shadow Gradient */}
+              <linearGradient id="houseSideGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#cbd5e1" />
+                <stop offset="100%" stopColor="#94a3b8" />
+              </linearGradient>
+
+              {/* Lawn Grass Landscape Gradient */}
+              <linearGradient id="lawnGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#4ade80" />
+                <stop offset="100%" stopColor="#16a34a" />
               </linearGradient>
 
               {/* Electric Wire Glow Filter */}
@@ -184,10 +208,10 @@ export const SolarInverterFlow: React.FC = () => {
             </defs>
 
             {/* 1. THE BRILLIANT DAY SUN (Top-Left Position) */}
-            <g transform="translate(58, 42)">
+            <g transform="translate(54, 38)">
               {/* Giant Sun Heat Corona Pulses */}
-              <circle cx="0" cy="0" r="46" fill="url(#daySunAura)" className="animate-pulse" />
-              <circle cx="0" cy="0" r="32" fill="url(#daySunAura)" />
+              <circle cx="0" cy="0" r="44" fill="url(#daySunAura)" className="animate-pulse" />
+              <circle cx="0" cy="0" r="30" fill="url(#daySunAura)" />
               
               {/* Rotating Golden Solar Rays */}
               <g className="animate-[spin_16s_linear_infinite]">
@@ -195,9 +219,9 @@ export const SolarInverterFlow: React.FC = () => {
                   <line
                     key={deg}
                     x1="0"
-                    y1={-28}
+                    y1={-26}
                     x2="0"
-                    y2={deg % 45 === 0 ? -44 : -36}
+                    y2={deg % 45 === 0 ? -42 : -34}
                     stroke="#ffffff"
                     strokeWidth={deg % 45 === 0 ? "3" : "1.8"}
                     strokeLinecap="round"
@@ -208,24 +232,24 @@ export const SolarInverterFlow: React.FC = () => {
               </g>
 
               {/* Brilliant Glowing Sun Disc */}
-              <circle cx="0" cy="0" r="22" fill="url(#daySunCore)" />
-              <circle cx="0" cy="0" r="14" fill="#ffffff" opacity="0.95" />
+              <circle cx="0" cy="0" r="20" fill="url(#daySunCore)" />
+              <circle cx="0" cy="0" r="13" fill="#ffffff" opacity="0.95" />
             </g>
 
-            {/* 2. BRIGHT SUNBEAMS & ENERGETIC LIGHT PHOTON BEAMS */}
-            {/* Broad Golden Sunbeam Shroud */}
+            {/* 2. BRIGHT SUNBEAMS & STREAMING LIGHT PHOTON BEAMS TOWARDS THE ROOF */}
+            {/* Broad Golden Sunbeam Shroud Spreading to Roof */}
             <polygon
-              points="60,45 130,190 270,110 90,40"
+              points="54,38 120,135 285,90 85,30"
               fill="url(#daySunAura)"
-              opacity="0.25"
+              opacity="0.28"
             />
 
             {/* Active Streaming Photons Beam 1 */}
             <line
-              x1="76"
-              y1="58"
-              x2="175"
-              y2="120"
+              x1="70"
+              y1="52"
+              x2="155"
+              y2="92"
               stroke="#ffffff"
               strokeWidth="3.5"
               strokeDasharray="8 10"
@@ -235,10 +259,10 @@ export const SolarInverterFlow: React.FC = () => {
             />
             {/* Active Streaming Photons Beam 2 */}
             <line
-              x1="90"
-              y1="52"
-              x2="235"
-              y2="120"
+              x1="82"
+              y1="46"
+              x2="215"
+              y2="88"
               stroke="#fef08a"
               strokeWidth="3"
               strokeDasharray="6 8"
@@ -248,10 +272,10 @@ export const SolarInverterFlow: React.FC = () => {
             />
             {/* Active Streaming Photons Beam 3 */}
             <line
-              x1="66"
-              y1="72"
-              x2="140"
-              y2="148"
+              x1="62"
+              y1="64"
+              x2="135"
+              y2="114"
               stroke="#fde047"
               strokeWidth="2.5"
               strokeDasharray="5 7"
@@ -261,10 +285,10 @@ export const SolarInverterFlow: React.FC = () => {
             />
             {/* Active Streaming Photons Beam 4 */}
             <line
-              x1="96"
-              y1="66"
-              x2="280"
-              y2="135"
+              x1="90"
+              y1="58"
+              x2="260"
+              y2="95"
               stroke="#f59e0b"
               strokeWidth="2.5"
               strokeDasharray="7 9"
@@ -272,81 +296,278 @@ export const SolarInverterFlow: React.FC = () => {
               strokeOpacity="0.8"
               className="animate-dash-fast"
             />
+            {/* Active Streaming Photons Beam 5 */}
+            <line
+              x1="75"
+              y1="60"
+              x2="185"
+              y2="108"
+              stroke="#ffffff"
+              strokeWidth="2.8"
+              strokeDasharray="6 9"
+              strokeLinecap="round"
+              strokeOpacity="0.9"
+              className="animate-dash-fast"
+            />
 
-            {/* 3. MONOCRYSTALLINE PHOTOVOLTAIC SOLAR PANEL (Tilted 3D Isometric View) */}
-            <g transform="translate(130, 85)">
-              
-              {/* Crisp Ground Shadow */}
-              <polygon points="12,108 192,88 238,28 58,48" fill="#0f172a" opacity="0.35" filter="blur(3px)" />
+            {/* 3. GROUND LAWN & LANDSCAPING */}
+            <polygon
+              points="0,185 420,180 420,220 0,220"
+              fill="url(#lawnGrad)"
+              opacity="0.9"
+            />
+            {/* Front walkway / patio */}
+            <polygon
+              points="140,195 210,194 225,220 125,220"
+              fill="#cbd5e1"
+              opacity="0.75"
+            />
+            {/* Garden shrubs around house base */}
+            <circle cx="95" cy="192" r="9" fill="#15803d" />
+            <circle cx="108" cy="190" r="11" fill="#16a34a" />
+            <circle cx="120" cy="193" r="8" fill="#22c55e" />
+            <circle cx="270" cy="190" r="9" fill="#15803d" />
+            <circle cx="282" cy="188" r="10" fill="#16a34a" />
 
-              {/* Panel Aluminum Alloy Beveled Outer Frame */}
+            {/* 4. MODERN ARCHITECTURAL HOUSE (Isometric Perspective) */}
+            <g id="modernResidentialHouse">
+              {/* House Shadow on Ground */}
               <polygon
-                points="0,100 180,80 225,20 45,40"
-                fill="#cbd5e1"
-                stroke="#64748b"
-                strokeWidth="2"
+                points="85,198 290,192 330,205 125,215"
+                fill="#0f172a"
+                opacity="0.25"
+                filter="blur(3px)"
               />
 
-              {/* Solar High-Transmission Tempered Glass PV Surface */}
+              {/* Main Front Wall Facade */}
               <polygon
-                points="4,97 176,78 221,23 49,42"
-                fill="url(#monoSilCell)"
-                stroke="#38bdf8"
+                points="95,128 268,124 268,194 95,198"
+                fill="url(#houseFacadeGrad)"
+                stroke="#cbd5e1"
+                strokeWidth="1.5"
+              />
+
+              {/* Right Side Wall (Perspective Depth) */}
+              <polygon
+                points="268,124 300,108 300,178 268,194"
+                fill="url(#houseSideGrad)"
+                stroke="#94a3b8"
                 strokeWidth="1.2"
               />
 
-              {/* Photovoltaic Cells & Anti-Reflective Grid Layout */}
-              {/* Horizontal Busbars */}
-              <line x1="16" y1="83" x2="187" y2="64" stroke="#93c5fd" strokeWidth="0.9" opacity="0.75" />
-              <line x1="27" y1="69" x2="198" y2="50" stroke="#93c5fd" strokeWidth="0.9" opacity="0.75" />
-              <line x1="38" y1="55" x2="209" y2="36" stroke="#93c5fd" strokeWidth="0.9" opacity="0.75" />
-
-              {/* Vertical Multi-Busbar (MBB) Ribbons */}
-              <line x1="50" y1="92" x2="90" y2="35" stroke="#e2e8f0" strokeWidth="1.2" opacity="0.85" />
-              <line x1="92" y1="88" x2="132" y2="31" stroke="#e2e8f0" strokeWidth="1.2" opacity="0.85" />
-              <line x1="135" y1="83" x2="175" y2="26" stroke="#e2e8f0" strokeWidth="1.2" opacity="0.85" />
-
-              {/* Sunlight Glint & Glass Reflection Sheen */}
+              {/* Architectural Feature: Warm Natural Wood Accent Siding */}
               <polygon
-                points="18,80 80,72 160,28 98,36"
-                fill="#ffffff"
-                opacity="0.18"
+                points="98,130 135,129 135,197 98,198"
+                fill="#d97706"
+                opacity="0.85"
+              />
+              {/* Vertical wood slat grooves */}
+              <line x1="107" y1="130" x2="107" y2="198" stroke="#92400e" strokeWidth="1" />
+              <line x1="116" y1="129" x2="116" y2="197" stroke="#92400e" strokeWidth="1" />
+              <line x1="125" y1="129" x2="125" y2="197" stroke="#92400e" strokeWidth="1" />
+
+              {/* Modern Floor-to-Ceiling Windows with Interior Warm Glow */}
+              <g transform="translate(145, 140)">
+                <rect x="0" y="0" width="52" height="42" rx="3" fill="#0f172a" stroke="#334155" strokeWidth="1.5" />
+                {/* Glowing interior pane */}
+                <rect x="2.5" y="2.5" width="47" height="37" rx="2" fill="#fef3c7" opacity="0.9" />
+                {/* Window mullion grid */}
+                <line x1="26" y1="2.5" x2="26" y2="39.5" stroke="#334155" strokeWidth="1.5" />
+                <line x1="2.5" y1="21" x2="49.5" y2="21" stroke="#334155" strokeWidth="1.5" />
+                {/* Glass reflection sheen */}
+                <polygon points="6,36 30,8 38,8 14,36" fill="#ffffff" opacity="0.6" />
+              </g>
+
+              {/* Modern Entryway Door */}
+              <g transform="translate(210, 146)">
+                <rect x="0" y="0" width="22" height="46" rx="2" fill="#1e293b" stroke="#0f172a" strokeWidth="1.2" />
+                {/* Modern vertical door handle */}
+                <line x1="4" y1="20" x2="4" y2="30" stroke="#f59e0b" strokeWidth="1.5" strokeLinecap="round" />
+                {/* Porch light above door */}
+                <circle cx="11" cy="-4" r="3" fill="#fef08a" />
+                <circle cx="11" cy="-4" r="6" fill="#fef08a" opacity="0.3" className="animate-pulse" />
+              </g>
+
+              {/* Modern Side Window on Right Wall */}
+              <polygon
+                points="276,134 292,126 292,154 276,162"
+                fill="#fef3c7"
+                stroke="#334155"
+                strokeWidth="1.2"
+                opacity="0.8"
               />
 
-              {/* Active Photon Energy Absorption Glow across solar cells */}
+              {/* 5. TILTED ROOF SLOPING TOWARDS THE SUN (Facing Top-Left Sunlight) */}
+              {/* Roof Sub-Structure / Eaves Trim (Dark Charcoal) */}
+              <polygon
+                points="88,131 276,126 276,121 88,126"
+                fill="#0f172a"
+              />
+
+              {/* Main Tilted Roof Plane Surface Facing Sun */}
+              <polygon
+                points="88,127 274,122 296,62 110,67"
+                fill="url(#roofBaseGrad)"
+                stroke="#475569"
+                strokeWidth="1.5"
+              />
+
+              {/* Left Roof Gable Overhang Edge */}
+              <polygon
+                points="88,127 110,67 98,69 76,129"
+                fill="#1e293b"
+                stroke="#334155"
+                strokeWidth="1"
+              />
+
+              {/* Rooftop Solar Aluminum Mounting Rails */}
+              {/* Top Rail */}
+              <line x1="108" y1="83" x2="280" y2="78" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" opacity="0.9" />
+              {/* Bottom Rail */}
+              <line x1="96" y1="113" x2="268" y2="108" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" opacity="0.9" />
+
+              {/* ================================================================= */}
+              {/* 6. SOLAR PV MODULES ARRAY MOUNTED DIRECTLY ON THE HOUSE ROOF     */}
+              {/* ================================================================= */}
+              {/* PANEL 1 (Top-Left PV Module facing Sun) */}
+              <g>
+                <polygon
+                  points="114,94 190,92 198,72 122,74"
+                  fill="#cbd5e1"
+                  stroke="#64748b"
+                  strokeWidth="1.5"
+                />
+                <polygon
+                  points="116,93 188,91 196,73 124,75"
+                  fill="url(#monoSilCell)"
+                  stroke="#38bdf8"
+                  strokeWidth="1"
+                />
+                {/* Silicon Grid Busbars */}
+                <line x1="120" y1="84" x2="192" y2="82" stroke="#93c5fd" strokeWidth="0.8" opacity="0.75" />
+                <line x1="138" y1="92" x2="144" y2="74" stroke="#e2e8f0" strokeWidth="1" opacity="0.8" />
+                <line x1="168" y1="91" x2="174" y2="73" stroke="#e2e8f0" strokeWidth="1" opacity="0.8" />
+              </g>
+
+              {/* PANEL 2 (Top-Right PV Module) */}
+              <g>
+                <polygon
+                  points="196,92 272,90 280,70 204,72"
+                  fill="#cbd5e1"
+                  stroke="#64748b"
+                  strokeWidth="1.5"
+                />
+                <polygon
+                  points="198,91 270,89 278,71 206,73"
+                  fill="url(#monoSilCell)"
+                  stroke="#38bdf8"
+                  strokeWidth="1"
+                />
+                {/* Silicon Grid Busbars */}
+                <line x1="202" y1="82" x2="274" y2="80" stroke="#93c5fd" strokeWidth="0.8" opacity="0.75" />
+                <line x1="220" y1="90" x2="226" y2="72" stroke="#e2e8f0" strokeWidth="1" opacity="0.8" />
+                <line x1="250" y1="89" x2="256" y2="71" stroke="#e2e8f0" strokeWidth="1" opacity="0.8" />
+              </g>
+
+              {/* PANEL 3 (Bottom-Left PV Module facing Sun) */}
+              <g>
+                <polygon
+                  points="102,120 178,118 186,98 110,100"
+                  fill="#cbd5e1"
+                  stroke="#64748b"
+                  strokeWidth="1.5"
+                />
+                <polygon
+                  points="104,119 176,117 184,99 112,101"
+                  fill="url(#monoSilCell)"
+                  stroke="#38bdf8"
+                  strokeWidth="1"
+                />
+                {/* Silicon Grid Busbars */}
+                <line x1="108" y1="110" x2="180" y2="108" stroke="#93c5fd" strokeWidth="0.8" opacity="0.75" />
+                <line x1="126" y1="118" x2="132" y2="100" stroke="#e2e8f0" strokeWidth="1" opacity="0.8" />
+                <line x1="156" y1="117" x2="162" y2="99" stroke="#e2e8f0" strokeWidth="1" opacity="0.8" />
+              </g>
+
+              {/* PANEL 4 (Bottom-Right PV Module) */}
+              <g>
+                <polygon
+                  points="184,118 260,116 268,96 192,98"
+                  fill="#cbd5e1"
+                  stroke="#64748b"
+                  strokeWidth="1.5"
+                />
+                <polygon
+                  points="186,117 258,115 266,97 194,99"
+                  fill="url(#monoSilCell)"
+                  stroke="#38bdf8"
+                  strokeWidth="1"
+                />
+                {/* Silicon Grid Busbars */}
+                <line x1="190" y1="108" x2="262" y2="106" stroke="#93c5fd" strokeWidth="0.8" opacity="0.75" />
+                <line x1="208" y1="116" x2="214" y2="98" stroke="#e2e8f0" strokeWidth="1" opacity="0.8" />
+                <line x1="238" y1="115" x2="244" y2="97" stroke="#e2e8f0" strokeWidth="1" opacity="0.8" />
+              </g>
+
+              {/* Anti-reflective Tempered Glass Sunlight Sheen */}
+              <polygon
+                points="115,116 165,110 240,73 190,79"
+                fill="#ffffff"
+                opacity="0.22"
+              />
+
+              {/* Active Photon Energy Absorption Glow across rooftop solar array */}
               <ellipse
-                cx="115"
-                cy="60"
-                rx="65"
-                ry="24"
+                cx="185"
+                cy="95"
+                rx="68"
+                ry="22"
                 fill="#38bdf8"
-                opacity="0.3"
+                opacity="0.32"
                 className="animate-pulse"
               />
               <ellipse
-                cx="120"
-                cy="60"
-                rx="35"
+                cx="175"
+                cy="95"
+                rx="38"
                 ry="12"
                 fill="#fde047"
-                opacity="0.35"
+                opacity="0.38"
                 className="animate-pulse"
               />
 
-              {/* DC Junction Box & MC4 Solar Connector (Lower Right Corner) */}
-              <g transform="translate(180, 80)">
-                <rect x="-6" y="-6" width="15" height="15" rx="3" fill="#0f172a" stroke="#f59e0b" strokeWidth="2" />
+              {/* Rooftop DC Solar Combiner Box (Right edge of roof) */}
+              <g transform="translate(268, 105)">
+                <rect x="-4" y="-4" width="13" height="13" rx="2.5" fill="#0f172a" stroke="#f59e0b" strokeWidth="1.8" />
                 {/* Generation Spark at Junction Box */}
-                <circle cx="1.5" cy="1.5" r="4" fill="#38bdf8" className="animate-spark" />
-                <circle cx="1.5" cy="1.5" r="2.5" fill="#ffffff" />
+                <circle cx="2.5" cy="2.5" r="3.5" fill="#38bdf8" className="animate-spark" />
+                <circle cx="2.5" cy="2.5" r="2" fill="#ffffff" />
               </g>
+
+              {/* Conduit dropping down from roof combiner box along the wall */}
+              <path
+                d="M 271 114 L 271 155 L 305 160"
+                fill="none"
+                stroke="#0f172a"
+                strokeWidth="5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M 271 114 L 271 155 L 305 160"
+                fill="none"
+                stroke="#ea580c"
+                strokeWidth="3.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </g>
 
-            {/* 4. HIGH-VOLTAGE OUTPUT DC WIRE WITH ELECTRIC LIGHTNING ARCS (Exits to Slide 3) */}
+            {/* 7. HIGH-VOLTAGE OUTPUT DC WIRE WITH ELECTRIC LIGHTNING ARCS (Exits to Slide 3) */}
             <g>
               {/* Outer Heavy Armor Conduit */}
               <path
-                d="M 311 161 C 340 161, 370 145, 420 145"
+                d="M 305 160 C 335 160, 365 145, 420 145"
                 fill="none"
                 stroke="#0f172a"
                 strokeWidth="8"
@@ -354,7 +575,7 @@ export const SolarInverterFlow: React.FC = () => {
               />
               {/* Heavy Orange Solar PV Wire */}
               <path
-                d="M 311 161 C 340 161, 370 145, 420 145"
+                d="M 305 160 C 335 160, 365 145, 420 145"
                 fill="none"
                 stroke="#ea580c"
                 strokeWidth="5"
@@ -362,7 +583,7 @@ export const SolarInverterFlow: React.FC = () => {
               />
               {/* Rapid Moving Electricity Plasma Flow (Cyan + Gold) */}
               <path
-                d="M 311 161 C 340 161, 370 145, 420 145"
+                d="M 305 160 C 335 160, 365 145, 420 145"
                 fill="none"
                 stroke="#38bdf8"
                 strokeWidth="3.2"
@@ -371,7 +592,7 @@ export const SolarInverterFlow: React.FC = () => {
                 filter="url(#electricGlow)"
               />
               <path
-                d="M 311 161 C 340 161, 370 145, 420 145"
+                d="M 305 160 C 335 160, 365 145, 420 145"
                 fill="none"
                 stroke="#fef08a"
                 strokeWidth="1.8"
@@ -381,7 +602,7 @@ export const SolarInverterFlow: React.FC = () => {
 
               {/* Zigzag Electric Lightning Bolt Arc 1 along the wire */}
               <path
-                d="M 312 161 L 325 158 L 332 163 L 348 153 L 360 157 L 375 147 L 390 149 L 405 144 L 420 145"
+                d="M 306 160 L 320 157 L 330 162 L 345 152 L 358 156 L 372 146 L 388 148 L 404 143 L 420 145"
                 fill="none"
                 stroke="#67e8f9"
                 strokeWidth="1.8"
@@ -391,7 +612,7 @@ export const SolarInverterFlow: React.FC = () => {
               />
               {/* Zigzag Electric Lightning Bolt Arc 2 */}
               <path
-                d="M 315 162 L 328 165 L 340 159 L 355 161 L 368 151 L 382 153 L 398 143 L 412 147 L 420 145"
+                d="M 308 161 L 322 164 L 336 158 L 350 160 L 364 150 L 378 152 L 394 142 L 410 146 L 420 145"
                 fill="none"
                 stroke="#fde047"
                 strokeWidth="1.4"
@@ -401,18 +622,23 @@ export const SolarInverterFlow: React.FC = () => {
               />
 
               {/* Crackling Electric Sparks along wire */}
-              <circle cx="330" cy="160" r="2.5" fill="#ffffff" className="animate-spark" />
-              <circle cx="365" cy="153" r="3" fill="#67e8f9" className="animate-spark" />
-              <circle cx="400" cy="146" r="2.5" fill="#fde047" className="animate-spark" />
+              <circle cx="325" cy="159" r="2.5" fill="#ffffff" className="animate-spark" />
+              <circle cx="360" cy="152" r="3" fill="#67e8f9" className="animate-spark" />
+              <circle cx="395" cy="145" r="2.5" fill="#fde047" className="animate-spark" />
             </g>
           </svg>
 
-          {/* Micro Telemetry Pill: Solar Daytime Irradiance */}
-          <div className="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md border border-amber-300 rounded-lg px-2.5 py-1 flex items-center gap-1.5 shadow-lg">
+          {/* Micro Telemetry Pill: Solar Daytime Irradiance & Rooftop Badge */}
+          <div className="absolute top-3 right-3 bg-slate-900/85 backdrop-blur-md border border-amber-300 rounded-lg px-2.5 py-1 flex items-center gap-1.5 shadow-lg">
             <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
             <span className="text-[11px] font-black text-amber-300 font-mono tracking-tight">
               {solarWatts} W
             </span>
+          </div>
+
+          {/* Micro Rooftop Tag */}
+          <div className="absolute bottom-2.5 left-3 bg-black/60 backdrop-blur-md border border-sky-400/40 text-sky-200 rounded-md px-2 py-0.5 text-[9px] font-bold font-mono">
+            🏠 Rooftop Solar Array
           </div>
         </div>
 
