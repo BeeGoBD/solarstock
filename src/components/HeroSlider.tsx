@@ -13,7 +13,11 @@ import {
   Layers,
   CheckCircle2,
   ArrowRight,
-  Flame
+  Flame,
+  Play,
+  VolumeX,
+  Radio,
+  ExternalLink
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 
@@ -42,11 +46,6 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
   const [banner2Hovered, setBanner2Hovered] = useState(false);
   const banner2TimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // 3. Automated Morphing Animation State for 3rd Image (Right Sub-Banner)
-  const [banner3ActiveIndex, setBanner3ActiveIndex] = useState(0);
-  const [banner3Hovered, setBanner3Hovered] = useState(false);
-  const banner3TimerRef = useRef<NodeJS.Timeout | null>(null);
-
   // Top Hero Carousel timer (6 seconds)
   useEffect(() => {
     if (isPaused) return;
@@ -68,21 +67,6 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
 
     return () => {
       if (banner2TimerRef.current) clearInterval(banner2TimerRef.current);
-    };
-  }, []);
-
-  // 3rd Image (Right Sub-Banner) automatic morphing animation cycle (every 3 seconds, slightly offset)
-  useEffect(() => {
-    // Initial delay offset for pleasant alternating visual rhythm
-    const initialTimeout = setTimeout(() => {
-      banner3TimerRef.current = setInterval(() => {
-        setBanner3ActiveIndex((prev) => (prev + 1) % 3);
-      }, 3400);
-    }, 1200);
-
-    return () => {
-      clearTimeout(initialTimeout);
-      if (banner3TimerRef.current) clearInterval(banner3TimerRef.current);
     };
   }, []);
 
@@ -140,43 +124,6 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
       glowColor: 'rgba(59, 130, 246, 0.4)',
       category: 'hybrid-inverters',
       visualType: 'srne'
-    }
-  ];
-
-  // Curated product morph items for 3rd Image (Right Sub-Banner)
-  const banner3Items = [
-    {
-      id: 'prod-felicity-10kwh',
-      name: 'Felicity 51.2V Powerwall',
-      badge: '5.12kWh LiFePO4 Wall',
-      specs: '6000+ Cycles • Smart BMS',
-      tag: '🔋 Next-Gen Storage',
-      accentColor: 'from-cyan-500 to-blue-600',
-      glowColor: 'rgba(6, 182, 212, 0.4)',
-      category: 'lithium-batteries',
-      visualType: 'powerwall'
-    },
-    {
-      id: 'prod-longi-585w-bifacial',
-      name: 'LONGi Hi-MO 6 585W',
-      badge: 'Bifacial Dual-Glass',
-      specs: '22.8% Eff • 25Yrs Warranty',
-      tag: '☀️ Tier-1 Solar PV',
-      accentColor: 'from-sky-400 to-blue-600',
-      glowColor: 'rgba(14, 165, 233, 0.4)',
-      category: 'solar-panels',
-      visualType: 'longi'
-    },
-    {
-      id: 'prod-solarstock-gp1000',
-      name: 'SolarStock GP-1000',
-      badge: '1000W (1024Wh LiFePO4)',
-      specs: 'Dual 220V AC • Solar Fast In',
-      tag: '⛺ Heavy Backup Hub',
-      accentColor: 'from-emerald-400 to-teal-600',
-      glowColor: 'rgba(16, 185, 129, 0.4)',
-      category: 'ips-systems',
-      visualType: 'gp1000'
     }
   ];
 
@@ -739,153 +686,19 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
         </div>
 
         {/* ========================================================================= */}
-        {/* 3RD IMAGE (Right Sub-Banner): Automated Inner Morph & Hover Animation     */}
+        {/* 3RD IMAGE / 3RD SECTION: Pure Video Player (Autoplay from 4:46, Muted, Loop, No UI/Title) */}
         {/* ========================================================================= */}
-        <div
-          onMouseEnter={() => setBanner3Hovered(true)}
-          onMouseLeave={() => setBanner3Hovered(false)}
-          onClick={() => {
-            const currentItem = banner3Items[banner3ActiveIndex];
-            handleClick(currentItem.category, currentItem.id);
-          }}
-          className="relative rounded-2xl overflow-hidden bg-gradient-to-b from-[#091f2c] via-[#081724] to-[#040c14] border border-neutral-800 shadow-md hover:shadow-2xl hover:border-cyan-400/80 transition-all duration-500 cursor-pointer p-3.5 sm:p-4 flex flex-col justify-between min-h-[190px] sm:min-h-[210px] group"
-        >
-          {/* Ambient Glow Aura */}
-          <div
-            className="absolute -top-12 -right-12 w-48 h-48 rounded-full blur-3xl transition-opacity duration-700 pointer-events-none"
-            style={{
-              background: banner3Items[banner3ActiveIndex].glowColor,
-              opacity: banner3Hovered ? 0.35 : 0.15
-            }}
-          />
-
-          {/* Top Header & Badge */}
-          <div className="relative z-10 text-center">
-            <div className="flex items-center justify-between gap-2 mb-0.5">
-              <span className="text-[10px] text-cyan-300 font-bold uppercase tracking-wider flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-cyan-400 animate-spin" style={{ animationDuration: '4s' }} />
-                {banner3Items[banner3ActiveIndex].tag}
-              </span>
-
-              {/* Micro Cycle Dots for Automatic Animation */}
-              <div className="flex items-center gap-1 bg-black/40 px-2 py-0.5 rounded-full border border-neutral-700">
-                <span className="text-[8px] text-neutral-400 font-mono">ENERGY HUB</span>
-                {banner3Items.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setBanner3ActiveIndex(i);
-                    }}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      banner3ActiveIndex === i ? 'w-3.5 bg-cyan-400' : 'w-1.5 bg-neutral-600'
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center gap-1.5 my-0.5">
-              <span className="text-sm sm:text-base font-black text-white font-['Outfit',sans-serif] group-hover:text-cyan-300 transition-colors">
-                {subBanners.rightBanner.titleMain}<span className="text-amber-400">{subBanners.rightBanner.titleAccent}</span>
-              </span>
-              <div className="inline-block bg-cyan-400 text-neutral-950 font-black px-2 py-0.2 rounded text-[9px] sm:text-[10px] tracking-wider uppercase shadow-xs">
-                {subBanners.rightBanner.discountBadge}
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center gap-2">
-              <span className="text-[8px] sm:text-[9px] font-bold text-cyan-200 bg-cyan-950/80 border border-cyan-800/80 px-1.5 py-0.2 rounded">
-                {subBanners.rightBanner.bengaliTag}
-              </span>
-              <span className="text-[8px] sm:text-[9px] text-neutral-300 flex items-center gap-1 bg-black/40 px-2 py-0.2 rounded-full border border-neutral-700">
-                <MapPin className="w-2.5 h-2.5 text-amber-400 shrink-0" />
-                <span className="line-clamp-1">{subBanners.rightBanner.locationText}</span>
-              </span>
-            </div>
+        <div className="relative rounded-2xl overflow-hidden bg-black border border-neutral-800 shadow-md hover:shadow-2xl hover:border-cyan-500/60 transition-all duration-500 min-h-[190px] sm:min-h-[210px] h-[190px] sm:h-[210px] w-full flex items-center justify-center group">
+          <div className="absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center pointer-events-none">
+            <iframe
+              src="https://www.youtube.com/embed/aJyEyZ3uZsU?autoplay=1&mute=1&loop=1&playlist=aJyEyZ3uZsU&start=286&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&iv_load_policy=3&disablekb=1&fs=0&origin=window.location.origin"
+              title="Solar Demo Video"
+              className="w-[125%] h-[135%] min-w-[120%] min-h-[130%] object-cover border-0 scale-125 sm:scale-130 pointer-events-none"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            />
           </div>
-
-          {/* THE AUTOMATIC INNER MORPH / APPEARS-FROM-INSIDE STAGE */}
-          <div className="relative z-10 w-full my-2 h-24 sm:h-28 flex items-center justify-center overflow-hidden">
-            {banner3Items.map((item, index) => {
-              const isActive = banner3ActiveIndex === index;
-              const isPrev = (banner3ActiveIndex - 1 + banner3Items.length) % banner3Items.length === index;
-              
-              return (
-                <div
-                  key={item.id}
-                  className={`absolute inset-0 flex items-center justify-center transition-all duration-700 ease-out pointer-events-none ${
-                    isActive
-                      ? 'opacity-100 scale-100 translate-y-0 rotate-0 z-20'
-                      : isPrev
-                      ? 'opacity-0 scale-75 -translate-y-4 rotate-3 z-10'
-                      : 'opacity-0 scale-125 translate-y-4 -rotate-3 z-0'
-                  }`}
-                >
-                  {/* Outer Orbiting Visual Container that pops in from inside */}
-                  <div className="w-full max-w-sm flex items-center justify-center gap-2 sm:gap-3 px-2">
-                    
-                    {/* Left Mini Companion Satellite */}
-                    <div className="w-14 sm:w-18 aspect-square rounded-lg bg-neutral-900/90 border border-neutral-700/80 p-1 flex flex-col items-center justify-center text-center shadow-md transform -rotate-6 transition-transform group-hover:rotate-0">
-                      <BatteryCharging className="w-3.5 h-3.5 text-cyan-400 mb-0.5" />
-                      <span className="text-[7px] text-neutral-300 font-bold leading-tight line-clamp-1">LiFePO4</span>
-                      <span className="text-[6px] text-cyan-400 font-mono">6000+ Cyc</span>
-                    </div>
-
-                    {/* Main Morphing Centerpiece Hero (Appears from inside with scaling & glow) */}
-                    <div className={`relative px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-gradient-to-r ${item.accentColor} p-[1.5px] shadow-xl shadow-black/60 transform transition-transform duration-500 ${banner3Hovered ? 'scale-105' : 'scale-100'}`}>
-                      <div className="bg-neutral-950/95 rounded-[10px] sm:rounded-[14px] px-3 py-1.5 flex items-center gap-2.5 border border-neutral-800">
-                        {/* Equipment Visual Icon / Indicator */}
-                        <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-neutral-900 border border-cyan-400/40 flex items-center justify-center relative shadow-inner">
-                          {item.visualType === 'powerwall' && <BatteryCharging className="w-5 h-5 text-cyan-400 animate-pulse" />}
-                          {item.visualType === 'longi' && <Sun className="w-5 h-5 text-amber-400 animate-spin" style={{ animationDuration: '8s' }} />}
-                          {item.visualType === 'gp1000' && <Zap className="w-5 h-5 text-emerald-400 animate-pulse" />}
-                          <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-cyan-400 border border-neutral-950 animate-ping" />
-                        </div>
-
-                        {/* Model Specs & Dynamic Text */}
-                        <div className="text-left">
-                          <span className="text-[10px] sm:text-xs font-black text-white block leading-tight">
-                            {item.name}
-                          </span>
-                          <span className="text-[8px] sm:text-[9px] text-cyan-300 font-semibold block leading-tight">
-                            {item.badge}
-                          </span>
-                          <span className="text-[7px] text-neutral-400 font-mono block">
-                            {item.specs}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right Mini Companion Satellite */}
-                    <div className="w-14 sm:w-18 aspect-square rounded-lg bg-neutral-900/90 border border-neutral-700/80 p-1 flex flex-col items-center justify-center text-center shadow-md transform rotate-6 transition-transform group-hover:rotate-0">
-                      <Sun className="w-3.5 h-3.5 text-amber-400 mb-0.5" />
-                      <span className="text-[7px] text-neutral-300 font-bold leading-tight line-clamp-1">Tier-1 PV</span>
-                      <span className="text-[6px] text-amber-400 font-mono">22.8% Eff</span>
-                    </div>
-
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Action Footer Bar */}
-          <div className="relative z-10 flex items-center justify-between pt-1 border-t border-neutral-800/80">
-            <span className="text-[9px] text-neutral-400 flex items-center gap-1 font-medium">
-              <CheckCircle2 className="w-3 h-3 text-cyan-400" />
-              <span>Auto-switching energy equipment</span>
-            </span>
-
-            <button
-              type="button"
-              className="bg-cyan-400 hover:bg-cyan-300 text-neutral-950 px-3.5 py-1 rounded-lg text-[10px] sm:text-xs font-black tracking-wider uppercase shadow-xs transition-all duration-300 group-hover:scale-105 flex items-center gap-1"
-            >
-              <span>Explore Storage</span>
-              <ArrowRight className="w-3 h-3" />
-            </button>
-          </div>
+          {/* Transparent protective shield to ensure pure ambient video playback without click pauses */}
+          <div className="absolute inset-0 z-10 pointer-events-auto bg-transparent" />
         </div>
 
       </div>
