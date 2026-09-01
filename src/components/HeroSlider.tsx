@@ -28,6 +28,49 @@ interface HeroSliderProps {
   onOpenChat?: () => void;
 }
 
+// Crisp mechanical tactile click sound synthesizer using Web Audio API
+const playSlideClickSound = () => {
+  try {
+    const AudioContextClass =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    if (!AudioContextClass) return;
+
+    const ctx = new AudioContextClass();
+    if (ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
+    }
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+
+    // Highpass filter for a crisp mechanical switch click
+    filter.type = 'highpass';
+    filter.frequency.setValueAtTime(1400, ctx.currentTime);
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(1800, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.028);
+
+    gain.gain.setValueAtTime(0.18, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.028);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.03);
+
+    setTimeout(() => {
+      ctx.close().catch(() => {});
+    }, 80);
+  } catch {
+    // Audio might be gracefully suppressed by browser until user gesture
+  }
+};
+
 export const HeroSlider: React.FC<HeroSliderProps> = ({
   onBannerClick,
   onSelectProduct,
@@ -40,11 +83,21 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
   const [isPaused, setIsPaused] = useState(false);
   const totalSlides = 4;
   const slideTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const isFirstMount = useRef(true);
 
   // 2. Automated Morphing Animation State for 2nd Image (Left Sub-Banner)
   const [banner2ActiveIndex, setBanner2ActiveIndex] = useState(0);
   const [banner2Hovered, setBanner2Hovered] = useState(false);
   const banner2TimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Trigger clicking sound on every slide change
+  useEffect(() => {
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
+      return;
+    }
+    playSlideClickSound();
+  }, [activeSlide]);
 
   // Top Hero Carousel timer (faster 4.2 seconds)
   useEffect(() => {
@@ -72,11 +125,13 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
 
   const handlePrevSlide = (e?: React.MouseEvent) => {
     e?.stopPropagation();
+    playSlideClickSound();
     setActiveSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
   };
 
   const handleNextSlide = (e?: React.MouseEvent) => {
     e?.stopPropagation();
+    playSlideClickSound();
     setActiveSlide((prev) => (prev + 1) % totalSlides);
   };
 
@@ -529,6 +584,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
               key={idx}
               onClick={(e) => {
                 e.stopPropagation();
+                playSlideClickSound();
                 setActiveSlide(idx);
               }}
               className={`h-1.5 rounded-full transition-all ${
@@ -580,6 +636,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
                     key={i}
                     onClick={(e) => {
                       e.stopPropagation();
+                      playSlideClickSound();
                       setBanner2ActiveIndex(i);
                     }}
                     className={`h-1.5 rounded-full transition-all duration-300 ${
@@ -688,10 +745,10 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
         <div className="relative rounded-2xl overflow-hidden bg-black border border-neutral-800 shadow-md hover:shadow-2xl hover:border-cyan-500/60 transition-all duration-300 min-h-[190px] sm:min-h-[210px] h-[190px] sm:h-[210px] w-full flex items-center justify-center group">
           <div className="absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center bg-black">
             <iframe
-              src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F889945084161954%2F&show_text=false&autoplay=true&muted=true&width=500&height=280"
+              src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F889945084161954%2F&show_text=0&autoplay=1&muted=1&mute=1&loop=1&width=500"
               title="SolarStock ESS 5-in-1 1000W 2kWh Video Demo"
               className="w-full h-full min-w-full min-h-full object-cover border-0 scale-105"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen"
               allowFullScreen
             />
           </div>
