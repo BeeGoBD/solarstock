@@ -1,0 +1,8 @@
+{
+  "name": "Solarstock - Solar, IPS & Inverter Megastore",
+  "description": "Premium e-commerce platform for Solar Panels, Hybrid Inverters, IPS systems, Lithium Batteries, and Solar Accessories.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

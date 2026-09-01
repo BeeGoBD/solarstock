@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#24272c" />
+      <stop offset="50%" stop-color="#191b1e" />
+      <stop offset="100%" stop-color="#0f1012" />
+    </linearGradient>
+    <linearGradient id="metalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#71767e" />
+      <stop offset="30%" stop-color="#4b5058" />
+      <stop offset="70%" stop-color="#2a2e34" />
+      <stop offset="100%" stop-color="#1a1d22" />
+    </linearGradient>
+    <linearGradient id="yellowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbb024" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+    <filter id="dropShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000" flood-opacity="0.8" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="800" fill="url(#bgGrad)" />
+
+  <!-- Diagonal Yellow Wings at Bottom matching poster -->
+  <path d="M0,620 L0,800 L800,800 L800,620 L650,800 L150,800 Z" fill="url(#yellowGrad)" />
+  <polygon points="0,620 180,800 0,800" fill="#fbb024" />
+  <polygon points="800,620 620,800 800,800" fill="#fbb024" />
+  <polygon points="0,680 800,680 800,800 0,800" fill="#f59e0b" opacity="0.9" />
+
+  <!-- Top Left Brand -->
+  <g transform="translate(35, 60)">
+    <text font-family="'Impact', 'Arial Black', sans-serif" font-size="34" font-weight="900" fill="#9ca3af" letter-spacing="1">
+      SOLARSTOCK<tspan font-size="20" dy="-14" fill="#60a5fa">BD</tspan>
+    </text>
+    <text x="35" y="32" font-family="'Brush Script MT', 'Lucida Handwriting', cursive, sans-serif" font-size="20" fill="#cbd5e1" font-style="italic">
+      Beat The Clock
+    </text>
+  </g>
+
+  <!-- Top Right Disc 20% Flag Ribbon -->
+  <g transform="translate(610, 0)">
+    <path d="M0,0 L115,0 L115,160 L57.5,130 L0,160 Z" fill="url(#yellowGrad)" filter="url(#dropShadow)" />
+    <text x="57" y="70" font-family="'Arial Black', sans-serif" font-size="28" font-weight="900" fill="#18181b" text-anchor="middle">Disc</text>
+    <text x="57" y="118" font-family="'Arial Black', sans-serif" font-size="36" font-weight="900" fill="#18181b" text-anchor="middle">20%</text>
+  </g>
+
+  <!-- Main Headline -->
+  <g transform="translate(400, 175)" text-anchor="middle">
+    <text font-family="'Arial Black', 'Impact', sans-serif" font-size="48" font-weight="900" fill="#f59e0b" letter-spacing="3">NEOZL</text>
+    <text y="130" font-family="'Arial Black', 'Impact', sans-serif" font-size="140" font-weight="900" fill="#ffffff" letter-spacing="-2">300W</text>
+  </g>
+
+  <!-- Product Illustration: NEOZL 300W Device -->
+  <g transform="translate(170, 320)" filter="url(#dropShadow)">
+    <!-- Base shadow -->
+    <ellipse cx="230" cy="345" rx="220" ry="18" fill="#000" opacity="0.6" />
+
+    <!-- Outer Casing with integrated handle -->
+    <path d="M70,80 Q230,0 390,80 Q450,110 450,180 L450,310 Q450,340 400,340 L60,340 Q10,340 10,310 L10,180 Q10,110 70,80 Z" fill="url(#metalGrad)" stroke="#8e95a0" stroke-width="3" />
+
+    <!-- Handle cutout -->
+    <path d="M120,80 Q230,30 340,80 Q320,105 230,105 Q140,105 120,80 Z" fill="#181a1e" stroke="#4b5058" stroke-width="2" />
+
+    <!-- Side ventilation grille (3D right side) -->
+    <g transform="translate(310, 110)">
+      <path d="M0,15 L125,5 L125,210 L0,210 Z" fill="#1f2227" stroke="#373b42" stroke-width="2" />
+      <!-- Slanted vent lines -->
+      <line x1="20" y1="30" x2="105" y2="190" stroke="#111315" stroke-width="7" stroke-linecap="round" />
+      <line x1="40" y1="30" x2="115" y2="170" stroke="#111315" stroke-width="7" stroke-linecap="round" />
+      <line x1="60" y1="30" x2="120" y2="140" stroke="#111315" stroke-width="7" stroke-linecap="round" />
+      <line x1="80" y1="30" x2="120" y2="100" stroke="#111315" stroke-width="7" stroke-linecap="round" />
+      <!-- AC input box -->
+      <rect x="25" y="140" width="45" height="50" rx="4" fill="#121316" stroke="#2c3038" stroke-width="1.5" />
+      <circle cx="47" cy="165" r="7" fill="#000" />
+    </g>
+
+    <!-- Front Faceplate -->
+    <path d="M20,110 L305,110 L305,325 L20,325 Z" fill="#2d3138" stroke="#434852" stroke-width="2" rx="10" />
+
+    <!-- Glossy LED Display Panel -->
+    <rect x="35" y="125" width="255" height="65" rx="8" fill="#090a0c" stroke="#1f232a" stroke-width="2" />
+    <g fill="#38bdf8" font-family="'Courier New', monospace" font-weight="bold">
+      <text x="50" y="150" font-size="11" fill="#94a3b8">AC USB</text>
+      <text x="50" y="172" font-size="11" fill="#94a3b8">DC LED</text>
+      <text x="135" y="168" font-size="34" font-family="'Arial Black', sans-serif" font-weight="900" fill="#ffffff">188<tspan font-size="16" fill="#38bdf8">%</tspan></text>
+      <circle cx="255" cy="148" r="4" fill="#22c55e" />
+      <path d="M250,165 L260,165 L255,157 Z" fill="#ef4444" />
+    </g>
+
+    <!-- Front Controls & Sockets -->
+    <!-- Buttons -->
+    <circle cx="55" cy="220" r="12" fill="#474e59" stroke="#94a3b8" stroke-width="1.5" />
+    <circle cx="270" cy="220" r="12" fill="#474e59" stroke="#94a3b8" stroke-width="1.5" />
+    <!-- USB Ports -->
+    <rect x="100" y="212" width="22" height="15" rx="2" fill="#0284c7" stroke="#38bdf8" stroke-width="1" />
+    <rect x="135" y="212" width="22" height="15" rx="2" fill="#0284c7" stroke="#38bdf8" stroke-width="1" />
+    <!-- Type C -->
+    <rect x="175" y="216" width="16" height="8" rx="4" fill="#0f172a" stroke="#64748b" stroke-width="1" />
+    <!-- DC Port -->
+    <circle cx="215" cy="220" r="7" fill="#0f172a" stroke="#f59e0b" stroke-width="1.5" />
+
+    <!-- AC Socket & Label -->
+    <g transform="translate(200, 245)">
+      <rect width="80" height="70" rx="6" fill="#1c1f24" stroke="#3b404a" stroke-width="2" />
+      <rect x="15" y="10" width="10" height="20" fill="#000" rx="1" />
+      <rect x="35" y="10" width="10" height="20" fill="#000" rx="1" />
+      <rect x="15" y="40" width="10" height="18" fill="#000" rx="1" />
+      <rect x="35" y="40" width="10" height="18" fill="#000" rx="1" />
+      <text x="60" y="38" font-family="sans-serif" font-size="8" fill="#64748b" font-weight="bold">TR</text>
+    </g>
+
+    <!-- 300W printed on front -->
+    <text x="45" y="295" font-family="'Arial Black', sans-serif" font-size="20" font-weight="900" fill="#ffffff" opacity="0.85">300W</text>
+  </g>
+
+  <!-- Left Side Spec List matching exact text in poster -->
+  <g transform="translate(25, 480)" font-family="sans-serif" font-size="13.5" fill="#ffffff">
+    <text font-weight="bold" fill="#e2e8f0">Output</text>
+    <text y="20" fill="#cbd5e1">USB-A x2 :Max.18W</text>
+    <text y="38" fill="#cbd5e1">USB-C: Max.45W</text>
+
+    <text y="70" font-weight="bold" fill="#e2e8f0">Net Weight : ~2.5KG(5.5LB)</text>
+
+    <text y="102" font-weight="bold" fill="#e2e8f0">Battery:</text>
+    <text y="122" fill="#cbd5e1">Capacity :192Wh (LifePO4)</text>
+    <text y="140" fill="#cbd5e1">Recharge Time: AC :~3.7Hrs;</text>
+    <text y="158" fill="#cbd5e1">Solar: ~3.4 Hrs</text>
+  </g>
+
+  <!-- Bottom Bar: Hotline + Price Ribbon + Website -->
+  <g transform="translate(0, 715)">
+    <!-- Hotline -->
+    <text x="35" y="18" font-family="sans-serif" font-size="13" font-weight="bold" fill="#18181b">For More Info:</text>
+    <text x="35" y="42" font-family="'Arial Black', sans-serif" font-size="20" font-weight="900" fill="#18181b">+8801306-061919</text>
+
+    <!-- Center Price Hexagon Pill -->
+    <g transform="translate(270, 0)">
+      <path d="M20,0 L240,0 L260,30 L240,60 L20,60 L0,30 Z" fill="#1e242c" stroke="#333b47" stroke-width="2" filter="url(#dropShadow)" />
+      <text x="130" y="40" font-family="'Arial Black', sans-serif" font-size="24" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="1">
+        PRICE: 24999BDT
+      </text>
+    </g>
+
+    <!-- Website -->
+    <text x="765" y="18" font-family="sans-serif" font-size="13" font-weight="bold" fill="#18181b" text-anchor="end">Check Our Site:</text>
+    <text x="765" y="42" font-family="'Arial Black', sans-serif" font-size="19" font-weight="900" fill="#18181b" text-anchor="end">solarstock.com</text>
+  </g>
+</svg>

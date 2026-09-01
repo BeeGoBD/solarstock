@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#24272c" />
+      <stop offset="50%" stop-color="#191b1e" />
+      <stop offset="100%" stop-color="#0f1012" />
+    </linearGradient>
+    <linearGradient id="yellowGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbb024" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+    <linearGradient id="youyoBody" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3d434c" />
+      <stop offset="100%" stop-color="#1b1e22" />
+    </linearGradient>
+    <filter id="shadow4" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000" flood-opacity="0.8" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="800" fill="url(#bgGrad4)" />
+
+  <!-- Diagonal Yellow Geometric Shapes at Bottom -->
+  <polygon points="0,620 180,800 0,800" fill="#fbb024" />
+  <polygon points="800,620 620,800 800,800" fill="#fbb024" />
+  <polygon points="0,680 800,680 800,800 0,800" fill="#f59e0b" opacity="0.9" />
+
+  <!-- Top Left Brand -->
+  <g transform="translate(35, 60)">
+    <text font-family="'Impact', 'Arial Black', sans-serif" font-size="34" font-weight="900" fill="#9ca3af" letter-spacing="1">
+      SOLARSTOCK<tspan font-size="20" dy="-14" fill="#60a5fa">BD</tspan>
+    </text>
+    <text x="35" y="32" font-family="'Brush Script MT', 'Lucida Handwriting', cursive, sans-serif" font-size="20" fill="#cbd5e1" font-style="italic">
+      Beat The Clock
+    </text>
+  </g>
+
+  <!-- Top Right Disc 20% Flag Ribbon -->
+  <g transform="translate(610, 0)">
+    <path d="M0,0 L115,0 L115,160 L57.5,130 L0,160 Z" fill="url(#yellowGrad4)" filter="url(#shadow4)" />
+    <text x="57" y="70" font-family="'Arial Black', sans-serif" font-size="28" font-weight="900" fill="#18181b" text-anchor="middle">Disc</text>
+    <text x="57" y="118" font-family="'Arial Black', sans-serif" font-size="36" font-weight="900" fill="#18181b" text-anchor="middle">20%</text>
+  </g>
+
+  <!-- Main Headline -->
+  <g transform="translate(400, 160)" text-anchor="middle">
+    <text font-family="'Arial Black', 'Impact', sans-serif" font-size="62" font-weight="900" fill="#f59e0b" letter-spacing="3">YOUYO</text>
+    <text y="140" font-family="'Arial Black', 'Impact', sans-serif" font-size="140" font-weight="900" fill="#ffffff" letter-spacing="-2">R100</text>
+  </g>
+
+  <!-- Product Illustration: YOUYO R100 Mini Power Station -->
+  <g transform="translate(180, 310)" filter="url(#shadow4)">
+    <!-- Base Shadow -->
+    <ellipse cx="230" cy="380" rx="220" ry="16" fill="#000" opacity="0.65" />
+
+    <!-- Top Fabric Loop Handle -->
+    <path d="M330,80 C360,0 410,0 410,120" fill="none" stroke="#2b313a" stroke-width="26" stroke-linecap="round" />
+    <path d="M330,80 C360,0 410,0 410,120" fill="none" stroke="#474f5c" stroke-width="20" stroke-linecap="round" />
+
+    <!-- 3D Perspective Right Panel -->
+    <polygon points="310,120 440,160 440,360 310,360" fill="#17191d" stroke="#323842" stroke-width="2" />
+    <!-- TR AC Socket on Right Panel -->
+    <g transform="translate(330, 220)">
+      <rect width="85" height="90" rx="8" fill="#22262d" stroke="#48505c" stroke-width="2" />
+      <rect x="20" y="20" width="10" height="24" fill="#000" rx="2" />
+      <rect x="50" y="20" width="10" height="24" fill="#000" rx="2" />
+      <rect x="20" y="55" width="10" height="20" fill="#000" rx="2" />
+      <rect x="50" y="55" width="10" height="20" fill="#000" rx="2" />
+      <text x="5" y="12" font-family="sans-serif" font-size="7" fill="#64748b">OUTPUT 120V AC 100W</text>
+    </g>
+
+    <!-- Front Casing -->
+    <rect x="0" y="120" width="310" height="240" rx="18" fill="url(#youyoBody)" stroke="#6b7582" stroke-width="2.5" />
+
+    <!-- Ribbed Horizontal Texture lines on Front Body -->
+    <g stroke="#1a1c20" stroke-width="2" opacity="0.7">
+      <line x1="20" y1="260" x2="290" y2="260" />
+      <line x1="20" y1="275" x2="290" y2="275" />
+      <line x1="20" y1="290" x2="290" y2="290" />
+      <line x1="20" y1="305" x2="290" y2="305" />
+      <line x1="20" y1="320" x2="290" y2="320" />
+    </g>
+
+    <!-- Display Screen (Center Top) -->
+    <rect x="110" y="145" width="90" height="48" rx="6" fill="#08090a" stroke="#1d2127" stroke-width="1.5" />
+    <g fill="#38bdf8" font-family="'Courier New', monospace" font-weight="bold">
+      <text x="155" y="178" font-size="24" font-family="'Arial Black', sans-serif" font-weight="900" fill="#ffffff" text-anchor="middle">100<tspan font-size="12" fill="#38bdf8">%</tspan></text>
+    </g>
+
+    <!-- Power Push Buttons -->
+    <rect x="40" y="148" width="55" height="40" rx="6" fill="#252a32" stroke="#48515e" stroke-width="1.5" />
+    <text x="67" y="172" font-family="sans-serif" font-size="7" fill="#cbd5e1" font-weight="bold" text-anchor="middle">DC POWER</text>
+
+    <rect x="215" y="148" width="55" height="40" rx="6" fill="#252a32" stroke="#48515e" stroke-width="1.5" />
+    <text x="242" y="172" font-family="sans-serif" font-size="7" fill="#cbd5e1" font-weight="bold" text-anchor="middle">AC POWER</text>
+
+    <!-- Input Socket & Ports Row -->
+    <circle cx="50" cy="225" r="9" fill="#0b0d0f" stroke="#4b5563" stroke-width="1.5" />
+    <!-- USB A1 -->
+    <rect x="80" y="215" width="22" height="18" rx="2" fill="#0284c7" stroke="#38bdf8" stroke-width="1" />
+    <!-- Type-C PD 1 & 2 -->
+    <rect x="125" y="218" width="16" height="12" rx="4" fill="#090a0c" stroke="#64748b" stroke-width="1" />
+    <rect x="165" y="218" width="16" height="12" rx="4" fill="#090a0c" stroke="#64748b" stroke-width="1" />
+    <!-- USB A2 -->
+    <rect x="205" y="215" width="22" height="18" rx="2" fill="#0284c7" stroke="#38bdf8" stroke-width="1" />
+    <!-- DC Output -->
+    <circle cx="260" cy="225" r="9" fill="#0b0d0f" stroke="#4b5563" stroke-width="1.5" />
+
+    <!-- Bottom Grip Opening -->
+    <rect x="100" y="325" width="110" height="24" rx="8" fill="#121417" stroke="#252930" stroke-width="1.5" />
+  </g>
+
+  <!-- Left Side Spec List matching exact text in poster -->
+  <g transform="translate(25, 470)" font-family="sans-serif" font-size="13" fill="#ffffff">
+    <text font-weight="bold" fill="#e2e8f0">Output:</text>
+    <text y="18" fill="#cbd5e1">USB-A1 :Max.15W; USB-A2 Max.18W</text>
+    <text y="35" fill="#cbd5e1">USB-C1 :Max.15W; USB-C2 : Max.45W</text>
+
+    <text y="65" font-weight="bold" fill="#e2e8f0">Net Weight : ~1.15KG(2.54LB)</text>
+
+    <text y="95" font-weight="bold" fill="#e2e8f0">Battery:</text>
+    <text y="113" fill="#cbd5e1">Capacity :89.6Wh(LifePO4)</text>
+    <text y="131" fill="#cbd5e1">Recharge Time :AC ~2 .4Hrs;</text>
+    <text y="149" fill="#cbd5e1">Solar:~2 4Hrs</text>
+  </g>
+
+  <!-- Bottom Bar: Hotline + Price Ribbon + Website -->
+  <g transform="translate(0, 715)">
+    <!-- Hotline -->
+    <text x="35" y="18" font-family="sans-serif" font-size="13" font-weight="bold" fill="#18181b">For More Info:</text>
+    <text x="35" y="42" font-family="'Arial Black', sans-serif" font-size="20" font-weight="900" fill="#18181b">+8801306-061919</text>
+
+    <!-- Center Price Hexagon Pill -->
+    <g transform="translate(280, 0)">
+      <path d="M20,0 L220,0 L240,30 L220,60 L20,60 L0,30 Z" fill="#1e242c" stroke="#333b47" stroke-width="2" filter="url(#shadow4)" />
+      <text x="120" y="40" font-family="'Arial Black', sans-serif" font-size="25" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="1">
+        PRICE: 11999
+      </text>
+    </g>
+
+    <!-- Website -->
+    <text x="765" y="18" font-family="sans-serif" font-size="13" font-weight="bold" fill="#18181b" text-anchor="end">Check Our Site:</text>
+    <text x="765" y="42" font-family="'Arial Black', sans-serif" font-size="19" font-weight="900" fill="#18181b" text-anchor="end">solarstock.com</text>
+  </g>
+</svg>
