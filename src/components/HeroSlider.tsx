@@ -28,49 +28,6 @@ interface HeroSliderProps {
   onOpenChat?: () => void;
 }
 
-// Crisp mechanical tactile click sound synthesizer using Web Audio API
-const playSlideClickSound = () => {
-  try {
-    const AudioContextClass =
-      window.AudioContext ||
-      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    if (!AudioContextClass) return;
-
-    const ctx = new AudioContextClass();
-    if (ctx.state === 'suspended') {
-      ctx.resume().catch(() => {});
-    }
-
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    const filter = ctx.createBiquadFilter();
-
-    // Highpass filter for a crisp mechanical switch click
-    filter.type = 'highpass';
-    filter.frequency.setValueAtTime(1400, ctx.currentTime);
-
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(1800, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.028);
-
-    gain.gain.setValueAtTime(0.18, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.028);
-
-    osc.connect(filter);
-    filter.connect(gain);
-    gain.connect(ctx.destination);
-
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + 0.03);
-
-    setTimeout(() => {
-      ctx.close().catch(() => {});
-    }, 80);
-  } catch {
-    // Audio might be gracefully suppressed by browser until user gesture
-  }
-};
-
 export const HeroSlider: React.FC<HeroSliderProps> = ({
   onBannerClick,
   onSelectProduct,
@@ -83,21 +40,6 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
   const [isPaused, setIsPaused] = useState(false);
   const totalSlides = 4;
   const slideTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const isFirstMount = useRef(true);
-
-  // 2. Automated Morphing Animation State for 2nd Image (Left Sub-Banner)
-  const [banner2ActiveIndex, setBanner2ActiveIndex] = useState(0);
-  const [banner2Hovered, setBanner2Hovered] = useState(false);
-  const banner2TimerRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Trigger clicking sound on every slide change
-  useEffect(() => {
-    if (isFirstMount.current) {
-      isFirstMount.current = false;
-      return;
-    }
-    playSlideClickSound();
-  }, [activeSlide]);
 
   // Top Hero Carousel timer (faster 4.2 seconds)
   useEffect(() => {
@@ -112,26 +54,13 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
     };
   }, [isPaused, totalSlides]);
 
-  // 2nd Image (Left Sub-Banner) automatic morphing animation cycle (faster 2.3 seconds)
-  useEffect(() => {
-    banner2TimerRef.current = setInterval(() => {
-      setBanner2ActiveIndex((prev) => (prev + 1) % 3);
-    }, 2300);
-
-    return () => {
-      if (banner2TimerRef.current) clearInterval(banner2TimerRef.current);
-    };
-  }, []);
-
   const handlePrevSlide = (e?: React.MouseEvent) => {
     e?.stopPropagation();
-    playSlideClickSound();
     setActiveSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
   };
 
   const handleNextSlide = (e?: React.MouseEvent) => {
     e?.stopPropagation();
-    playSlideClickSound();
     setActiveSlide((prev) => (prev + 1) % totalSlides);
   };
 
@@ -144,43 +73,6 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
       onBannerClick(category);
     }
   };
-
-  // Curated product morph items for 2nd Image (Left Sub-Banner)
-  const banner2Items = [
-    {
-      id: 'prod-growatt-5000es',
-      name: 'Growatt SPF 5000ES',
-      badge: '5kW Pure Sine Wave',
-      specs: '100A MPPT • 450V PV',
-      tag: '🔥 Best Seller Inverter',
-      accentColor: 'from-amber-500 to-orange-600',
-      glowColor: 'rgba(245, 158, 11, 0.4)',
-      category: 'hybrid-inverters',
-      visualType: 'growatt'
-    },
-    {
-      id: 'prod-solarstock-neozl-300w',
-      name: 'SolarStock NEOZL 300W',
-      badge: '192Wh LiFePO4 Station',
-      specs: '45W Type-C PD • 3000+ Cycles',
-      tag: '⚡ Ultra-Portable IPS',
-      accentColor: 'from-yellow-400 to-amber-500',
-      glowColor: 'rgba(234, 179, 8, 0.4)',
-      category: 'ips-systems',
-      visualType: 'neozl'
-    },
-    {
-      id: 'prod-srne-6kw-hybrid',
-      name: 'SRNE 6.2kW Dual-PV',
-      badge: '6200W Dual Output',
-      specs: 'Dual AC Output • 120A MPPT',
-      tag: '⭐ Heavy-Duty Hybrid',
-      accentColor: 'from-blue-500 to-indigo-600',
-      glowColor: 'rgba(59, 130, 246, 0.4)',
-      category: 'hybrid-inverters',
-      visualType: 'srne'
-    }
-  ];
 
   return (
     <section className="relative max-w-7xl mx-auto px-3 sm:px-4 pt-2 sm:pt-3">
@@ -584,7 +476,6 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
               key={idx}
               onClick={(e) => {
                 e.stopPropagation();
-                playSlideClickSound();
                 setActiveSlide(idx);
               }}
               className={`h-1.5 rounded-full transition-all ${
@@ -596,164 +487,41 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
         </div>
       </div>
 
-      {/* 2. Dual Sub-Banners (2nd Image & 3rd Image) with Automatic "Appears From Inside" Hover & Cycling Morph Animation */}
+      {/* 2. Dual Sub-Banners (2nd Modern Slide & 3rd Modern Slide) - Identical Sizing & Pure Seamless HD Ambient Video Players */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mt-3 sm:mt-3.5">
         
         {/* ========================================================================= */}
-        {/* 2ND IMAGE (Left Sub-Banner): Automated Inner Morph & Hover Animation      */}
+        {/* 2ND MODERN SLIDE (Left Video): Emmvee High-Tech Solar Cell Factory Video  */}
         {/* ========================================================================= */}
-        <div
-          onMouseEnter={() => setBanner2Hovered(true)}
-          onMouseLeave={() => setBanner2Hovered(false)}
-          onClick={() => {
-            const currentItem = banner2Items[banner2ActiveIndex];
-            handleClick(currentItem.category, currentItem.id);
-          }}
-          className="relative rounded-2xl overflow-hidden bg-gradient-to-b from-[#1b2333] via-[#101725] to-[#0a0f1d] border border-neutral-800 shadow-md hover:shadow-2xl hover:border-amber-400/80 transition-all duration-500 cursor-pointer p-3.5 sm:p-4 flex flex-col justify-between min-h-[190px] sm:min-h-[210px] group"
-        >
-          {/* Ambient Glow Aura */}
-          <div
-            className="absolute -top-12 -right-12 w-48 h-48 rounded-full blur-3xl transition-opacity duration-700 pointer-events-none"
-            style={{
-              background: banner2Items[banner2ActiveIndex].glowColor,
-              opacity: banner2Hovered ? 0.35 : 0.15
-            }}
-          />
-
-          {/* Top Header & Guarantee */}
-          <div className="relative z-10 text-center">
-            <div className="flex items-center justify-between gap-2 mb-0.5">
-              <span className="text-[10px] text-amber-400 font-bold uppercase tracking-wider flex items-center gap-1">
-                <Flame className="w-3 h-3 text-amber-400 animate-pulse" />
-                {banner2Items[banner2ActiveIndex].tag}
-              </span>
-              
-              {/* Micro Cycle Dots for Automatic Animation */}
-              <div className="flex items-center gap-1 bg-black/40 px-2 py-0.5 rounded-full border border-neutral-700">
-                <span className="text-[8px] text-neutral-400 font-mono">LIVE PREVIEW</span>
-                {banner2Items.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      playSlideClickSound();
-                      setBanner2ActiveIndex(i);
-                    }}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      banner2ActiveIndex === i ? 'w-3.5 bg-amber-400' : 'w-1.5 bg-neutral-600'
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <h3 className="text-sm sm:text-lg font-black text-white uppercase tracking-tight font-['Outfit',sans-serif] group-hover:text-amber-400 transition-colors">
-              {subBanners.leftBanner.title}
-            </h3>
-
-            <div className="inline-flex items-center gap-1 bg-neutral-900/90 border border-amber-400/40 rounded-md px-2 py-0.5 mt-0.5 shadow-xs">
-              <ShieldCheck className="w-3 h-3 text-amber-400" />
-              <span className="text-[8px] sm:text-[9px] font-black text-white">
-                solarCare+ <span className="text-amber-400 font-bold">{subBanners.leftBanner.guaranteeText}</span>
-              </span>
-            </div>
-          </div>
-
-          {/* THE AUTOMATIC INNER MORPH / APPEARS-FROM-INSIDE STAGE */}
-          <div className="relative z-10 w-full my-2 h-24 sm:h-28 flex items-center justify-center overflow-hidden">
-            {banner2Items.map((item, index) => {
-              const isActive = banner2ActiveIndex === index;
-              
-              return (
-                <div
-                  key={item.id}
-                  className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ease-out pointer-events-none ${
-                    isActive
-                      ? 'opacity-100 scale-100 translate-y-0 z-20'
-                      : 'opacity-0 scale-[0.97] translate-y-1 z-0'
-                  }`}
-                >
-                  {/* Outer Orbiting Visual Container */}
-                  <div className="w-full max-w-sm flex items-center justify-center gap-2 sm:gap-3 px-2">
-                    
-                    {/* Left Mini Companion Satellite */}
-                    <div className="w-14 sm:w-18 aspect-square rounded-lg bg-neutral-900/90 border border-neutral-700/80 p-1 flex flex-col items-center justify-center text-center shadow-md">
-                      <Zap className="w-3.5 h-3.5 text-amber-400 mb-0.5" />
-                      <span className="text-[7px] text-neutral-300 font-bold leading-tight line-clamp-1">Pure Sine</span>
-                      <span className="text-[6px] text-amber-400 font-mono">0ms Sync</span>
-                    </div>
-
-                    {/* Main Morphing Centerpiece Hero */}
-                    <div className={`relative px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-gradient-to-r ${item.accentColor} p-[1.5px] shadow-xl shadow-black/60 transform transition-transform duration-200 ${banner2Hovered ? 'scale-[1.02]' : 'scale-100'}`}>
-                      <div className="bg-neutral-950/95 rounded-[10px] sm:rounded-[14px] px-3 py-1.5 flex items-center gap-2.5 border border-neutral-800">
-                        {/* Equipment Visual Icon / Indicator */}
-                        <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-neutral-900 border border-amber-400/40 flex items-center justify-center relative shadow-inner">
-                          {item.visualType === 'growatt' && <Zap className="w-5 h-5 text-amber-400" />}
-                          {item.visualType === 'neozl' && <Sparkles className="w-5 h-5 text-yellow-400" />}
-                          {item.visualType === 'srne' && <Cpu className="w-5 h-5 text-blue-400" />}
-                          <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 border border-neutral-950 animate-ping" />
-                        </div>
-
-                        {/* Model Specs & Dynamic Text */}
-                        <div className="text-left">
-                          <span className="text-[10px] sm:text-xs font-black text-white block leading-tight">
-                            {item.name}
-                          </span>
-                          <span className="text-[8px] sm:text-[9px] text-amber-300 font-semibold block leading-tight">
-                            {item.badge}
-                          </span>
-                          <span className="text-[7px] text-neutral-400 font-mono block">
-                            {item.specs}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right Mini Companion Satellite */}
-                    <div className="w-14 sm:w-18 aspect-square rounded-lg bg-neutral-900/90 border border-neutral-700/80 p-1 flex flex-col items-center justify-center text-center shadow-md">
-                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 mb-0.5" />
-                      <span className="text-[7px] text-neutral-300 font-bold leading-tight line-clamp-1">SolarCare+</span>
-                      <span className="text-[6px] text-emerald-400 font-mono">5Y Warranty</span>
-                    </div>
-
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Action Footer Bar */}
-          <div className="relative z-10 flex items-center justify-between pt-1 border-t border-neutral-800/80">
-            <span className="text-[9px] text-neutral-400 flex items-center gap-1 font-medium">
-              <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-              <span>Click to view model & specs</span>
-            </span>
-
-            <button
-              type="button"
-              className="bg-amber-400 hover:bg-amber-300 text-neutral-950 px-3.5 py-1 rounded-lg text-[10px] sm:text-xs font-black tracking-wider uppercase shadow-xs transition-all duration-200 hover:scale-105 flex items-center gap-1"
-            >
-              <span>{subBanners.leftBanner.buttonText || 'Buy Now'}</span>
-              <ArrowRight className="w-3 h-3" />
-            </button>
-          </div>
-        </div>
-
-        {/* ========================================================================= */}
-        {/* 3RD IMAGE / 3RD SECTION: SolarStock ESS 5-in-1 Video Showcase              */}
-        {/* ========================================================================= */}
-        <div className="relative rounded-2xl overflow-hidden bg-black border border-neutral-800 shadow-md hover:shadow-2xl hover:border-cyan-500/60 transition-all duration-300 min-h-[190px] sm:min-h-[210px] h-[190px] sm:h-[210px] w-full flex items-center justify-center group">
-          <div className="absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center bg-black">
+        <div className="relative rounded-2xl overflow-hidden bg-black border border-neutral-800 shadow-md hover:shadow-2xl hover:border-cyan-500/60 transition-all duration-300 min-h-[190px] sm:min-h-[210px] h-[190px] sm:h-[210px] w-full flex items-center justify-center select-none">
+          <div className="absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center bg-black pointer-events-none">
             <iframe
-              src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F889945084161954%2F&show_text=0&autoplay=1&muted=1&mute=1&loop=1&width=500"
-              title="SolarStock ESS 5-in-1 1000W 2kWh Video Demo"
-              className="w-full h-full min-w-full min-h-full object-cover border-0 scale-105"
-              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen"
+              src="https://www.youtube-nocookie.com/embed/pK9cEeLEASU?autoplay=1&mute=1&loop=1&playlist=pK9cEeLEASU&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&iv_load_policy=3&disablekb=1&fs=0&vq=hd720"
+              title="Inside Emmvee Solar Cell Manufacturing Facility"
+              className="w-[130%] h-[140%] min-w-[125%] min-h-[135%] object-cover border-0 scale-125 sm:scale-130 pointer-events-none select-none"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
             />
           </div>
-          {/* Transparent protective shield for clean ambient playback */}
-          <div className="absolute inset-0 z-10 pointer-events-none bg-transparent" />
+          {/* Transparent protective shield preventing any pauses, clicks or control interactions */}
+          <div className="absolute inset-0 z-20 cursor-default bg-transparent" />
+        </div>
+
+        {/* ========================================================================= */}
+        {/* 3RD MODERN SLIDE (Right Video): Clean Auto-Playing 720p Looping Video      */}
+        {/* ========================================================================= */}
+        <div className="relative rounded-2xl overflow-hidden bg-black border border-neutral-800 shadow-md hover:shadow-2xl hover:border-cyan-500/60 transition-all duration-300 min-h-[190px] sm:min-h-[210px] h-[190px] sm:h-[210px] w-full flex items-center justify-center select-none">
+          <div className="absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center bg-black pointer-events-none">
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/AqsGaXM_dLU?autoplay=1&mute=1&loop=1&playlist=AqsGaXM_dLU&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&iv_load_policy=3&disablekb=1&fs=0&vq=hd720"
+              title="Solar Clean Energy Video Feature"
+              className="w-[130%] h-[140%] min-w-[125%] min-h-[135%] object-cover border-0 scale-125 sm:scale-130 pointer-events-none select-none"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          </div>
+          {/* Transparent protective shield preventing any pauses, clicks or control interactions */}
+          <div className="absolute inset-0 z-20 cursor-default bg-transparent" />
         </div>
 
       </div>
