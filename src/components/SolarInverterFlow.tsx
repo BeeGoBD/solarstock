@@ -2,28 +2,28 @@ import React, { useState, useEffect } from 'react';
 
 export const SolarInverterFlow: React.FC = () => {
   // Live dynamic charging telemetry state
-  const [batteryPercent, setBatteryPercent] = useState(76.4);
-  const [solarWatts, setSolarWatts] = useState(3840);
-  const [solarAmps, setSolarAmps] = useState(74.8);
+  const [batteryPercent, setBatteryPercent] = useState(78.4);
+  const [solarWatts, setSolarWatts] = useState(4180);
+  const [solarAmps, setSolarAmps] = useState(81.6);
   const [sineOffset, setSineOffset] = useState(0);
 
   // Real-time dynamic simulation loop for smooth LCD readout
   useEffect(() => {
     const telemetryInterval = setInterval(() => {
       setBatteryPercent((prev) => {
-        if (prev >= 99.8) return 68.0;
-        return Number((prev + 0.15).toFixed(1));
+        if (prev >= 99.9) return 72.0;
+        return Number((prev + 0.12).toFixed(1));
       });
 
-      // Realistic minor PV irradiance fluctuations
-      setSolarWatts(Math.floor(3800 + Math.sin(Date.now() / 1500) * 120 + Math.random() * 40));
-      setSolarAmps(Number((73.5 + Math.sin(Date.now() / 2000) * 2.2).toFixed(1)));
-    }, 400);
+      // Realistic minor PV irradiance fluctuations under direct bright daytime sun
+      setSolarWatts(Math.floor(4150 + Math.sin(Date.now() / 1200) * 160 + Math.random() * 50));
+      setSolarAmps(Number((81.0 + Math.sin(Date.now() / 1600) * 3.2).toFixed(1)));
+    }, 350);
 
     // High frequency sine wave oscilloscope animation
     let animationFrameId: number;
     const animateSine = () => {
-      setSineOffset((prev) => (prev + 0.12) % (Math.PI * 2));
+      setSineOffset((prev) => (prev + 0.14) % (Math.PI * 2));
       animationFrameId = requestAnimationFrame(animateSine);
     };
     animationFrameId = requestAnimationFrame(animateSine);
@@ -41,7 +41,7 @@ export const SolarInverterFlow: React.FC = () => {
     const midY = height / 2;
     let path = `M 0 ${midY}`;
     for (let x = 0; x <= width; x += 2) {
-      const y = midY + Math.sin((x / 10) + sineOffset) * 6;
+      const y = midY + Math.sin((x / 9) + sineOffset) * 6;
       path += ` L ${x} ${y.toFixed(2)}`;
     }
     return path;
@@ -49,185 +49,278 @@ export const SolarInverterFlow: React.FC = () => {
 
   return (
     <div className="relative w-full">
-      {/* Visual Inter-Slide Connecting Energy Cable (Desktop Bridge) */}
-      <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-4 z-30 pointer-events-none">
-        <svg className="w-full h-full overflow-visible" viewBox="0 0 32 16">
+      {/* Visual Inter-Slide Connecting Energy Cable (Desktop Bridge with Electric Lightning) */}
+      <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-6 z-30 pointer-events-none">
+        <svg className="w-full h-full overflow-visible" viewBox="0 0 40 24">
           {/* Outer conduit shadow */}
-          <path d="M 0 8 L 32 8" stroke="#171717" strokeWidth="6" strokeLinecap="round" />
-          {/* Main orange high-voltage cable */}
-          <path d="M 0 8 L 32 8" stroke="#f59e0b" strokeWidth="3.5" strokeLinecap="round" />
-          {/* Glowing pulse core */}
+          <path d="M 0 12 L 40 12" stroke="#0f172a" strokeWidth="8" strokeLinecap="round" />
+          {/* Main heavy DC solar wire */}
+          <path d="M 0 12 L 40 12" stroke="#ea580c" strokeWidth="5" strokeLinecap="round" />
+          {/* Intense electric current core */}
           <path
-            d="M 0 8 L 32 8"
-            stroke="#fef08a"
-            strokeWidth="2"
-            strokeDasharray="4 6"
-            className="animate-[dash_0.6s_linear_infinite]"
+            d="M 0 12 L 40 12"
+            stroke="#38bdf8"
+            strokeWidth="3"
+            strokeDasharray="5 7"
+            className="animate-dash-fast"
           />
+          {/* Supercharged golden spark line */}
+          <path
+            d="M 0 12 L 40 12"
+            stroke="#fef08a"
+            strokeWidth="1.8"
+            strokeDasharray="3 9"
+            className="animate-dash-fast"
+          />
+          {/* Crackling Electric Lightning Arcs Across Bridge */}
+          <path
+            d="M 2 12 Q 10 7, 20 12 T 38 12"
+            fill="none"
+            stroke="#67e8f9"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            className="animate-electric"
+          />
+          <path
+            d="M 4 12 Q 15 16, 26 12 T 36 12"
+            fill="none"
+            stroke="#facc15"
+            strokeWidth="1.2"
+            strokeLinecap="round"
+            className="animate-electric"
+          />
+          {/* Central plasma energy spark */}
+          <circle cx="20" cy="12" r="3" fill="#ffffff" className="animate-spark" />
         </svg>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         
         {/* ========================================================================= */}
-        {/* SLIDE 2: SUN HARVESTING & PHOTOVOLTAIC SOLAR PANEL ANIMATION               */}
+        {/* SLIDE 2: FULL BLUE WEATHER — VIBRANT SKY WITH MOVING CLOUDS & SOLAR PV     */}
         {/* ========================================================================= */}
-        <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#0c1424] via-[#090e1a] to-[#05070d] border border-amber-500/30 shadow-xl min-h-[195px] sm:min-h-[220px] h-[195px] sm:h-[220px] w-full flex items-center justify-center select-none group">
+        <div className="relative rounded-2xl overflow-hidden bg-gradient-to-b from-[#0284c7] via-[#0ea5e9] to-[#38bdf8] border-2 border-sky-300 shadow-xl min-h-[195px] sm:min-h-[220px] h-[195px] sm:h-[220px] w-full flex items-center justify-center select-none group">
           
-          {/* Ambient Solar Sky Aura */}
-          <div className="absolute top-0 left-0 w-64 h-64 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 right-0 w-48 h-48 bg-blue-600/10 rounded-full blur-2xl pointer-events-none" />
+          {/* Ambient Sunny Sky Atmospheric Glow */}
+          <div className="absolute -top-12 -left-12 w-80 h-80 bg-amber-300/40 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-sky-200/30 to-transparent pointer-events-none" />
+
+          {/* ======================================================================= */}
+          {/* ANIMATED MOVING CLOUDS (Multiple Depth Layers & Speeds)                 */}
+          {/* ======================================================================= */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+            {/* Layer 1: High Altitude Soft Cloud (Slow Drift) */}
+            <div className="absolute top-3 left-0 animate-cloud-slow opacity-60">
+              <svg width="110" height="42" viewBox="0 0 110 42" fill="none">
+                <path
+                  d="M18 36h74a14 14 0 0 0 0-28 20 20 0 0 0-38-6 16 16 0 0 0-26 12 12 12 0 0 0-10 22z"
+                  fill="#ffffff"
+                />
+              </svg>
+            </div>
+
+            {/* Layer 2: Mid Altitude Puffy Cumulus Cloud (Medium Drift) */}
+            <div className="absolute top-10 left-[-40px] animate-cloud-medium opacity-75">
+              <svg width="135" height="50" viewBox="0 0 135 50" fill="none">
+                <path
+                  d="M22 44h90a16 16 0 0 0 0-32 24 24 0 0 0-46-8 18 18 0 0 0-32 14 14 14 0 0 0-12 26z"
+                  fill="#ffffff"
+                />
+              </svg>
+            </div>
+
+            {/* Layer 3: Lower Background Fluffy Cloud (Fast Drift) */}
+            <div className="absolute top-24 left-[-80px] animate-cloud-fast opacity-45">
+              <svg width="95" height="36" viewBox="0 0 95 36" fill="none">
+                <path
+                  d="M15 32h65a12 12 0 0 0 0-24 18 18 0 0 0-34-6 14 14 0 0 0-22 10 10 10 0 0 0-9 20z"
+                  fill="#ffffff"
+                />
+              </svg>
+            </div>
+
+            {/* Layer 4: Distant Subtle Wispy Cloud (Slow Drift Staggered) */}
+            <div className="absolute top-5 left-[160px] animate-cloud-slow opacity-40">
+              <svg width="85" height="30" viewBox="0 0 85 30" fill="none">
+                <path
+                  d="M12 26h60a10 10 0 0 0 0-20 15 15 0 0 0-28-4 12 12 0 0 0-20 8 9 9 0 0 0-12 16z"
+                  fill="#ffffff"
+                />
+              </svg>
+            </div>
+          </div>
 
           {/* SVG Sun, Photons & Solar Panel Isometric Stage */}
-          <svg className="w-full h-full p-2" viewBox="0 0 420 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg className="relative z-10 w-full h-full p-2" viewBox="0 0 420 220" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              {/* Sun Flare Gradients */}
-              <radialGradient id="sunCore" cx="50%" cy="50%" r="50%">
+              {/* Day Mode Brilliant Sun Gradients */}
+              <radialGradient id="daySunCore" cx="50%" cy="50%" r="50%">
                 <stop offset="0%" stopColor="#ffffff" />
-                <stop offset="35%" stopColor="#fef08a" />
-                <stop offset="70%" stopColor="#f59e0b" />
-                <stop offset="100%" stopColor="#d97706" stopOpacity="0.8" />
+                <stop offset="25%" stopColor="#fffbeb" />
+                <stop offset="55%" stopColor="#fde047" />
+                <stop offset="85%" stopColor="#f59e0b" />
+                <stop offset="100%" stopColor="#d97706" />
               </radialGradient>
-              <radialGradient id="sunAura" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#fbbf24" stopOpacity="0.6" />
-                <stop offset="60%" stopColor="#f59e0b" stopOpacity="0.2" />
+              
+              <radialGradient id="daySunAura" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#ffffff" stopOpacity="0.8" />
+                <stop offset="40%" stopColor="#fde047" stopOpacity="0.5" />
+                <stop offset="70%" stopColor="#f59e0b" stopOpacity="0.25" />
                 <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
               </radialGradient>
 
-              {/* Solar Cell Gradient */}
-              <linearGradient id="solarCellGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#1e293b" />
-                <stop offset="40%" stopColor="#0f172a" />
-                <stop offset="100%" stopColor="#0284c7" stopOpacity="0.3" />
+              {/* Day Mode High-Efficiency Monocrystalline Silicon Gradient */}
+              <linearGradient id="monoSilCell" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#1e3a8a" />
+                <stop offset="45%" stopColor="#0f172a" />
+                <stop offset="100%" stopColor="#172554" />
               </linearGradient>
 
-              {/* Energy Glow Filter */}
-              <filter id="solarGlow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="3" result="blur" />
+              {/* Electric Wire Glow Filter */}
+              <filter id="electricGlow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="2.5" result="blur" />
                 <feComposite in="SourceGraphic" in2="blur" operator="over" />
               </filter>
             </defs>
 
-            {/* 1. THE SUN (Top-Left Position) */}
-            <g transform="translate(60, 45)">
-              {/* Outer Corona Pulse */}
-              <circle cx="0" cy="0" r="38" fill="url(#sunAura)" className="animate-pulse" />
-              <circle cx="0" cy="0" r="28" fill="url(#sunAura)" />
+            {/* 1. THE BRILLIANT DAY SUN (Top-Left Position) */}
+            <g transform="translate(58, 42)">
+              {/* Giant Sun Heat Corona Pulses */}
+              <circle cx="0" cy="0" r="46" fill="url(#daySunAura)" className="animate-pulse" />
+              <circle cx="0" cy="0" r="32" fill="url(#daySunAura)" />
               
-              {/* Rotating Solar Flare Corona Rays */}
-              <g className="animate-[spin_12s_linear_infinite]">
-                {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => (
+              {/* Rotating Golden Solar Rays */}
+              <g className="animate-[spin_16s_linear_infinite]">
+                {[0, 22.5, 45, 67.5, 90, 112.5, 135, 157.5, 180, 202.5, 225, 247.5, 270, 292.5, 315, 337.5].map((deg) => (
                   <line
                     key={deg}
                     x1="0"
-                    y1={-30}
+                    y1={-28}
                     x2="0"
-                    y2={-38}
-                    stroke="#fde047"
-                    strokeWidth="2.5"
+                    y2={deg % 45 === 0 ? -44 : -36}
+                    stroke="#ffffff"
+                    strokeWidth={deg % 45 === 0 ? "3" : "1.8"}
                     strokeLinecap="round"
                     transform={`rotate(${deg})`}
-                    opacity="0.85"
+                    opacity="0.9"
                   />
                 ))}
               </g>
 
-              {/* Sun Brilliant Core */}
-              <circle cx="0" cy="0" r="20" fill="url(#sunCore)" filter="url(#solarGlow)" />
-              <circle cx="0" cy="0" r="12" fill="#ffffff" opacity="0.9" />
+              {/* Brilliant Glowing Sun Disc */}
+              <circle cx="0" cy="0" r="22" fill="url(#daySunCore)" />
+              <circle cx="0" cy="0" r="14" fill="#ffffff" opacity="0.95" />
             </g>
 
-            {/* 2. PHOTON BEAMS & SOLAR LIGHT STREAMS */}
-            {/* Beam 1 */}
+            {/* 2. BRIGHT SUNBEAMS & ENERGETIC LIGHT PHOTON BEAMS */}
+            {/* Broad Golden Sunbeam Shroud */}
+            <polygon
+              points="60,45 130,190 270,110 90,40"
+              fill="url(#daySunAura)"
+              opacity="0.25"
+            />
+
+            {/* Active Streaming Photons Beam 1 */}
             <line
-              x1="80"
-              y1="60"
+              x1="76"
+              y1="58"
               x2="175"
               y2="120"
-              stroke="#fef08a"
-              strokeWidth="2.5"
-              strokeDasharray="6 8"
-              strokeOpacity="0.9"
-              className="animate-[dash_0.8s_linear_infinite]"
+              stroke="#ffffff"
+              strokeWidth="3.5"
+              strokeDasharray="8 10"
+              strokeLinecap="round"
+              strokeOpacity="0.95"
+              className="animate-dash-fast"
             />
-            {/* Beam 2 */}
+            {/* Active Streaming Photons Beam 2 */}
             <line
-              x1="95"
-              y1="55"
+              x1="90"
+              y1="52"
               x2="235"
               y2="120"
-              stroke="#fbbf24"
-              strokeWidth="2"
-              strokeDasharray="5 7"
-              strokeOpacity="0.8"
-              className="animate-[dash_1s_linear_infinite]"
-            />
-            {/* Beam 3 */}
-            <line
-              x1="70"
-              y1="75"
-              x2="140"
-              y2="145"
               stroke="#fef08a"
-              strokeWidth="2"
-              strokeDasharray="4 6"
-              strokeOpacity="0.75"
-              className="animate-[dash_0.6s_linear_infinite]"
+              strokeWidth="3"
+              strokeDasharray="6 8"
+              strokeLinecap="round"
+              strokeOpacity="0.9"
+              className="animate-dash-fast"
             />
-            {/* Beam 4 */}
+            {/* Active Streaming Photons Beam 3 */}
             <line
-              x1="100"
-              y1="70"
+              x1="66"
+              y1="72"
+              x2="140"
+              y2="148"
+              stroke="#fde047"
+              strokeWidth="2.5"
+              strokeDasharray="5 7"
+              strokeLinecap="round"
+              strokeOpacity="0.85"
+              className="animate-dash-fast"
+            />
+            {/* Active Streaming Photons Beam 4 */}
+            <line
+              x1="96"
+              y1="66"
               x2="280"
               y2="135"
               stroke="#f59e0b"
-              strokeWidth="2"
-              strokeDasharray="6 8"
-              strokeOpacity="0.7"
-              className="animate-[dash_0.9s_linear_infinite]"
+              strokeWidth="2.5"
+              strokeDasharray="7 9"
+              strokeLinecap="round"
+              strokeOpacity="0.8"
+              className="animate-dash-fast"
             />
 
-            {/* 3. PHOTOVOLTAIC SOLAR PANEL (Tilted Perspective Frame) */}
+            {/* 3. MONOCRYSTALLINE PHOTOVOLTAIC SOLAR PANEL (Tilted 3D Isometric View) */}
             <g transform="translate(130, 85)">
               
-              {/* Panel Shadow */}
-              <polygon points="12,108 192,88 238,28 58,48" fill="#000000" opacity="0.5" filter="blur(4px)" />
+              {/* Crisp Ground Shadow */}
+              <polygon points="12,108 192,88 238,28 58,48" fill="#0f172a" opacity="0.35" filter="blur(3px)" />
 
-              {/* Panel Aluminum Exterior Bevel Frame */}
+              {/* Panel Aluminum Alloy Beveled Outer Frame */}
               <polygon
                 points="0,100 180,80 225,20 45,40"
-                fill="#334155"
+                fill="#cbd5e1"
                 stroke="#64748b"
-                strokeWidth="2.5"
+                strokeWidth="2"
               />
 
-              {/* Solar Glass PV Surface */}
+              {/* Solar High-Transmission Tempered Glass PV Surface */}
               <polygon
-                points="5,97 176,78 220,23 49,42"
-                fill="url(#solarCellGrad)"
-                stroke="#0284c7"
-                strokeWidth="1"
+                points="4,97 176,78 221,23 49,42"
+                fill="url(#monoSilCell)"
+                stroke="#38bdf8"
+                strokeWidth="1.2"
               />
 
-              {/* Photovoltaic Cells & Anti-Reflective Grid (4x3 Grid) */}
-              {/* Cell Busbars Horizontal */}
-              <line x1="16" y1="83" x2="187" y2="64" stroke="#38bdf8" strokeWidth="0.8" opacity="0.6" />
-              <line x1="27" y1="69" x2="198" y2="50" stroke="#38bdf8" strokeWidth="0.8" opacity="0.6" />
-              <line x1="38" y1="55" x2="209" y2="36" stroke="#38bdf8" strokeWidth="0.8" opacity="0.6" />
+              {/* Photovoltaic Cells & Anti-Reflective Grid Layout */}
+              {/* Horizontal Busbars */}
+              <line x1="16" y1="83" x2="187" y2="64" stroke="#93c5fd" strokeWidth="0.9" opacity="0.75" />
+              <line x1="27" y1="69" x2="198" y2="50" stroke="#93c5fd" strokeWidth="0.9" opacity="0.75" />
+              <line x1="38" y1="55" x2="209" y2="36" stroke="#93c5fd" strokeWidth="0.9" opacity="0.75" />
 
-              {/* Cell Busbars Vertical */}
-              <line x1="50" y1="92" x2="90" y2="35" stroke="#94a3b8" strokeWidth="1" opacity="0.7" />
-              <line x1="92" y1="88" x2="132" y2="31" stroke="#94a3b8" strokeWidth="1" opacity="0.7" />
-              <line x1="135" y1="83" x2="175" y2="26" stroke="#94a3b8" strokeWidth="1" opacity="0.7" />
+              {/* Vertical Multi-Busbar (MBB) Ribbons */}
+              <line x1="50" y1="92" x2="90" y2="35" stroke="#e2e8f0" strokeWidth="1.2" opacity="0.85" />
+              <line x1="92" y1="88" x2="132" y2="31" stroke="#e2e8f0" strokeWidth="1.2" opacity="0.85" />
+              <line x1="135" y1="83" x2="175" y2="26" stroke="#e2e8f0" strokeWidth="1.2" opacity="0.85" />
 
-              {/* Active Photon Energy Absorption Glow across cells */}
+              {/* Sunlight Glint & Glass Reflection Sheen */}
+              <polygon
+                points="18,80 80,72 160,28 98,36"
+                fill="#ffffff"
+                opacity="0.18"
+              />
+
+              {/* Active Photon Energy Absorption Glow across solar cells */}
               <ellipse
                 cx="115"
                 cy="60"
                 rx="65"
                 ry="24"
                 fill="#38bdf8"
-                opacity="0.25"
+                opacity="0.3"
                 className="animate-pulse"
               />
               <ellipse
@@ -235,51 +328,87 @@ export const SolarInverterFlow: React.FC = () => {
                 cy="60"
                 rx="35"
                 ry="12"
-                fill="#facc15"
-                opacity="0.3"
+                fill="#fde047"
+                opacity="0.35"
                 className="animate-pulse"
               />
 
               {/* DC Junction Box & MC4 Solar Connector (Lower Right Corner) */}
               <g transform="translate(180, 80)">
-                <rect x="-6" y="-6" width="14" height="14" rx="3" fill="#0f172a" stroke="#f59e0b" strokeWidth="1.5" />
-                <circle cx="1" cy="1" r="3" fill="#10b981" className="animate-ping" />
-                <circle cx="1" cy="1" r="2.5" fill="#34d399" />
+                <rect x="-6" y="-6" width="15" height="15" rx="3" fill="#0f172a" stroke="#f59e0b" strokeWidth="2" />
+                {/* Generation Spark at Junction Box */}
+                <circle cx="1.5" cy="1.5" r="4" fill="#38bdf8" className="animate-spark" />
+                <circle cx="1.5" cy="1.5" r="2.5" fill="#ffffff" />
               </g>
             </g>
 
-            {/* 4. HIGH-VOLTAGE OUTPUT DC ENERGY CABLE (Exits right edge to Slide 3) */}
+            {/* 4. HIGH-VOLTAGE OUTPUT DC WIRE WITH ELECTRIC LIGHTNING ARCS (Exits to Slide 3) */}
             <g>
-              {/* Outer Cable Armor Tube */}
+              {/* Outer Heavy Armor Conduit */}
               <path
                 d="M 311 161 C 340 161, 370 145, 420 145"
                 fill="none"
                 stroke="#0f172a"
-                strokeWidth="7"
+                strokeWidth="8"
                 strokeLinecap="round"
               />
-              {/* Solar Conduit Orange Wire */}
+              {/* Heavy Orange Solar PV Wire */}
               <path
                 d="M 311 161 C 340 161, 370 145, 420 145"
                 fill="none"
-                stroke="#f59e0b"
-                strokeWidth="4"
+                stroke="#ea580c"
+                strokeWidth="5"
                 strokeLinecap="round"
               />
-              {/* Moving Electric Energy Flow Particles */}
+              {/* Rapid Moving Electricity Plasma Flow (Cyan + Gold) */}
+              <path
+                d="M 311 161 C 340 161, 370 145, 420 145"
+                fill="none"
+                stroke="#38bdf8"
+                strokeWidth="3.2"
+                strokeDasharray="6 8"
+                className="animate-dash-fast"
+                filter="url(#electricGlow)"
+              />
               <path
                 d="M 311 161 C 340 161, 370 145, 420 145"
                 fill="none"
                 stroke="#fef08a"
-                strokeWidth="2.5"
-                strokeDasharray="6 8"
-                className="animate-[dash_0.6s_linear_infinite]"
+                strokeWidth="1.8"
+                strokeDasharray="4 7"
+                className="animate-dash-fast"
               />
+
+              {/* Zigzag Electric Lightning Bolt Arc 1 along the wire */}
+              <path
+                d="M 312 161 L 325 158 L 332 163 L 348 153 L 360 157 L 375 147 L 390 149 L 405 144 L 420 145"
+                fill="none"
+                stroke="#67e8f9"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="animate-electric"
+              />
+              {/* Zigzag Electric Lightning Bolt Arc 2 */}
+              <path
+                d="M 315 162 L 328 165 L 340 159 L 355 161 L 368 151 L 382 153 L 398 143 L 412 147 L 420 145"
+                fill="none"
+                stroke="#fde047"
+                strokeWidth="1.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="animate-electric"
+              />
+
+              {/* Crackling Electric Sparks along wire */}
+              <circle cx="330" cy="160" r="2.5" fill="#ffffff" className="animate-spark" />
+              <circle cx="365" cy="153" r="3" fill="#67e8f9" className="animate-spark" />
+              <circle cx="400" cy="146" r="2.5" fill="#fde047" className="animate-spark" />
             </g>
           </svg>
 
-          {/* Micro Telemetry Pill: Solar Irradiance */}
-          <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-md border border-amber-400/40 rounded-lg px-2.5 py-1 flex items-center gap-1.5 shadow-lg">
+          {/* Micro Telemetry Pill: Solar Daytime Irradiance */}
+          <div className="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md border border-amber-300 rounded-lg px-2.5 py-1 flex items-center gap-1.5 shadow-lg">
             <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
             <span className="text-[11px] font-black text-amber-300 font-mono tracking-tight">
               {solarWatts} W
@@ -288,7 +417,7 @@ export const SolarInverterFlow: React.FC = () => {
         </div>
 
         {/* ========================================================================= */}
-        {/* SLIDE 3: SMART INVERTER & ESS UNIT ACTIVELY CHARGING ANIMATION            */}
+        {/* SLIDE 3: SMART INVERTER & ESS UNIT ACTIVELY CHARGING WITH ELECTRIC SPARK  */}
         {/* ========================================================================= */}
         <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#0c1424] via-[#090e1a] to-[#05070d] border border-cyan-500/30 shadow-xl min-h-[195px] sm:min-h-[220px] h-[195px] sm:h-[220px] w-full flex items-center justify-center select-none group">
           
@@ -296,33 +425,70 @@ export const SolarInverterFlow: React.FC = () => {
           <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/12 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
 
-          {/* Incoming High-Voltage Wire from Left Edge */}
+          {/* Incoming High-Voltage Wire from Left Edge with Electric Lightning Arcs */}
           <svg className="absolute left-0 top-0 w-full h-full pointer-events-none" viewBox="0 0 420 220" fill="none">
+            {/* Outer Armor Conduit */}
             <path
-              d="M 0 145 C 40 145, 70 160, 100 160"
+              d="M 0 145 C 38 145, 68 160, 98 160"
               fill="none"
               stroke="#0f172a"
-              strokeWidth="7"
+              strokeWidth="8"
               strokeLinecap="round"
             />
+            {/* Heavy Orange Solar Wire */}
             <path
-              d="M 0 145 C 40 145, 70 160, 100 160"
+              d="M 0 145 C 38 145, 68 160, 98 160"
               fill="none"
-              stroke="#f59e0b"
-              strokeWidth="4"
+              stroke="#ea580c"
+              strokeWidth="5"
               strokeLinecap="round"
             />
+            {/* Rapid Electricity Pulse Stream */}
             <path
-              d="M 0 145 C 40 145, 70 160, 100 160"
+              d="M 0 145 C 38 145, 68 160, 98 160"
+              fill="none"
+              stroke="#38bdf8"
+              strokeWidth="3.2"
+              strokeDasharray="6 8"
+              className="animate-dash-fast"
+            />
+            <path
+              d="M 0 145 C 38 145, 68 160, 98 160"
               fill="none"
               stroke="#fef08a"
-              strokeWidth="2.5"
-              strokeDasharray="6 8"
-              className="animate-[dash_0.6s_linear_infinite]"
+              strokeWidth="1.8"
+              strokeDasharray="4 7"
+              className="animate-dash-fast"
             />
-            {/* Input Port Spark & Connection Node */}
-            <circle cx="100" cy="160" r="5" fill="#f59e0b" />
-            <circle cx="100" cy="160" r="3" fill="#ffffff" className="animate-ping" />
+
+            {/* Zigzag Electric Lightning Bolt entering inverter terminal */}
+            <path
+              d="M 0 145 L 14 143 L 26 148 L 42 149 L 56 156 L 70 155 L 85 162 L 98 160"
+              fill="none"
+              stroke="#67e8f9"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="animate-electric"
+            />
+            <path
+              d="M 0 146 L 18 148 L 32 144 L 48 152 L 64 158 L 78 157 L 92 163 L 98 160"
+              fill="none"
+              stroke="#fde047"
+              strokeWidth="1.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="animate-electric"
+            />
+
+            {/* Electric Sparks at Entry Port */}
+            <circle cx="28" cy="146" r="2.5" fill="#ffffff" className="animate-spark" />
+            <circle cx="68" cy="156" r="2.5" fill="#67e8f9" className="animate-spark" />
+
+            {/* High-Voltage Inverter Input Port Terminal Flash */}
+            <circle cx="98" cy="160" r="7" fill="#f59e0b" opacity="0.8" />
+            <circle cx="98" cy="160" r="5" fill="#38bdf8" className="animate-pulse" />
+            <circle cx="98" cy="160" r="3.5" fill="#ffffff" className="animate-spark" />
           </svg>
 
           {/* Inverter Hardware Chassis (Centerpiece) */}
