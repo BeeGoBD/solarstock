@@ -374,65 +374,65 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
         {activeSlide === 1 && (
           <div
             onClick={() => handleClick('solar-packages')}
-            className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-900 border border-sky-400/40 shadow-xl cursor-pointer transition-all duration-300 min-h-[300px] sm:min-h-[370px] md:min-h-[400px] flex flex-col justify-between p-4 sm:p-6 text-white group"
+            className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-900 border border-sky-400/40 shadow-lg cursor-pointer transition-all duration-300 min-h-[300px] sm:min-h-[370px] md:min-h-[400px] sm:h-[370px] md:h-[400px] flex flex-col justify-between p-3 sm:p-5 text-white group"
           >
             {/* Background Ambient Blur Glow */}
-            <div className="absolute top-0 right-0 w-80 h-80 bg-sky-500/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-0 right-0 w-72 h-72 bg-sky-500/15 rounded-full blur-3xl pointer-events-none" />
 
-            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-5 my-auto">
-              <div className="space-y-3 max-w-md text-center md:text-left">
-                <span className="inline-flex items-center gap-1.5 bg-sky-500/20 text-sky-300 border border-sky-400/40 font-black px-3 py-1 rounded-full text-[10px] sm:text-xs uppercase tracking-wider backdrop-blur-md">
-                  <Sun className="w-3.5 h-3.5 text-amber-400 animate-spin" />
+            <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-5 my-auto">
+              <div className="space-y-1.5 sm:space-y-2 max-w-md text-center sm:text-left">
+                <span className="inline-flex items-center gap-1 bg-sky-500/20 text-sky-300 border border-sky-400/40 font-black px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] uppercase tracking-wider backdrop-blur-md">
+                  <Sun className="w-3 h-3 text-amber-400 animate-spin" />
                   CLEAN ENERGY ARCHITECTURE
                 </span>
-                <h2 className="text-xl sm:text-3xl md:text-4xl font-black font-['Outfit',sans-serif] text-white tracking-tight leading-tight">
+                <h2 className="text-base sm:text-xl md:text-2xl font-black font-['Outfit',sans-serif] text-white tracking-tight leading-snug">
                   Power Your Home From Your Own Roof
                 </h2>
-                <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
-                  Experience true electricity freedom. High-efficiency monocrystalline solar panels engineered seamlessly onto your rooftop for 25+ years of silent, zero-emission electricity.
+                <p className="text-[11px] sm:text-xs text-neutral-300 line-clamp-2 leading-relaxed">
+                  High-efficiency monocrystalline solar panels engineered seamlessly onto your rooftop for 25+ years of silent, zero-emission electricity.
                 </p>
 
                 {/* Feature Chips */}
-                <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 pt-1">
-                  <span className="bg-white/10 backdrop-blur-md border border-white/15 text-neutral-200 text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-lg">
-                    ✨ Up to 90% Bill Reduction
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 pt-0.5">
+                  <span className="bg-white/10 backdrop-blur-md border border-white/15 text-neutral-200 text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 rounded-md">
+                    ✨ 90% Bill Reduction
                   </span>
-                  <span className="bg-white/10 backdrop-blur-md border border-white/15 text-neutral-200 text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-lg">
-                    🛡️ 25 Years Linear Warranty
+                  <span className="bg-white/10 backdrop-blur-md border border-white/15 text-neutral-200 text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 rounded-md">
+                    🛡️ 25Y Warranty
                   </span>
-                  <span className="bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-lg">
-                    🌱 100% Green Living
+                  <span className="bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 rounded-md">
+                    🌱 100% Green
                   </span>
                 </div>
               </div>
 
-              {/* High-Resolution Photorealistic AI Image Display */}
-              <div className="relative w-full max-w-[320px] sm:max-w-[390px] md:max-w-[430px] rounded-2xl overflow-hidden border-2 border-sky-400/50 shadow-2xl shadow-sky-500/20 group-hover:border-sky-300 transition-all duration-300">
+              {/* Compact Matching Proportion AI Image Display */}
+              <div className="relative w-48 sm:w-60 md:w-72 shrink-0 rounded-xl overflow-hidden border-2 border-sky-400/50 shadow-xl shadow-sky-500/10 group-hover:border-sky-300 transition-all duration-300">
                 <img
                   src={rooftopSolarHome}
                   alt="Modern rooftop solar home under sunny sky"
                   referrerPolicy="no-referrer"
-                  className="w-full aspect-[16/10] sm:aspect-[16/9] object-cover transform group-hover:scale-105 transition-transform duration-500"
+                  className="w-full aspect-[16/10] object-cover transform group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10 pointer-events-none" />
-                <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                    <span className="text-[11px] font-bold text-sky-200 drop-shadow-sm font-mono">
-                      Residential On-Grid & Hybrid
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/10 pointer-events-none" />
+                <div className="absolute bottom-2 left-2.5 right-2.5 flex items-center justify-between text-white">
+                  <div className="flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                    <span className="text-[10px] font-bold text-sky-200 drop-shadow-sm font-mono">
+                      Residential On-Grid
                     </span>
                   </div>
-                  <span className="text-[10px] bg-sky-500/80 px-2 py-0.5 rounded font-mono font-bold backdrop-blur-xs">
+                  <span className="text-[9px] bg-sky-500/80 px-1.5 py-0.5 rounded font-mono font-bold backdrop-blur-xs">
                     5kW - 20kW
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="relative z-10 flex items-center justify-between pt-3 border-t border-white/10 mt-2">
-              <span className="text-xs text-neutral-400 font-medium">Engineered for Tropical Weather & Storm Resistance</span>
-              <span className="text-amber-400 font-bold text-xs flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                Explore Rooftop Systems <ArrowRight className="w-3.5 h-3.5" />
+            <div className="relative z-10 flex items-center justify-between pt-1.5 border-t border-white/10">
+              <span className="text-[10px] sm:text-xs text-neutral-400 font-medium">Engineered for Tropical Weather & Storm Resistance</span>
+              <span className="text-amber-400 font-bold text-[10px] sm:text-xs flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                Explore Rooftop Systems <ArrowRight className="w-3 h-3" />
               </span>
             </div>
           </div>
@@ -442,65 +442,65 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
         {activeSlide === 2 && (
           <div
             onClick={() => handleClick('hybrid-inverters')}
-            className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-gradient-to-br from-[#0c1a2e] via-[#111f38] to-[#0a101f] border border-amber-400/40 shadow-xl cursor-pointer transition-all duration-300 min-h-[300px] sm:min-h-[370px] md:min-h-[400px] flex flex-col justify-between p-4 sm:p-6 text-white group"
+            className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-gradient-to-br from-[#0c1a2e] via-[#111f38] to-[#0a101f] border border-amber-400/40 shadow-lg cursor-pointer transition-all duration-300 min-h-[300px] sm:min-h-[370px] md:min-h-[400px] sm:h-[370px] md:h-[400px] flex flex-col justify-between p-3 sm:p-5 text-white group"
           >
             {/* Background Ambient Warm Glow */}
-            <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-0 right-0 w-72 h-72 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
 
-            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-5 my-auto">
-              <div className="space-y-3 max-w-md text-center md:text-left">
-                <span className="inline-flex items-center gap-1.5 bg-amber-500/20 text-amber-300 border border-amber-400/40 font-black px-3 py-1 rounded-full text-[10px] sm:text-xs uppercase tracking-wider backdrop-blur-md">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                  24/7 PEACE OF MIND FOR FAMILY
+            <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-5 my-auto">
+              <div className="space-y-1.5 sm:space-y-2 max-w-md text-center sm:text-left">
+                <span className="inline-flex items-center gap-1 bg-amber-500/20 text-amber-300 border border-amber-400/40 font-black px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] uppercase tracking-wider backdrop-blur-md">
+                  <Sparkles className="w-3 h-3 text-amber-300" />
+                  24/7 FAMILY COMFORT
                 </span>
-                <h2 className="text-xl sm:text-3xl md:text-4xl font-black font-['Outfit',sans-serif] text-white tracking-tight leading-tight">
+                <h2 className="text-base sm:text-xl md:text-2xl font-black font-['Outfit',sans-serif] text-white tracking-tight leading-snug">
                   Uninterrupted Smiles & Comfortable Living
                 </h2>
-                <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
-                  Say goodbye to load shedding and power interruptions. Keep your lights, ceiling fans, WiFi, study lamps, and refrigerators running continuously with zero switchover delay.
+                <p className="text-[11px] sm:text-xs text-neutral-300 line-clamp-2 leading-relaxed">
+                  Say goodbye to load shedding. Keep your lights, ceiling fans, WiFi, and refrigerator running continuously with zero switchover lag.
                 </p>
 
                 {/* Feature Chips */}
-                <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 pt-1">
-                  <span className="bg-white/10 backdrop-blur-md border border-white/15 text-neutral-200 text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-lg">
-                    ⚡ Zero Millisecond Transfer
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 pt-0.5">
+                  <span className="bg-white/10 backdrop-blur-md border border-white/15 text-neutral-200 text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 rounded-md">
+                    ⚡ Zero Lag Transfer
                   </span>
-                  <span className="bg-white/10 backdrop-blur-md border border-white/15 text-neutral-200 text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-lg">
-                    🔇 100% Silent Operation
+                  <span className="bg-white/10 backdrop-blur-md border border-white/15 text-neutral-200 text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 rounded-md">
+                    🔇 100% Silent
                   </span>
-                  <span className="bg-amber-400/20 border border-amber-300/40 text-amber-300 text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-lg">
-                    👨‍👩‍👧 Family First Safety
+                  <span className="bg-amber-400/20 border border-amber-300/40 text-amber-300 text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 rounded-md">
+                    👨‍👩‍👧 Family Safety
                   </span>
                 </div>
               </div>
 
-              {/* High-Resolution Photorealistic AI Image Display */}
-              <div className="relative w-full max-w-[320px] sm:max-w-[390px] md:max-w-[430px] rounded-2xl overflow-hidden border-2 border-amber-400/50 shadow-2xl shadow-amber-500/20 group-hover:border-amber-300 transition-all duration-300">
+              {/* Compact Matching Proportion AI Image Display */}
+              <div className="relative w-48 sm:w-60 md:w-72 shrink-0 rounded-xl overflow-hidden border-2 border-amber-400/50 shadow-xl shadow-amber-500/10 group-hover:border-amber-300 transition-all duration-300">
                 <img
                   src={familySolarLiving}
                   alt="Happy family relaxing together in solar powered home"
                   referrerPolicy="no-referrer"
-                  className="w-full aspect-[16/10] sm:aspect-[16/9] object-cover transform group-hover:scale-105 transition-transform duration-500"
+                  className="w-full aspect-[16/10] object-cover transform group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10 pointer-events-none" />
-                <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-[11px] font-bold text-amber-200 drop-shadow-sm font-mono">
-                      Safe & Clean LiFePO4 Energy
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/10 pointer-events-none" />
+                <div className="absolute bottom-2 left-2.5 right-2.5 flex items-center justify-between text-white">
+                  <div className="flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-[10px] font-bold text-amber-200 drop-shadow-sm font-mono">
+                      LiFePO4 Home Energy
                     </span>
                   </div>
-                  <span className="text-[10px] bg-amber-500/80 text-neutral-950 px-2 py-0.5 rounded font-mono font-black backdrop-blur-xs">
+                  <span className="text-[9px] bg-amber-500/80 text-neutral-950 px-1.5 py-0.5 rounded font-mono font-black backdrop-blur-xs">
                     6000+ Cycles
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="relative z-10 flex items-center justify-between pt-3 border-t border-white/10 mt-2">
-              <span className="text-xs text-neutral-400 font-medium">Automatic Emergency Power Backup for Lights, Fans & Gadgets</span>
-              <span className="text-amber-400 font-bold text-xs flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                View Home Hybrid Solutions <ArrowRight className="w-3.5 h-3.5" />
+            <div className="relative z-10 flex items-center justify-between pt-1.5 border-t border-white/10">
+              <span className="text-[10px] sm:text-xs text-neutral-400 font-medium">Automatic Emergency Power Backup for Lights, Fans & Gadgets</span>
+              <span className="text-amber-400 font-bold text-[10px] sm:text-xs flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                View Home Hybrid Solutions <ArrowRight className="w-3 h-3" />
               </span>
             </div>
           </div>
@@ -510,65 +510,65 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
         {activeSlide === 3 && (
           <div
             onClick={() => handleClick('ips-systems')}
-            className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-gradient-to-br from-[#1c1917] via-[#292524] to-[#0c0a09] border border-orange-400/40 shadow-xl cursor-pointer transition-all duration-300 min-h-[300px] sm:min-h-[370px] md:min-h-[400px] flex flex-col justify-between p-4 sm:p-6 text-white group"
+            className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-gradient-to-br from-[#1c1917] via-[#292524] to-[#0c0a09] border border-orange-400/40 shadow-lg cursor-pointer transition-all duration-300 min-h-[300px] sm:min-h-[370px] md:min-h-[400px] sm:h-[370px] md:h-[400px] flex flex-col justify-between p-3 sm:p-5 text-white group"
           >
             {/* Background Ambient Sunset Glow */}
-            <div className="absolute top-0 right-0 w-80 h-80 bg-orange-500/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-0 right-0 w-72 h-72 bg-orange-500/15 rounded-full blur-3xl pointer-events-none" />
 
-            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-5 my-auto">
-              <div className="space-y-3 max-w-md text-center md:text-left">
-                <span className="inline-flex items-center gap-1.5 bg-orange-500/20 text-orange-300 border border-orange-400/40 font-black px-3 py-1 rounded-full text-[10px] sm:text-xs uppercase tracking-wider backdrop-blur-md">
-                  <Zap className="w-3.5 h-3.5 text-amber-400" />
-                  OFF-GRID FREEDOM & ADVENTURE
+            <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-5 my-auto">
+              <div className="space-y-1.5 sm:space-y-2 max-w-md text-center sm:text-left">
+                <span className="inline-flex items-center gap-1 bg-orange-500/20 text-orange-300 border border-orange-400/40 font-black px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] uppercase tracking-wider backdrop-blur-md">
+                  <Zap className="w-3 h-3 text-amber-400" />
+                  OFF-GRID FREEDOM
                 </span>
-                <h2 className="text-xl sm:text-3xl md:text-4xl font-black font-['Outfit',sans-serif] text-white tracking-tight leading-tight">
+                <h2 className="text-base sm:text-xl md:text-2xl font-black font-['Outfit',sans-serif] text-white tracking-tight leading-snug">
                   Take Clean Solar Anywhere Under the Sky
                 </h2>
-                <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
-                  Camp under the stars, travel in your RV, or work remotely with portable solar power stations and folding panels. Power laptops, camp stoves, drones, and medical devices anywhere.
+                <p className="text-[11px] sm:text-xs text-neutral-300 line-clamp-2 leading-relaxed">
+                  Camp under the stars, travel in your RV, or work remotely with portable solar power stations and fast-charging folding panels.
                 </p>
 
                 {/* Feature Chips */}
-                <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 pt-1">
-                  <span className="bg-white/10 backdrop-blur-md border border-white/15 text-neutral-200 text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-lg">
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 pt-0.5">
+                  <span className="bg-white/10 backdrop-blur-md border border-white/15 text-neutral-200 text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 rounded-md">
                     🏕️ Rugged & Portable
                   </span>
-                  <span className="bg-white/10 backdrop-blur-md border border-white/15 text-neutral-200 text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-lg">
-                    🔌 220V AC Pure Sine Output
+                  <span className="bg-white/10 backdrop-blur-md border border-white/15 text-neutral-200 text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 rounded-md">
+                    🔌 220V Pure Sine
                   </span>
-                  <span className="bg-orange-400/20 border border-orange-300/40 text-orange-300 text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-lg">
-                    ☀️ Fast Solar Fast-Charge
+                  <span className="bg-orange-400/20 border border-orange-300/40 text-orange-300 text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 rounded-md">
+                    ☀️ Fast Solar Charge
                   </span>
                 </div>
               </div>
 
-              {/* High-Resolution Photorealistic AI Image Display */}
-              <div className="relative w-full max-w-[320px] sm:max-w-[390px] md:max-w-[430px] rounded-2xl overflow-hidden border-2 border-orange-400/50 shadow-2xl shadow-orange-500/20 group-hover:border-orange-300 transition-all duration-300">
+              {/* Compact Matching Proportion AI Image Display */}
+              <div className="relative w-48 sm:w-60 md:w-72 shrink-0 rounded-xl overflow-hidden border-2 border-orange-400/50 shadow-xl shadow-orange-500/10 group-hover:border-orange-300 transition-all duration-300">
                 <img
                   src={travelPortableSolar}
                   alt="Friends camping with camper van powered by portable solar generator"
                   referrerPolicy="no-referrer"
-                  className="w-full aspect-[16/10] sm:aspect-[16/9] object-cover transform group-hover:scale-105 transition-transform duration-500"
+                  className="w-full aspect-[16/10] object-cover transform group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10 pointer-events-none" />
-                <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-                    <span className="text-[11px] font-bold text-amber-200 drop-shadow-sm font-mono">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/10 pointer-events-none" />
+                <div className="absolute bottom-2 left-2.5 right-2.5 flex items-center justify-between text-white">
+                  <div className="flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
+                    <span className="text-[10px] font-bold text-amber-200 drop-shadow-sm font-mono">
                       Expedition & Field Power
                     </span>
                   </div>
-                  <span className="text-[10px] bg-orange-500/80 px-2 py-0.5 rounded font-mono font-bold backdrop-blur-xs">
+                  <span className="text-[9px] bg-orange-500/80 px-1.5 py-0.5 rounded font-mono font-bold backdrop-blur-xs">
                     300W - 2000W
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="relative z-10 flex items-center justify-between pt-3 border-t border-white/10 mt-2">
-              <span className="text-xs text-neutral-400 font-medium">Ideal for Outdoor Camping, Photography, Drones & Road Trips</span>
-              <span className="text-amber-400 font-bold text-xs flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                Explore Portable Stations <ArrowRight className="w-3.5 h-3.5" />
+            <div className="relative z-10 flex items-center justify-between pt-1.5 border-t border-white/10">
+              <span className="text-[10px] sm:text-xs text-neutral-400 font-medium">Ideal for Outdoor Camping, Photography, Drones & Road Trips</span>
+              <span className="text-amber-400 font-bold text-[10px] sm:text-xs flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                Explore Portable Stations <ArrowRight className="w-3 h-3" />
               </span>
             </div>
           </div>
