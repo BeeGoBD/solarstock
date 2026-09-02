@@ -137,45 +137,45 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
                 isActive ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'
               }`}
             >
-              {/* Full-Bleed Photographic Background */}
+              {/* Full-Bleed Photographic Background - Bright & Vibrant */}
               <img
                 src={slide.image}
                 alt={slide.alt}
                 referrerPolicy="no-referrer"
-                className="w-full h-full object-cover transform scale-100 group-hover:scale-105 transition-transform duration-1000 ease-out"
+                className="w-full h-full object-cover brightness-[1.08] contrast-[1.03] transform scale-100 group-hover:scale-105 transition-transform duration-1000 ease-out"
               />
 
-              {/* Multilayered Gradient Overlay for Text Legibility & Depth */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/20" />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/35 to-transparent" />
+              {/* Refined Soft Gradient Overlay (Bright & High Readability) */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/15 to-transparent pointer-events-none" />
 
               {/* Minimalist Floating Text Overlay */}
-              <div className="absolute inset-0 z-20 flex flex-col justify-end p-5 sm:p-8 md:p-10 max-w-2xl">
+              <div className="absolute inset-0 z-20 flex flex-col justify-end p-4 sm:p-7 md:p-9 max-w-2xl">
                 {/* Floating Tag & Badge */}
-                <div className="flex flex-wrap items-center gap-2 mb-2 sm:mb-3">
-                  <span className="inline-flex items-center gap-1.5 bg-amber-400 text-neutral-950 font-black px-3 py-1 rounded-full text-[10px] sm:text-xs uppercase tracking-wider backdrop-blur-md shadow-sm">
+                <div className="flex flex-wrap items-center gap-2 mb-2 sm:mb-2.5">
+                  <span className="inline-flex items-center gap-1.5 bg-amber-400 text-neutral-950 font-black px-3 py-1 rounded-full text-[10px] sm:text-xs uppercase tracking-wider shadow-md">
                     <TagIcon className="w-3.5 h-3.5" />
                     {slide.tag}
                   </span>
-                  <span className="inline-flex items-center gap-1 bg-black/60 text-emerald-400 border border-emerald-500/30 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-mono font-bold backdrop-blur-md">
+                  <span className="inline-flex items-center gap-1 bg-black/60 text-emerald-400 border border-emerald-400/40 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-mono font-bold backdrop-blur-md">
                     <ShieldCheck className="w-3 h-3" />
                     {slide.badge}
                   </span>
                 </div>
 
-                {/* Headline */}
-                <h2 className="text-xl sm:text-3xl md:text-4xl font-black font-['Outfit',sans-serif] text-white tracking-tight leading-tight drop-shadow-md mb-1.5 sm:mb-2">
+                {/* Headline with High-Contrast Drop Shadow */}
+                <h2 className="text-xl sm:text-3xl md:text-4xl font-black font-['Outfit',sans-serif] text-white tracking-tight leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)] mb-1 sm:mb-1.5">
                   {slide.title}
                 </h2>
 
                 {/* Subtitle / Short Description */}
-                <p className="text-xs sm:text-sm md:text-base text-neutral-200 line-clamp-2 leading-relaxed drop-shadow-sm mb-4 max-w-xl font-medium">
+                <p className="text-xs sm:text-sm md:text-base text-neutral-100 line-clamp-2 leading-relaxed drop-shadow-[0_1px_6px_rgba(0,0,0,0.85)] mb-3.5 max-w-xl font-medium">
                   {slide.subtitle}
                 </p>
 
                 {/* Floating Action Button */}
                 <div className="flex items-center gap-3">
-                  <span className="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-neutral-950 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 shadow-lg shadow-amber-400/20 group-hover:translate-x-1">
+                  <span className="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-neutral-950 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 shadow-lg shadow-amber-400/30 group-hover:translate-x-1">
                     {slide.buttonText}
                     <ArrowRight className="w-4 h-4" />
                   </span>
@@ -222,9 +222,13 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
         </div>
       </div>
 
-      {/* 2. Dual Sub-Banners (2nd Modern Slide & 3rd Modern Slide) - Solar Inverter Flow */}
+      {/* 2. Dual Sub-Banners (50/50): 2-Phase Solar & Inverter Flow + Premium Product Showcase */}
       <div className="mt-3 sm:mt-3.5">
-        <SolarInverterFlow />
+        <SolarInverterFlow
+          onBannerClick={onBannerClick}
+          onSelectProduct={onSelectProduct}
+          onExploreCategory={onExploreCategory}
+        />
       </div>
     </section>
   );
