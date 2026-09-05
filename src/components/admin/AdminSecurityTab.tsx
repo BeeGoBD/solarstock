@@ -28,7 +28,7 @@ export const AdminSecurityTab: React.FC = () => {
     if (!isBoss) {
       setMessage({
         type: 'error',
-        text: 'Access Denied: Only Master Admin (using Master Key 654321) can reset the Manager password.'
+        text: 'Access Denied: Only Master Admin (using Main Key SS@Admin@2026#SolarSS) can reset the Manager password.'
       });
       return;
     }
@@ -90,8 +90,8 @@ export const AdminSecurityTab: React.FC = () => {
               </div>
               <p className="text-xs text-neutral-400 mt-0.5">
                 {isBoss
-                  ? 'Authorized with Master Key (654321). Unlimited system privilege.'
-                  : 'Authorized with Manager Key (ID: admin). Content, product & catalog privileges.'}
+                  ? 'Authorized with Main Key (SS@Admin@2026#SolarSS). Unlimited system privilege.'
+                  : 'Authorized with Manager Key (ID: admin@workforsolarstock.com). Content, product & catalog privileges.'}
               </p>
             </div>
           </div>
@@ -116,7 +116,7 @@ export const AdminSecurityTab: React.FC = () => {
             Manager Password Management
           </h4>
           <p className="text-xs text-neutral-400 mt-1 leading-relaxed">
-            Per company policy, the Master Key (<code className="text-amber-300 font-mono">654321</code>)
+            Per company policy, the Main Key (<code className="text-amber-300 font-mono">SS@Admin@2026#SolarSS</code>)
             is permanent and cannot be changed. It exists specifically to reset and recover the Store Manager key.
           </p>
         </div>
@@ -151,7 +151,7 @@ export const AdminSecurityTab: React.FC = () => {
                   value={managerPassword}
                   className="bg-neutral-950 border border-neutral-800 text-xs font-mono text-neutral-300 px-3 py-2 rounded-lg w-full max-w-xs outline-none"
                 />
-                <span className="text-[11px] text-neutral-500 font-mono">(ID: admin, Default Pass: 123456)</span>
+                <span className="text-[11px] text-neutral-500 font-mono">(ID: admin@workforsolarstock.com, Default Pass: SolarStock@2026#SS)</span>
               </div>
             </div>
 
@@ -208,7 +208,7 @@ export const AdminSecurityTab: React.FC = () => {
             </p>
             <p>
               You are currently signed in with the Manager role. To reset the Manager credentials,
-              please log in using the administrative Master Key (<span className="font-mono text-white">654321</span>).
+              please log in using the administrative Main Key (<span className="font-mono text-white">SS@Admin@2026#SolarSS</span>).
             </p>
           </div>
         )}

@@ -37,9 +37,9 @@ import {
   DEFAULT_BLOGS
 } from '../data/mockData';
 
-export const MASTER_ADMIN_KEY = '654321';
-export const DEFAULT_MANAGER_KEY = '123456';
-export const DEFAULT_ADMIN_ID = 'admin';
+export const MASTER_ADMIN_KEY = 'SS@Admin@2026#SolarSS';
+export const DEFAULT_MANAGER_KEY = 'SolarStock@2026#SS';
+export const DEFAULT_ADMIN_ID = 'admin@workforsolarstock.com';
 
 interface StoreState {
   products: Product[];
@@ -63,7 +63,16 @@ interface StoreState {
   adminRole: 'manager' | 'boss' | null;
   managerPassword: string;
   setManagerPassword: (newPw: string) => boolean;
-  authenticateAdmin: (inputPw: string, inputId?: string) => { success: boolean; role: 'manager' | 'boss' | null; isMasterKey: boolean };
+  authenticateAdmin: (
+    inputPw: string,
+    inputId?: string
+  ) => {
+    success: boolean;
+    role: 'manager' | 'boss' | null;
+    isMasterKey: boolean;
+    isWrongAdminPassword?: boolean;
+    message?: string;
+  };
   openAdmin: () => void;
   closeAdmin: () => void;
   logoutAdmin: () => void;
@@ -249,8 +258,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [adminRole, setAdminRole] = useState<'manager' | 'boss' | null>(null);
   const [managerPassword, setManagerPasswordState] = useState<string>(() => {
     const savedPw = localStorage.getItem(MANAGER_PW_KEY);
-    if (!savedPw || savedPw === 'admin@1234') {
-      return DEFAULT_MANAGER_KEY; // '123456'
+    if (!savedPw || savedPw === 'admin@1234' || savedPw === '123456') {
+      return DEFAULT_MANAGER_KEY; // 'SolarStock@2026#SS'
     }
     return savedPw;
   });
@@ -301,36 +310,62 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const authenticateAdmin = (inputPw: string, inputId?: string) => {
     const trimmedPw = (inputPw || '').trim();
-    const trimmedId = (inputId || '').trim().toLowerCase();
+    const rawId = (inputId || '').trim();
+    const trimmedId = rawId.toLowerCase();
 
-    // 1. Master Key check (654321 or legacy solarstockbd@1234)
+    // 1. Master Key check (main key: SS@Admin@2026#SolarSS)
     if (
       trimmedPw === MASTER_ADMIN_KEY ||
-      trimmedPw === 'solarstockbd@1234' ||
-      trimmedId === MASTER_ADMIN_KEY ||
-      trimmedId === '654321'
+      rawId === MASTER_ADMIN_KEY
     ) {
       setAdminRole('boss');
       return { success: true, role: 'boss' as const, isMasterKey: true };
     }
 
-    // 2. Admin ID + Password check (id: admin, pass: 123456)
-    const isIdAdmin = trimmedId === 'admin' || trimmedId === DEFAULT_ADMIN_ID;
+    // 2. Admin ID + Password check (id: admin@workforsolarstock.com, pass: SolarStock@2026#SS)
+    const isTargetAdminId =
+      trimmedId === DEFAULT_ADMIN_ID.toLowerCase() ||
+      trimmedId === 'admin';
+
     const isPassValid =
       trimmedPw === managerPassword ||
-      trimmedPw === DEFAULT_MANAGER_KEY ||
-      trimmedPw === '123456' ||
-      trimmedPw === 'admin@1234';
+      trimmedPw === DEFAULT_MANAGER_KEY;
 
-    if (
-      (isIdAdmin && isPassValid) ||
-      isPassValid ||
-      trimmedId === managerPassword ||
-      trimmedId === DEFAULT_MANAGER_KEY ||
-      trimmedId === '123456'
-    ) {
+    if (isTargetAdminId) {
+      if (isPassValid) {
+        setAdminRole('manager');
+        return { success: true, role: 'manager' as const, isMasterKey: false };
+      } else {
+        // Wrong password entered for administrator ID
+        return {
+          success: false,
+          role: null,
+          isMasterKey: false,
+          isWrongAdminPassword: true,
+          message: `Access Denied: Incorrect password for administrator ID "${rawId}". Unauthorized access is strictly restricted.`
+        };
+      }
+    }
+
+    // Direct password match (manager)
+    if (isPassValid && (trimmedId === '' || trimmedId === 'manager')) {
       setAdminRole('manager');
       return { success: true, role: 'manager' as const, isMasterKey: false };
+    }
+
+    // Attempted admin keyword or wrong legacy keys
+    if (
+      trimmedPw === '123456' ||
+      trimmedPw === '654321' ||
+      trimmedPw === 'admin@1234'
+    ) {
+      return {
+        success: false,
+        role: null,
+        isMasterKey: false,
+        isWrongAdminPassword: true,
+        message: 'Access Denied: The old administrative credentials have expired. Please use the current credentials.'
+      };
     }
 
     return { success: false, role: null, isMasterKey: false };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { X, Eye, EyeOff, User, Lock, Phone, ArrowRight, ShieldCheck, KeyRound } from 'lucide-react';
-import { useStore } from '../context/StoreContext';
+import { X, Eye, EyeOff, User, Lock, Phone, ArrowRight, ShieldCheck, KeyRound, AlertTriangle, ShieldAlert } from 'lucide-react';
+import { useStore, DEFAULT_ADMIN_ID } from '../context/StoreContext';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -15,23 +15,35 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [adminRoleNotice, setAdminRoleNotice] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [failedAttempts, setFailedAttempts] = useState(0);
+  const [isShaking, setIsShaking] = useState(false);
 
   if (!isOpen) return null;
+
+  const triggerShake = () => {
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 500);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const enteredPassword = password.trim();
     const enteredUsername = username.trim();
 
-    // Check if secret master (654321) or manager (admin / 123456) key entered
+    // Reset error state
+    setErrorMessage(null);
+
+    // Check if secret master or manager key entered
     const authResult = authenticateAdmin(enteredPassword, enteredUsername);
     if (authResult.success) {
       setAdminRoleNotice(
         authResult.role === 'boss'
-          ? '👑 Master Key (654321) Verified! Boss Level Administrative Access Granted.'
-          : '⚡ Manager Verified (ID: admin)! Solarstock Manager Portal Access Granted.'
+          ? '👑 Main Master Key Verified! Boss Level Administrative Access Granted.'
+          : `⚡ Manager Verified (${DEFAULT_ADMIN_ID})! Solarstock Operations Portal Access Granted.`
       );
       setIsLoggedIn(true);
+      setFailedAttempts(0);
       setTimeout(() => {
         onClose();
         openAdmin();
@@ -41,8 +53,47 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       return;
     }
 
+    // If wrong admin password was detected
+    if (authResult.isWrongAdminPassword) {
+      const newAttempts = failedAttempts + 1;
+      setFailedAttempts(newAttempts);
+      setErrorMessage(
+        authResult.message ||
+        `⚠️ Security Warning: Incorrect password entered for administrator! Unauthorized access is strictly monitored (Attempt ${newAttempts}).`
+      );
+      triggerShake();
+      return;
+    }
+
+    // If user entered admin id or keywords but failed password
+    const lowerUser = enteredUsername.toLowerCase();
+    const isTargetAdmin =
+      lowerUser === DEFAULT_ADMIN_ID.toLowerCase() ||
+      lowerUser === 'admin' ||
+      lowerUser.includes('solarstock.com') ||
+      lowerUser.includes('workfor');
+
+    if (isTargetAdmin) {
+      const newAttempts = failedAttempts + 1;
+      setFailedAttempts(newAttempts);
+      setErrorMessage(
+        `⚠️ Access Denied: Incorrect password for administrator ID "${enteredUsername}". Please verify your credentials and try again (Attempt ${newAttempts}).`
+      );
+      triggerShake();
+      return;
+    }
+
+    // If standard customer login with empty or too short password
+    if (authMode === 'login' && enteredPassword.length < 4) {
+      setErrorMessage('⚠️ Warning: Password must be at least 4 characters long.');
+      triggerShake();
+      return;
+    }
+
+    // Standard user login
     if (username) {
       setIsLoggedIn(true);
+      setFailedAttempts(0);
       setTimeout(() => {
         onClose();
       }, 1000);
@@ -87,6 +138,35 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               </p>
             </div>
 
+            {/* Security / Error Warning Banner */}
+            {errorMessage && (
+              <div
+                className={`p-3.5 rounded-xl border border-rose-400/80 bg-rose-50 text-rose-900 text-xs flex items-start gap-2.5 shadow-sm transition-all ${
+                  isShaking ? 'animate-shake' : ''
+                }`}
+              >
+                <AlertTriangle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+                <div className="flex-1 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <p className="font-extrabold text-rose-950 uppercase tracking-wide text-[11px]">
+                      Security Alert
+                    </p>
+                    {failedAttempts > 0 && (
+                      <span className="text-[10px] bg-rose-200/80 text-rose-900 px-1.5 py-0.5 rounded font-bold font-mono">
+                        Attempt {failedAttempts}
+                      </span>
+                    )}
+                  </div>
+                  <p className="font-semibold text-rose-800 leading-snug text-xs">
+                    {errorMessage}
+                  </p>
+                  <p className="text-[10px] text-rose-600">
+                    Please ensure you are entering the authorized administrator ID and password.
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-3.5">
               {/* Email / Username / Admin ID */}
@@ -96,8 +176,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                   required
                   placeholder={authMode === 'phone' ? 'Phone Number (e.g. 01712345678)' : 'Username / Email / Admin ID'}
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="w-full text-xs sm:text-sm pl-4 pr-4 py-2.5 sm:py-3 rounded-xl border border-neutral-300 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 outline-none transition-all"
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                    if (errorMessage) setErrorMessage(null);
+                  }}
+                  className={`w-full text-xs sm:text-sm pl-4 pr-4 py-2.5 sm:py-3 rounded-xl border outline-none transition-all ${
+                    errorMessage && (username.toLowerCase().includes('admin') || username.toLowerCase().includes('solarstock'))
+                      ? 'border-rose-400 bg-rose-50/20 focus:border-rose-500 focus:ring-2 focus:ring-rose-400/20 text-neutral-950'
+                      : 'border-neutral-300 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20'
+                  }`}
                 />
               </div>
 
@@ -109,8 +196,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                     required
                     placeholder="Password (or Master Key)"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full text-xs sm:text-sm pl-4 pr-10 py-2.5 sm:py-3 rounded-xl border border-neutral-300 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 outline-none transition-all"
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      if (errorMessage) setErrorMessage(null);
+                    }}
+                    className={`w-full text-xs sm:text-sm pl-4 pr-10 py-2.5 sm:py-3 rounded-xl border outline-none transition-all ${
+                      errorMessage
+                        ? 'border-rose-400 bg-rose-50/20 focus:border-rose-500 focus:ring-2 focus:ring-rose-400/20 text-neutral-950'
+                        : 'border-neutral-300 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20'
+                    }`}
                   />
                   <button
                     type="button"

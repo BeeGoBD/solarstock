@@ -396,7 +396,7 @@ export const Header: React.FC<HeaderProps> = ({
               <User className="w-4 h-4 text-neutral-700" />
             )}
             <span className="hidden md:inline font-semibold">
-              {adminRole ? (adminRole === 'master_admin' ? 'Master Admin' : 'Admin Panel') : 'Account'}
+              {adminRole ? (adminRole === 'boss' ? 'Master Admin' : 'Admin Panel') : 'Account'}
             </span>
             {adminRole && (
               <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />

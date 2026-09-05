@@ -72,8 +72,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           alt={product.name}
           referrerPolicy="no-referrer"
           onClick={() => onViewDetails(product)}
-          className="w-full h-full object-contain rounded-lg cursor-pointer group-hover:scale-105 transition-transform duration-300 shadow-2xs"
+          className="w-full h-full object-contain rounded-lg cursor-pointer group-hover:scale-105 transition-transform duration-300 shadow-2xs gpu-accelerated"
           loading="lazy"
+          decoding="async"
         />
 
         {/* SolarCare+ Warranty Badge at Bottom of Image */}
