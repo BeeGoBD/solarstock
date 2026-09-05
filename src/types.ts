@@ -67,6 +67,7 @@ export interface BranchLocation {
   offDay?: string;
   image: string;
   mapCoords?: string;
+  googleMapUrl?: string;
 }
 
 export interface BlogPost {
@@ -76,8 +77,98 @@ export interface BlogPost {
   date: string;
   readTime: string;
   image: string;
+  images?: string[];
   excerpt: string;
   author: string;
+  content?: string;
+}
+
+export interface HeroSlideItem {
+  id: number;
+  image: string;
+  alt?: string;
+  tag: string;
+  badge: string; // The attractive green text / green letter
+  title: string;
+  subtitle: string;
+  category: string;
+  buttonText: string;
+}
+
+export interface Slide3ShowcaseProduct {
+  id: string;
+  category: string;
+  name: string;
+  tag: string;
+  spec: string;
+  badge: string;
+  accentColor: string;
+  image: string;
+}
+
+export interface SubCategoryItem {
+  id: string;
+  categoryId?: string;
+  name: string;
+  itemCount?: number;
+  image?: string;
+  sdgTag?: string;
+  sdgIcon?: string;
+  slug?: string;
+  productCount?: number;
+  icon?: string;
+}
+
+export interface PeaceOfMindItem {
+  id: string;
+  tag: string;
+  tagColor?: string;
+  title: string;
+  subtitle: string;
+  iconType?: string;
+}
+
+export interface PeaceOfMindConfig {
+  sectionTitle?: string;
+  trustHighlight?: string;
+  title?: string;
+  subtitle?: string;
+  items: PeaceOfMindItem[];
+}
+
+export interface SolarCareFeature {
+  id?: string;
+  title: string;
+  subtitle: string;
+}
+
+export interface SolarCareConfig {
+  badgeText?: string;
+  titleMain?: string;
+  titleHighlight?: string;
+  title?: string;
+  tag?: string;
+  description: string;
+  feature1Title?: string;
+  feature1Desc?: string;
+  feature2Title?: string;
+  feature2Desc?: string;
+  features?: SolarCareFeature[];
+}
+
+export interface BrandItem {
+  id?: string;
+  name: string;
+  logo: string;
+  logoImage?: string;
+  image?: string;
+  tagline?: string;
+}
+
+export interface FaqItem {
+  id: string;
+  q: string;
+  a: string;
 }
 
 export interface LiveNotification {

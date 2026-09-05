@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChevronRight, Calendar, ArrowRight, BookOpen } from 'lucide-react';
-import { BLOG_POSTS } from '../data/mockData';
+import { useStore } from '../context/StoreContext';
 import { BlogPost } from '../types';
 
 interface BlogSectionProps {
@@ -9,7 +9,17 @@ interface BlogSectionProps {
 }
 
 export const BlogSection: React.FC<BlogSectionProps> = ({ onSelectBlog, onSeeAll }) => {
-  const featuredBlog = BLOG_POSTS[0];
+  const { blogs } = useStore();
+  const featuredBlog = blogs[0] || {
+    id: 'b1',
+    title: 'How to Choose the Right Solar Inverter for Bangladeshi Homes',
+    slug: 'solar-inverter-guide-bangladesh',
+    category: 'Buying Guide',
+    date: '12 May, 2025',
+    readTime: '4 min read',
+    image: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80',
+    excerpt: 'Everything you need to know about pure sine wave hybrid inverters, MPPT technology, and optimizing energy production during load shedding.'
+  };
 
   return (
     <section className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6">

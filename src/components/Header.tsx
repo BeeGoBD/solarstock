@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, Menu, X, ShoppingBag, Sun, Zap, Phone, ShieldCheck, Heart, SlidersHorizontal, Calculator, LayoutGrid, Layers, ChevronDown } from 'lucide-react';
+import { Search, Menu, X, ShoppingBag, Sun, Zap, Phone, ShieldCheck, Heart, SlidersHorizontal, Calculator, LayoutGrid, Layers, ChevronDown, User, ShieldAlert } from 'lucide-react';
 import { Product } from '../types';
 import { SEARCH_SUGGESTIONS } from '../data/mockData';
+import { useStore } from '../context/StoreContext';
 
 interface HeaderProps {
   cartCount: number;
@@ -33,6 +34,7 @@ export const Header: React.FC<HeaderProps> = ({
   searchQuery = '',
   setSearchQuery
 }) => {
+  const { adminRole, openAdmin } = useStore();
   const [internalQuery, setInternalQuery] = useState(searchQuery);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>([
@@ -50,7 +52,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   // Close dropdown on outside click
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (
         searchDropdownRef.current &&
         !searchDropdownRef.current.contains(event.target as Node) &&
@@ -61,7 +63,11 @@ export const Header: React.FC<HeaderProps> = ({
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
   }, []);
 
   const handleSearchSubmit = (e?: React.FormEvent) => {
@@ -74,6 +80,9 @@ export const Header: React.FC<HeaderProps> = ({
       onSearch(internalQuery.trim());
       setShowSearchModal(false);
       setActiveView('home');
+    } else {
+      setShowSearchModal(true);
+      searchInputRef.current?.focus();
     }
   };
 
@@ -184,6 +193,7 @@ export const Header: React.FC<HeaderProps> = ({
                 setShowSearchModal(true);
               }}
               onFocus={() => setShowSearchModal(true)}
+              onClick={() => setShowSearchModal(true)}
               className="w-full bg-neutral-100/90 hover:bg-neutral-100 focus:bg-white text-neutral-900 text-xs sm:text-sm pl-3 sm:pl-4 pr-12 py-2 sm:py-2.5 rounded-lg border border-neutral-300 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 outline-none transition-all placeholder:text-neutral-500 font-medium"
             />
             {internalQuery && (
@@ -212,8 +222,23 @@ export const Header: React.FC<HeaderProps> = ({
           {showSearchModal && (
             <div
               ref={searchDropdownRef}
-              className="absolute left-0 right-0 top-full mt-2 bg-white rounded-xl shadow-2xl border border-neutral-200 p-4 z-50 animate-in fade-in zoom-in-95 duration-150"
+              className="absolute left-0 right-0 sm:left-0 sm:right-0 top-full mt-2 bg-white rounded-xl shadow-2xl border border-neutral-200 p-3 sm:p-4 z-50 animate-in fade-in zoom-in-95 duration-150 max-h-[75vh] overflow-y-auto"
             >
+              {/* Header inside search popup */}
+              <div className="flex items-center justify-between pb-2 mb-2 border-b border-neutral-100">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+                  {internalQuery.trim() ? `Search Results for "${internalQuery}"` : 'Quick Solar Search'}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShowSearchModal(false)}
+                  className="text-neutral-400 hover:text-neutral-800 p-1 rounded-md hover:bg-neutral-100 transition-colors"
+                  title="Close Search"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
               {/* If user typed, show instant matching products */}
               {internalQuery.trim() && filteredQuickProducts.length > 0 && (
                 <div className="mb-4">
@@ -346,6 +371,36 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <Calculator className="w-4 h-4 text-amber-600" />
             <span>Calculator</span>
+          </button>
+
+          {/* Profile / Admin Panel Access Button */}
+          <button
+            id="header-profile-admin-btn"
+            onClick={() => {
+              if (adminRole) {
+                openAdmin();
+              } else {
+                onOpenAuth();
+              }
+            }}
+            className={`flex items-center gap-1.5 p-2 sm:px-3 sm:py-2 rounded-xl border text-xs font-bold transition-all shadow-2xs ${
+              adminRole
+                ? 'bg-amber-400 text-neutral-950 border-amber-500 hover:bg-amber-300'
+                : 'bg-neutral-100 hover:bg-neutral-200 text-neutral-800 border-neutral-200'
+            }`}
+            title={adminRole ? 'Open Admin Control Panel' : 'Account & Admin Login'}
+          >
+            {adminRole ? (
+              <ShieldAlert className="w-4 h-4 text-neutral-950" />
+            ) : (
+              <User className="w-4 h-4 text-neutral-700" />
+            )}
+            <span className="hidden md:inline font-semibold">
+              {adminRole ? (adminRole === 'master_admin' ? 'Master Admin' : 'Admin Panel') : 'Account'}
+            </span>
+            {adminRole && (
+              <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
+            )}
           </button>
 
           {/* Cart Trigger */}

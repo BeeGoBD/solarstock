@@ -11,8 +11,7 @@ import {
   CheckCircle2,
   Maximize2
 } from 'lucide-react';
-import brightSolarShowcase from '../assets/images/bright_solar_products_showcase_1788316402828.jpg';
-import brightSolarBattery from '../assets/images/bright_solar_inverter_battery_1788316424489.jpg';
+import { useStore } from '../context/StoreContext';
 
 interface SolarInverterFlowProps {
   onSelectProduct?: (productId: string) => void;
@@ -25,6 +24,8 @@ export const SolarInverterFlow: React.FC<SolarInverterFlowProps> = ({
   onExploreCategory,
   onBannerClick
 }) => {
+  const { slide3Products } = useStore();
+
   // ---------------------------------------------------------------------------
   // SLIDE 2 STATE: AUTOMATIC SEQUENTIAL ANIMATION (Phase 1: Solar -> Phase 2: Inverter)
   // ---------------------------------------------------------------------------
@@ -41,52 +42,19 @@ export const SolarInverterFlow: React.FC<SolarInverterFlowProps> = ({
   // ---------------------------------------------------------------------------
   const [selectedProductIndex, setSelectedProductIndex] = useState(0);
 
-  const featuredProducts = [
-    {
-      id: 'hybrid-10kw',
-      category: 'hybrid-inverters',
-      name: '10kW Hybrid MPPT Inverter',
-      tag: 'FLAGSHIP INVERTER',
-      tagIcon: Zap,
-      spec: '98.4% Efficiency • 0ms UPS Switch',
-      badge: 'Tier-1 Pure Sine',
-      accentColor: '#38bdf8',
-      image: brightSolarShowcase
-    },
-    {
-      id: 'lifepo4-powerwall',
-      category: 'lithium-batteries',
-      name: '51.2V 200Ah LiFePO4 ESS',
-      tag: 'SMART ENERGY STORAGE',
-      tagIcon: BatteryCharging,
-      spec: '10.24kWh • 6,000+ Deep Cycles',
-      badge: 'Grade-A Smart BMS',
-      accentColor: '#34d399',
-      image: brightSolarBattery
-    },
-    {
-      id: 'bifacial-600w',
-      category: 'solar-packages',
-      name: '600W Bifacial TOPCon Array',
-      tag: 'N-TYPE MONOCRYSTALLINE',
-      tagIcon: Sun,
-      spec: '22.8% Yield • 30-Yr Power Output',
-      badge: 'Dual-Glass Armor',
-      accentColor: '#fbbf24',
-      image: brightSolarShowcase
-    },
-    {
-      id: 'portable-2400w',
-      category: 'ips-systems',
-      name: '2400W LiFePO4 Power Hub',
-      tag: 'PORTABLE & OFF-GRID',
-      tagIcon: Sparkles,
-      spec: '2048Wh • 1.2h Super Solar Charge',
-      badge: '220V + Dual PD 100W',
-      accentColor: '#f59e0b',
-      image: brightSolarBattery
+  const getProdTagIcon = (idx: number) => {
+    switch (idx % 4) {
+      case 0: return Zap;
+      case 1: return BatteryCharging;
+      case 2: return Sun;
+      default: return Sparkles;
     }
-  ];
+  };
+
+  const featuredProducts = (slide3Products || []).map((prod, idx) => ({
+    ...prod,
+    tagIcon: getProdTagIcon(idx)
+  }));
 
   // ---------------------------------------------------------------------------
   // SLIDE 2: AUTOMATIC SEQUENTIAL 2.5-SECOND PHASE FLIPPER (Solar -> Inverter -> Solar...)
@@ -162,8 +130,18 @@ export const SolarInverterFlow: React.FC<SolarInverterFlowProps> = ({
     }
   };
 
-  const currentProduct = featuredProducts[selectedProductIndex];
-  const ProductTagIcon = currentProduct.tagIcon;
+  const currentProduct = featuredProducts[selectedProductIndex] || featuredProducts[0] || {
+    id: 'hybrid-10kw',
+    category: 'hybrid-inverters',
+    name: '10kW Hybrid MPPT Inverter',
+    tag: 'FLAGSHIP INVERTER',
+    tagIcon: Zap,
+    spec: '98.4% Efficiency • 0ms UPS Switch',
+    badge: 'Tier-1 Pure Sine',
+    accentColor: '#38bdf8',
+    image: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=600&q=80'
+  };
+  const ProductTagIcon = currentProduct.tagIcon || Zap;
 
   return (
     <div className="relative w-full">

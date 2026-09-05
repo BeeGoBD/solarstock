@@ -1,9 +1,30 @@
-import { Product, Category, BranchLocation, BlogPost, LiveNotification } from '../types';
+import {
+  Product,
+  Category,
+  BranchLocation,
+  BlogPost,
+  LiveNotification,
+  HeroSlideItem,
+  Slide3ShowcaseProduct,
+  PeaceOfMindConfig,
+  SolarCareConfig,
+  BrandItem,
+  FaqItem
+} from '../types';
 import neozl300wPoster from '../assets/images/neozl_300w_poster_1788228244967.jpg';
 import gp1000Poster from '../assets/images/gp_1000_poster_1788228264628.jpg';
 import gp600Poster from '../assets/images/gp_600_poster_1788228282433.jpg';
 import youyoR100Poster from '../assets/images/youyo_r100_poster_1788228300440.jpg';
 import neo600lPoster from '../assets/images/neo_600l_poster_1788228320164.jpg';
+import solarYellowBlackPoster1 from '../assets/images/solar_yellow_black_poster1_1788580321943.jpg';
+import solarYellowBlackPoster2 from '../assets/images/solar_yellow_black_poster2_1788580344764.jpg';
+import solarYellowBlackPoster3 from '../assets/images/solar_yellow_black_poster3_1788580360991.jpg';
+import flagshipSolarArray from '../assets/images/flagship_solar_array_1788247199655.jpg';
+import rooftopSolarHome from '../assets/images/rooftop_solar_home_1788246756735.jpg';
+import familySolarLiving from '../assets/images/family_solar_living_1788246770378.jpg';
+import travelPortableSolar from '../assets/images/travel_portable_solar_1788246785319.jpg';
+import brightSolarShowcase from '../assets/images/bright_solar_products_showcase_1788316402828.jpg';
+import brightSolarBattery from '../assets/images/bright_solar_inverter_battery_1788316424489.jpg';
 
 export const CATEGORIES: Category[] = [
   {
@@ -935,6 +956,372 @@ export const PRODUCTS: Product[] = [
     reviewsCount: 58,
     minBooking: 1000,
     purchasePoints: 45
+  },
+  {
+    id: 'prod-solarstock-titan-2000',
+    name: 'SolarStock TITAN 2000W Ultra Portable Solar Generator (1536Wh LiFePO4)',
+    category: 'ips-systems',
+    subCategory: 'Portable Power Station',
+    brand: 'SolarStock BD',
+    images: [
+      solarYellowBlackPoster1,
+      'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80'
+    ],
+    price: 89999,
+    originalPrice: 112500,
+    discountPercent: 20,
+    tag: 'Beat The Clock',
+    isHot: true,
+    warranty: '2 Years SolarCare+ Official Replacement',
+    capacityVariants: ['1536Wh LiFePO4 (2000W)'],
+    voltageVariants: ['AC 220V Pure Sine Wave', 'Type-C PD 100W Supercharge'],
+    specs: {
+      'Continuous AC Output': '2000W Pure Sine Wave (Surge 4000W)',
+      'Battery Capacity': '1536Wh Grade-A LiFePO4 Cells (3500+ Cycles)',
+      'Solar Input': 'Max 600W MPPT (12V-60V DC)',
+      'Fast Wall Charging': '0 to 80% in 70 Minutes via AC SuperCharge',
+      'Outputs': '3x 220V AC Outlets, 2x 100W PD Type-C, 4x QC3.0 USB-A, 1x 12V Car Port',
+      'Display': 'Color TFT Smart Power Analyzer with Real-Time Wattage',
+      'Warranty': '2 Years Official Free Replacement'
+    },
+    highlights: [
+      'Industrial-grade yellow-black chassis with reinforced anti-drop armor',
+      'Powers heavy home appliances including 1.5-ton inverter AC, refrigerator, and water pumps',
+      'Dual 100W Type-C Power Delivery ports for full-speed laptop & phone charging',
+      'Whisper-quiet smart cooling fans with temperature-controlled speed modulation'
+    ],
+    shortDesc: 'SolarStock TITAN 2000W LiFePO4 power station with 1536Wh storage, 600W solar fast recharge, and 4000W peak surge output.',
+    description: 'The SolarStock TITAN 2000W is our flagship ultra-power station built for extreme residential load-shedding and off-grid remote expeditions. Packed with automotive Grade-A LiFePO4 cells, it ensures up to 10 years of reliable daily power cycles.',
+    rating: 4.96,
+    reviewsCount: 74,
+    minBooking: 5000,
+    purchasePoints: 450,
+    emiAvailable: '12 Months EMI from ৳7,499/month with 0% interest'
+  },
+  {
+    id: 'prod-solarstock-volt-1200',
+    name: 'SolarStock VOLTX 1200W Hybrid Inverter & Smart Energy Station (960Wh)',
+    category: 'solar-inverters',
+    subCategory: 'Hybrid Solar Inverter',
+    brand: 'SolarStock BD',
+    images: [
+      solarYellowBlackPoster2,
+      'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=800&q=80'
+    ],
+    price: 49500,
+    originalPrice: 61875,
+    discountPercent: 20,
+    tag: 'Beat The Clock',
+    isHot: true,
+    warranty: '3 Years Official SolarCare+ Guarantee',
+    capacityVariants: ['960Wh High Rate LiFePO4 (1200W)'],
+    specs: {
+      'Rated AC Inverter': '1200W Continuous Pure Sine Wave',
+      'Storage Capacity': '960Wh Integrated LiFePO4 Pack',
+      'Solar MPPT Controller': 'Built-in 50A High-Efficiency Solar MPPT',
+      'Transfer Time': '< 10ms UPS-grade Instant Switchover',
+      'Dimensions': '360 x 280 x 215 mm',
+      'Weight': '11.8 KG'
+    },
+    highlights: [
+      'High-contrast yellow and matte black cyber design with built-in status display',
+      'Instant 10ms zero-interruption UPS transition protects desktop computers and servers',
+      'Multi-protection BMS safeguards against overcharge, short circuit, and voltage spikes'
+    ],
+    shortDesc: 'SolarStock VOLTX 1200W hybrid solar station with 960Wh LiFePO4 battery and built-in 50A MPPT.',
+    description: 'Combining pure sine wave inverter technology with built-in high-capacity LiFePO4 battery, the SolarStock VOLTX 1200W eliminates the hassle of external acid batteries.',
+    rating: 4.92,
+    reviewsCount: 51,
+    minBooking: 3000,
+    purchasePoints: 250
+  },
+  {
+    id: 'prod-solarstock-lithium-wall-5kwh',
+    name: 'SolarStock BlackGold 5.12kWh LiFePO4 Wall Powerpack (100Ah 51.2V)',
+    category: 'solar-batteries',
+    subCategory: 'Lithium LiFePO4 Battery',
+    brand: 'SolarStock BD',
+    images: [
+      solarYellowBlackPoster3,
+      'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80'
+    ],
+    price: 145000,
+    originalPrice: 175000,
+    discountPercent: 17,
+    tag: 'Top Selling',
+    isHot: true,
+    warranty: '5 Years Official Free Replacement Guarantee',
+    capacityVariants: ['5.12kWh / 51.2V 100Ah'],
+    specs: {
+      'Nominal Voltage': '51.2V (16S Configuration)',
+      'Nominal Energy': '5,120 Wh (5.12 kWh)',
+      'Usable Capacity': '100Ah with 95% Depth of Discharge (DoD)',
+      'Cycle Life': '6,000+ Cycles at 80% DoD (15+ Years Service Life)',
+      'Max Discharge Current': '100A Continuous (5.12kW output)',
+      'Communication Protocols': 'CAN Bus / RS485 / RS232 (Growatt, Deye, SMA, SRNE compatible)',
+      'Chassis': 'Heavy Gauge Wall-Mount Yellow & Black Alloy Steel Casing'
+    },
+    highlights: [
+      'Premium SolarStock BD Yellow-Black industrial wall battery aesthetic',
+      'Automotive EV-grade CATL prismatic cells with smart cloud BMS telemetry',
+      'Supports parallel expansion up to 15 units (76.8kWh total capacity)'
+    ],
+    shortDesc: 'SolarStock BlackGold 5.12kWh 51.2V 100Ah wall-mount LiFePO4 lithium battery with 6000+ cycle life.',
+    description: 'Designed for residential rooftop solar and commercial emergency backup, the SolarStock BlackGold 5.12kWh delivers zero-maintenance, high-density clean energy storage with full inverter CAN/RS485 sync.',
+    rating: 4.98,
+    reviewsCount: 39,
+    minBooking: 10000,
+    purchasePoints: 750
+  },
+  {
+    id: 'prod-solarstock-gp-800-pro',
+    name: 'SolarStock GP 800 Pro Smart Solar Generator (768Wh LiFePO4)',
+    category: 'ips-systems',
+    subCategory: 'Portable Power Station',
+    brand: 'SolarStock BD',
+    images: [
+      gp600Poster,
+      'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80'
+    ],
+    price: 44999,
+    originalPrice: 56250,
+    discountPercent: 20,
+    tag: 'Beat The Clock',
+    isHot: true,
+    warranty: '2 Years SolarCare+ Official Replacement',
+    capacityVariants: ['768Wh LiFePO4 (800W Inverter)'],
+    specs: {
+      'Rated Output Power': '800W Pure Sine Wave AC (Peak 1600W)',
+      'Battery Capacity': '768Wh Premium LiFePO4',
+      'USB-A Outputs': '3x QC3.0 18W Fast Ports',
+      'USB-C Output': '1x 65W PD Fast Charge',
+      'Net Weight': '~8.4 KG',
+      'LED Light': 'Multi-stage SOS & Flood Light on rear panel'
+    },
+    highlights: [
+      'Official SolarStock BD yellow-black graphic poster design',
+      'Runs Wi-Fi router, laptop, ceiling fans, and LED TVs for 10+ hours',
+      'Dual recharging methods via AC grid and high-efficiency solar panel input'
+    ],
+    shortDesc: 'SolarStock GP 800 Pro portable generator with 768Wh LiFePO4 battery, 800W pure sine wave inverter, and 65W USB-C PD.',
+    description: 'The SolarStock GP 800 Pro delivers dependable, quiet power for families facing load-shedding or enjoying outdoor travel. Light enough to carry with one hand, strong enough to power all essentials.',
+    rating: 4.93,
+    reviewsCount: 62,
+    minBooking: 3000,
+    purchasePoints: 220
+  },
+  {
+    id: 'prod-solarstock-neo-1500x',
+    name: 'SolarStock NEO 1500X Extreme Camping & Loadshedding Hub',
+    category: 'ips-systems',
+    subCategory: 'Portable Power Station',
+    brand: 'SolarStock BD',
+    images: [
+      neo600lPoster,
+      'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=800&q=80'
+    ],
+    price: 68000,
+    originalPrice: 85000,
+    discountPercent: 20,
+    tag: 'Best Seller',
+    isHot: true,
+    warranty: '2 Years SolarCare+ Replacement',
+    capacityVariants: ['1200Wh LiFePO4 (1500W Peak)'],
+    specs: {
+      'Rated Power': '1500W Pure Sine Wave Output',
+      'Battery Capacity': '1200Wh Grade-A LiFePO4',
+      'Recharge Time': '1.8 Hours Fast AC Input',
+      'Chassis Material': 'Shock-Resistant Polymer with Yellow Racing Accents'
+    },
+    highlights: [
+      'Iconic Solarstock yellow and black industrial aesthetic',
+      'Built-in jump start capability and DC 12V 10A regulated outlet',
+      'Ultra-clear color LCD with minute-by-minute runtime forecast'
+    ],
+    shortDesc: 'SolarStock NEO 1500X heavy-duty mobile power station with 1200Wh LiFePO4 battery and 1500W AC power.',
+    description: 'Engineered for off-grid fieldwork, emergency relief, and modern home setups, the NEO 1500X offers huge power capacity in a rugged, portable build.',
+    rating: 4.95,
+    reviewsCount: 44,
+    minBooking: 4000,
+    purchasePoints: 340
+  },
+  {
+    id: 'prod-solarstock-youyo-r200',
+    name: 'SolarStock YOUYO R200 Fast-Charge Emergency Solar Station',
+    category: 'ips-systems',
+    subCategory: 'Portable Power Station',
+    brand: 'SolarStock BD',
+    images: [
+      youyoR100Poster,
+      'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80'
+    ],
+    price: 19999,
+    originalPrice: 24999,
+    discountPercent: 20,
+    tag: 'Beat The Clock',
+    isHot: true,
+    warranty: '2 Years Official Replacement',
+    capacityVariants: ['160Wh LiFePO4 (200W AC)'],
+    specs: {
+      'AC Output': '200W Continuous Pure Sine Wave',
+      'Battery Capacity': '160Wh LiFePO4',
+      'Weight': 'Only 1.85 KG (Ultra Portable)',
+      'USB Ports': '2x Fast USB-A, 1x USB-C PD 30W'
+    },
+    highlights: [
+      'Pocket-sized yellow & black emergency power station',
+      'Ideal for university students, online freelancers, and drone pilots',
+      'Charges from 0 to 100% in 2.5 hours with included fast charger'
+    ],
+    shortDesc: 'Ultra-compact 1.85kg SolarStock YOUYO R200 emergency power station with 160Wh battery and 200W AC output.',
+    description: 'Never drop an online meeting, zoom call, or exam due to load-shedding. The YOUYO R200 powers routers and laptops effortlessly on the go.',
+    rating: 4.88,
+    reviewsCount: 83,
+    minBooking: 1500,
+    purchasePoints: 100
+  },
+  {
+    id: 'prod-solarstock-apex-hybrid-3kw',
+    name: 'SolarStock APEX 3.2kW MPPT Hybrid Inverter (Yellow Edition)',
+    category: 'solar-inverters',
+    subCategory: 'Off-Grid Solar Inverter',
+    brand: 'SolarStock BD',
+    images: [
+      solarYellowBlackPoster2,
+      'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80'
+    ],
+    price: 52000,
+    originalPrice: 65000,
+    discountPercent: 20,
+    tag: 'New Arrival',
+    isHot: true,
+    warranty: '3 Years Comprehensive Warranty',
+    capacityVariants: ['3.2kW 24V MPPT 80A'],
+    specs: {
+      'Rated Power': '3200W / 3200VA',
+      'System Voltage': '24V DC',
+      'Solar Input Voltage': '30V - 400V DC Wide Range',
+      'Max PV Array Power': '4000W Solar PV Support',
+      'Max Solar Charging Current': '80A Built-in MPPT',
+      'Grid Feed-in Option': 'Zero Export / Battery Priority Mode'
+    },
+    highlights: [
+      'Bold SolarStock yellow-black metal housing with dust-resistant filters',
+      'High-voltage solar PV input allows running appliances directly without batteries during daytime',
+      'Smart mobile app monitoring with Wi-Fi dongle support'
+    ],
+    shortDesc: 'SolarStock APEX 3.2kW 24V MPPT hybrid inverter with 4000W PV support and battery-less daytime operation.',
+    description: 'The SolarStock APEX 3.2kW is built for modern households looking to cut electricity bills significantly. Run daytime loads directly from rooftop solar arrays with seamless city grid backup.',
+    rating: 4.94,
+    reviewsCount: 37,
+    minBooking: 3500,
+    purchasePoints: 260
+  },
+  {
+    id: 'prod-solarstock-storm-500',
+    name: 'SolarStock STORM 500W Compact LiFePO4 Power Station (320Wh)',
+    category: 'ips-systems',
+    subCategory: 'Portable Power Station',
+    brand: 'SolarStock BD',
+    images: [
+      neozl300wPoster,
+      'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=800&q=80'
+    ],
+    price: 31500,
+    originalPrice: 39375,
+    discountPercent: 20,
+    tag: 'Beat The Clock',
+    isHot: true,
+    warranty: '2 Years SolarCare+ Replacement',
+    capacityVariants: ['320Wh LiFePO4 (500W Pure Sine)'],
+    specs: {
+      'Continuous Output': '500W Pure Sine Wave AC (Surge 1000W)',
+      'Battery Capacity': '320Wh LiFePO4 Chemistry',
+      'DC Output': '12V 10A Car Socket + 2x DC5521 Ports',
+      'Weight': '3.8 KG with Sturdy Yellow Handle'
+    },
+    highlights: [
+      'Signature yellow and black high-contrast design matching official posters',
+      'Can run table fans, 32-inch LED TV, and 4 LED bulbs for up to 6 hours',
+      'Compatible with SolarStock 100W foldable solar panels for 100% off-grid recharge'
+    ],
+    shortDesc: 'SolarStock STORM 500W power station with 320Wh LiFePO4 battery, pure sine wave AC, and 100W solar recharge support.',
+    description: 'Compact, powerful, and built to survive frequent loadshedding cycles in Bangladesh homes and remote workspaces.',
+    rating: 4.91,
+    reviewsCount: 56,
+    minBooking: 2000,
+    purchasePoints: 160
+  },
+  {
+    id: 'prod-solarstock-gp-2400-max',
+    name: 'SolarStock GP 2400 MAX Heavy Duty Industrial Solar Generator (2048Wh)',
+    category: 'ips-systems',
+    subCategory: 'Portable Power Station',
+    brand: 'SolarStock BD',
+    images: [
+      gp1000Poster,
+      'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80'
+    ],
+    price: 125000,
+    originalPrice: 155000,
+    discountPercent: 19,
+    tag: 'Top Selling',
+    isHot: true,
+    warranty: '2 Years SolarCare+ Replacement',
+    capacityVariants: ['2048Wh LiFePO4 (2400W Continuous)'],
+    specs: {
+      'AC Output': '2400W Pure Sine Wave (Surge 4800W)',
+      'Storage Capacity': '2048Wh Grade-A LiFePO4 Battery',
+      'Expandability': 'Expandable up to 6144Wh with extra battery modules',
+      'AC Fast Charge': '0-80% in 60 Minutes via 1800W Grid Input',
+      'Heavy Duty Wheels': 'Built-in Luggage-Style Telescopic Handle and Rugged Wheels'
+    },
+    highlights: [
+      'Maximum output yellow-black graphic poster flagship model',
+      'Runs heavy equipment: microwave ovens, deep fridges, medical devices, and power tools',
+      'Rugged trolley design for easy mobility across workshops, hospitals, and outdoor sites'
+    ],
+    shortDesc: 'SolarStock GP 2400 MAX 2400W / 2048Wh expandable LiFePO4 mobile solar generator with rolling wheels.',
+    description: 'The heavyweight champion of portable clean power. Built for commercial enterprises, mobile clinics, and demanding off-grid luxury villas.',
+    rating: 4.97,
+    reviewsCount: 29,
+    minBooking: 8000,
+    purchasePoints: 620
+  },
+  {
+    id: 'prod-solarstock-powerbox-lite',
+    name: 'SolarStock CyberBox 400W Ultra-Lightweight Solar Station (256Wh)',
+    category: 'ips-systems',
+    subCategory: 'Portable Power Station',
+    brand: 'SolarStock BD',
+    images: [
+      solarYellowBlackPoster1,
+      'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=800&q=80'
+    ],
+    price: 26999,
+    originalPrice: 33750,
+    discountPercent: 20,
+    tag: 'New Arrival',
+    isHot: true,
+    warranty: '2 Years Official Warranty',
+    capacityVariants: ['256Wh LiFePO4 (400W AC)'],
+    specs: {
+      'Rated Output': '400W Pure Sine Wave AC',
+      'Battery Capacity': '256Wh LiFePO4',
+      'Weight': '2.6 KG',
+      'USB-C Fast Charging': 'Bidirectional 60W USB-C'
+    },
+    highlights: [
+      'High-impact yellow & black graphic design with illuminated dashboard',
+      'Zero noise, zero fumes, 100% safe for indoor bedside table operation',
+      'Powers Wi-Fi and study light for up to 14 hours continuously'
+    ],
+    shortDesc: 'SolarStock CyberBox 400W portable power station with 256Wh LiFePO4 battery and bidirectional 60W USB-C.',
+    description: 'A sleek, lightweight power pack perfect for apartment balconies, study desks, and photography shoots.',
+    rating: 4.9,
+    reviewsCount: 41,
+    minBooking: 2000,
+    purchasePoints: 135
   }
 ];
 
@@ -1061,7 +1448,8 @@ export const BRANCHES: BranchLocation[] = [
     landmark: 'Panthapath, Dhaka 1205',
     phone: '09638001122 / 01711-SOLAR1',
     offDay: 'Tuesday',
-    image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80'
+    image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80',
+    googleMapUrl: 'https://maps.google.com/?q=Bashundhara+City+Shopping+Mall+Dhaka'
   },
   {
     id: 'branch-2',
@@ -1071,7 +1459,8 @@ export const BRANCHES: BranchLocation[] = [
     landmark: 'Kuril, Dhaka',
     phone: '09638001123 / 01711-SOLAR2',
     offDay: 'Wednesday',
-    image: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=600&q=80'
+    image: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=600&q=80',
+    googleMapUrl: 'https://maps.google.com/?q=Jamuna+Future+Park+Dhaka'
   },
   {
     id: 'branch-3',
@@ -1081,7 +1470,8 @@ export const BRANCHES: BranchLocation[] = [
     landmark: 'GEC Circle, Chittagong',
     phone: '09638001124 / 01811-SOLAR3',
     offDay: 'Wednesday',
-    image: 'https://images.unsplash.com/photo-1558441719-8b489c652790?auto=format&fit=crop&w=600&q=80'
+    image: 'https://images.unsplash.com/photo-1558441719-8b489c652790?auto=format&fit=crop&w=600&q=80',
+    googleMapUrl: 'https://maps.google.com/?q=Finlay+Square+Chittagong'
   },
   {
     id: 'branch-4',
@@ -1091,7 +1481,8 @@ export const BRANCHES: BranchLocation[] = [
     landmark: 'Mohammad Ali Road, CTG',
     phone: '09638001125',
     offDay: 'Sunday',
-    image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80'
+    image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80',
+    googleMapUrl: 'https://maps.google.com/?q=Meridian+Kohinoor+City+Chittagong'
   },
   {
     id: 'branch-5',
@@ -1101,7 +1492,8 @@ export const BRANCHES: BranchLocation[] = [
     landmark: 'Beside Airport, Uttara',
     phone: '09638001126',
     offDay: 'Monday',
-    image: 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=600&q=80'
+    image: 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=600&q=80',
+    googleMapUrl: 'https://maps.google.com/?q=Centre+Point+Uttara+Dhaka'
   },
   {
     id: 'branch-6',
@@ -1111,7 +1503,8 @@ export const BRANCHES: BranchLocation[] = [
     landmark: 'Nawab Bari Road, Bogura',
     phone: '09638001127',
     offDay: 'Friday',
-    image: 'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=600&q=80'
+    image: 'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=600&q=80',
+    googleMapUrl: 'https://maps.google.com/?q=Nawab+Bari+Road+Bogura'
   },
   {
     id: 'branch-7',
@@ -1121,7 +1514,8 @@ export const BRANCHES: BranchLocation[] = [
     landmark: 'Zindabazar, Sylhet',
     phone: '09638001128',
     offDay: 'Friday',
-    image: 'https://images.unsplash.com/photo-1508873696983-2df5293cb32f?auto=format&fit=crop&w=600&q=80'
+    image: 'https://images.unsplash.com/photo-1508873696983-2df5293cb32f?auto=format&fit=crop&w=600&q=80',
+    googleMapUrl: 'https://maps.google.com/?q=Al-Hamra+Shopping+City+Zindabazar+Sylhet'
   },
   {
     id: 'branch-8',
@@ -1131,7 +1525,8 @@ export const BRANCHES: BranchLocation[] = [
     landmark: 'KDA Avenue, Khulna',
     phone: '09638001129',
     offDay: 'Thursday',
-    image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80'
+    image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80',
+    googleMapUrl: 'https://maps.google.com/?q=Ocean+City+KDA+Avenue+Khulna'
   }
 ];
 
@@ -1296,4 +1691,251 @@ export const FLASH_SALE_PRODUCTS = [...solarstockPowerStations, ...otherFlashDea
 export const BEST_DEALS_PRODUCTS = PRODUCTS.filter(p => p.price < 50000).slice(0, 8);
 export const RECENT_PRODUCTS = PRODUCTS.slice().reverse().slice(0, 6);
 export const TRENDING_PRODUCTS = PRODUCTS.filter(p => p.rating && p.rating >= 4.8).slice(0, 8);
+
+export const DEFAULT_HERO_SLIDES: HeroSlideItem[] = [
+  {
+    id: 0,
+    image: flagshipSolarArray,
+    alt: 'Next-Generation Smart Solar Energy Showroom',
+    tag: 'SMART SOLAR ARCHITECTURE',
+    badge: 'Up to 90% Bill Savings',
+    title: 'Next-Generation Solar Energy Systems',
+    subtitle: 'Pure Sine Wave Hybrid Inverters & LiFePO4 Battery Storage for 24/7 Power Freedom.',
+    category: 'hybrid-inverters',
+    buttonText: 'Explore Solar Systems'
+  },
+  {
+    id: 1,
+    image: rooftopSolarHome,
+    alt: 'Modern Rooftop Solar Home under Sunny Sky',
+    tag: 'RESIDENTIAL ROOFTOP',
+    badge: '25-Year Linear Warranty',
+    title: 'Power Your Home From Your Own Roof',
+    subtitle: 'Sleek monocrystalline rooftop installations engineered for 25+ years of silent, zero-emission electricity.',
+    category: 'solar-packages',
+    buttonText: 'View Rooftop Packages'
+  },
+  {
+    id: 2,
+    image: familySolarLiving,
+    alt: 'Family Relaxing in Solar Powered Living Room',
+    tag: '24/7 UNINTERRUPTED LIVING',
+    badge: '100% Silent & Safe LiFePO4',
+    title: 'Zero Load Shedding, Pure Family Comfort',
+    subtitle: 'Instant zero-millisecond power transfer keeps lights, fans, WiFi, and refrigerators running continuously.',
+    category: 'lithium-batteries',
+    buttonText: 'Discover Home Backup'
+  },
+  {
+    id: 3,
+    image: travelPortableSolar,
+    alt: 'Friends Camping Powered by Portable Solar Generator',
+    tag: 'OFF-GRID & ADVENTURE',
+    badge: '220V Pure Sine Output',
+    title: 'Take Limitless Solar Anywhere Under the Sky',
+    subtitle: 'Lightweight LiFePO4 portable power stations and folding solar panels for travel, camping & field work.',
+    category: 'ips-systems',
+    buttonText: 'Explore Portable Power'
+  }
+];
+
+export const DEFAULT_SLIDE3_PRODUCTS: Slide3ShowcaseProduct[] = [
+  {
+    id: 'hybrid-10kw',
+    category: 'hybrid-inverters',
+    name: '10kW Hybrid MPPT Inverter',
+    tag: 'FLAGSHIP INVERTER',
+    spec: '98.4% Efficiency • 0ms UPS Switch',
+    badge: 'Tier-1 Pure Sine',
+    accentColor: '#38bdf8',
+    image: brightSolarShowcase
+  },
+  {
+    id: 'lifepo4-powerwall',
+    category: 'lithium-batteries',
+    name: '51.2V 200Ah LiFePO4 ESS',
+    tag: 'SMART ENERGY STORAGE',
+    spec: '10.24kWh • 6,000+ Deep Cycles',
+    badge: 'Grade-A Smart BMS',
+    accentColor: '#34d399',
+    image: brightSolarBattery
+  },
+  {
+    id: 'bifacial-600w',
+    category: 'solar-packages',
+    name: '600W Bifacial TOPCon Array',
+    tag: 'N-TYPE MONOCRYSTALLINE',
+    spec: '22.8% Yield • 30-Yr Power Output',
+    badge: 'Dual-Glass Armor',
+    accentColor: '#fbbf24',
+    image: brightSolarShowcase
+  },
+  {
+    id: 'portable-2400w',
+    category: 'ips-systems',
+    name: '2400W LiFePO4 Power Hub',
+    tag: 'PORTABLE & OFF-GRID',
+    spec: '2048Wh • 1.2h Super Solar Charge',
+    badge: '220V + Dual PD 100W',
+    accentColor: '#f59e0b',
+    image: brightSolarBattery
+  }
+];
+
+export const DEFAULT_PEACE_OF_MIND: PeaceOfMindConfig = {
+  sectionTitle: 'Solarstock™ Peace of Mind Guarantee',
+  trustHighlight: 'Trusted by over 45,000+ Bangladeshi Homes & Businesses',
+  items: [
+    {
+      id: 'pom-1',
+      tag: '100% AUTHENTIC',
+      tagColor: 'bg-emerald-100 text-emerald-800',
+      title: '100% Genuine Products',
+      subtitle: 'Direct Factory Sealed with Serial Verification',
+      iconType: 'shield'
+    },
+    {
+      id: 'pom-2',
+      tag: 'EXPRESS DISPATCH',
+      tagColor: 'bg-amber-100 text-amber-800',
+      title: 'Super Fast Delivery',
+      subtitle: '24-48 Hours Delivery Across All 64 Districts',
+      iconType: 'zap'
+    },
+    {
+      id: 'pom-3',
+      tag: 'FLEXIBLE PAYMENT',
+      tagColor: 'bg-sky-100 text-sky-800',
+      title: '36 Months 0% EMI',
+      subtitle: 'Available with 18+ Leading Partner Banks',
+      iconType: 'calendar'
+    },
+    {
+      id: 'pom-4',
+      tag: 'OFFICIAL GUARANTEE',
+      tagColor: 'bg-purple-100 text-purple-800',
+      title: 'Up to 25 Yrs Warranty',
+      subtitle: 'SolarCare+ Instant Replacement Guarantee',
+      iconType: 'rotate'
+    }
+  ]
+};
+
+export const DEFAULT_SOLAR_CARE: SolarCareConfig = {
+  badgeText: 'Official Solar Protection',
+  tag: 'Official Solar Protection',
+  titleMain: 'Why',
+  titleHighlight: 'Solarstock Care+?',
+  title: 'Why Solarstock Care+?',
+  description: 'The only dedicated solar & IPS warranty in Bangladesh offering instant doorstep hardware replacement, lightning surge protection, and certified solar engineer dispatch.',
+  feature1Title: 'Instant Unit Replacement',
+  feature1Desc: 'Zero waiting for repair parts',
+  feature2Title: '730 Days Surge Coverage',
+  feature2Desc: 'Full lightning & grid fluctuation cover',
+  features: [
+    {
+      id: 'sc-1',
+      title: 'Instant Unit Replacement',
+      subtitle: 'Zero waiting for repair parts'
+    },
+    {
+      id: 'sc-2',
+      title: '730 Days Surge Coverage',
+      subtitle: 'Full lightning & grid fluctuation cover'
+    }
+  ]
+};
+
+export const DEFAULT_BRANDS_LIST: BrandItem[] = [
+  { name: 'Growatt', logo: '⚡ GROWATT', tagline: 'Global #1 Residential Hybrid Inverters' },
+  { name: 'LONGi Solar', logo: '☀️ LONGI', tagline: 'Tier-1 Mono Bifacial Solar Panels' },
+  { name: 'Luminous', logo: '💡 LUMINOUS', tagline: 'Pure Sine Wave Smart Home IPS' },
+  { name: 'Deye', logo: '⚙️ DEYE', tagline: 'Industrial High-Voltage Inverters' },
+  { name: 'Felicity Solar', logo: '🔋 FELICITY', tagline: 'Smart LiFePO4 Wall Batteries' },
+  { name: 'Jinko Solar', logo: '🌟 JINKO', tagline: 'Ultra-High Efficiency Tiger Neo Panels' },
+  { name: 'Microtek', logo: '🔌 MICROTEK', tagline: 'Heavy Duty Digital UPS Systems' },
+  { name: 'Huawei Solar', logo: '📡 HUAWEI', tagline: 'FusionSolar Commercial Inverters' },
+  { name: 'Hamko', logo: '🛡️ HAMKO', tagline: 'Deep Cycle Tall Tubular Batteries' },
+  { name: 'Canadian Solar', logo: '🍁 CANADIAN', tagline: 'BiHiKu7 Bifacial Modules' },
+  { name: 'SMA Solar', logo: '🌐 SMA', tagline: 'German Engineered On-Grid Inverters' },
+  { name: 'SRNE', logo: '🎛️ SRNE', tagline: 'Advanced MPPT Charge Controllers' }
+];
+
+export const DEFAULT_FAQS: FaqItem[] = [
+  {
+    id: 'faq-1',
+    q: "1. Can I exchange my old IPS device or battery for a new one at Solarstock?",
+    a: "Yes! Solarstock offers an exclusive Solar Trade-In Exchange facility with up to 25% extra bonus value. Simply bring your old tubular battery or dead inverter to any of our 8+ branches, and our engineering team will evaluate its exchange value toward your brand-new pure sine wave hybrid inverter or LiFePO4 battery pack."
+  },
+  {
+    id: 'faq-2',
+    q: "2. Where are Solarstock's store locations in Bangladesh?",
+    a: "Solarstock operates premier flagship experience centers across Dhaka (Bashundhara City Level 7, Jamuna Future Park Level 4, Uttara Centre Point), Chittagong (Finlay Square & Meridian Kohinoor City), Bogura (Nawab Bari Road), Sylhet (Zindabazar), and Khulna (KDA Avenue) with nationwide delivery to all 64 districts."
+  },
+  {
+    id: 'faq-3',
+    q: "3. What customer support does Solarstock provide?",
+    a: "Solarstock offers 24/7 technical solar engineering hotline support to assist with rooftop solar load calculations, system design, inverter setup, warranty registrations, and net metering liaison. You can reach our engineers via hotline 09638001122 (10 AM - 10 PM) or our on-site technician dispatch desk."
+  },
+  {
+    id: 'faq-4',
+    q: "4. How can I be sure I'm getting a genuine product from Solarstock?",
+    a: "Solarstock guarantees 100% authenticity. We import directly from verified Tier-1 manufacturers (Growatt, LONGi, Luminous, Deye, Felicity Solar, Jinko) as authorized distributors. Every product is sealed with official brand barcodes and verified under our SolarCare+ registration portal."
+  },
+  {
+    id: 'faq-5',
+    q: "5. Does Solarstock accept pre-orders for specialized industrial solar equipment?",
+    a: "Yes! Use our interactive Pre-Order portal in the app to request specialized 3-phase commercial inverters (10kW to 100kW), custom high-voltage rack batteries, or agricultural solar irrigation systems. We source and deliver custom units within 10 to 15 business days."
+  },
+  {
+    id: 'faq-6',
+    q: "6. Can I return or exchange a product if I'm not satisfied?",
+    a: "Solarstock offers a 7-day hassle-free replacement policy and official manufacturer warranty up to 25 years. If your inverter, panel, or battery has any manufacturing discrepancy, our SolarCare+ team will exchange it with a brand-new unit immediately."
+  }
+];
+
+export const DEFAULT_BLOGS: BlogPost[] = [
+  {
+    id: 'blog-1',
+    title: 'How to Choose the Best Hybrid Solar Inverter for Load Shedding in 2026',
+    category: 'SOLAR GUIDE',
+    date: '17 AUG, 2026',
+    readTime: '6 min read',
+    image: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=600&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=600&q=80',
+      'https://images.unsplash.com/photo-1558441719-8b489c652790?auto=format&fit=crop&w=600&q=80'
+    ],
+    excerpt: 'Detailed comparison of Growatt vs Deye vs Solis hybrid inverters, MPPT voltage requirements, and battery chemistry compatibility.',
+    author: 'Engr. Rafiqul Islam, Senior Solar Engineer'
+  },
+  {
+    id: 'blog-2',
+    title: 'LiFePO4 Lithium Battery vs Tubular Battery: Which is Better for Home IPS in Bangladesh?',
+    category: 'BATTERY TECH',
+    date: '12 AUG, 2026',
+    readTime: '8 min read',
+    image: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=600&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=600&q=80',
+      'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80'
+    ],
+    excerpt: 'Calculate total cost of ownership, 6000 cycles life vs 1500 cycles, charging speed, and zero maintenance benefits.',
+    author: 'Solarstock Technical Team'
+  },
+  {
+    id: 'blog-3',
+    title: 'Net Metering in Bangladesh: Step-by-Step Guide to Selling Rooftop Solar Electricity',
+    category: 'NET METERING',
+    date: '04 AUG, 2026',
+    readTime: '5 min read',
+    image: 'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=600&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=600&q=80',
+      'https://images.unsplash.com/photo-1508873696983-2df5293cb32f?auto=format&fit=crop&w=600&q=80'
+    ],
+    excerpt: 'How DESCO, DPDC, and REB consumers can apply for bi-directional meters and reduce electric bills by up to 85%.',
+    author: 'Engr. Shamim Ahmed'
+  }
+];
 

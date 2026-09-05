@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { Facebook, Instagram, Linkedin, Youtube, MapPin, Mail, Phone, Sun, ShieldCheck, KeyRound } from 'lucide-react';
+import React from 'react';
+import { Facebook, Instagram, Linkedin, Youtube, MapPin, Mail, Phone, Sun, ShieldCheck } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 
 interface FooterProps {
@@ -13,76 +13,26 @@ export const Footer: React.FC<FooterProps> = ({
   onSelectCategory,
   onOpenCalculator
 }) => {
-  const { branches, footerConfig, brandConfig, openAdmin } = useStore();
-
-  // 5-Click Admin Access Trigger State
-  const [clickCount, setClickCount] = useState(0);
-  const [clickMessage, setClickMessage] = useState<string | null>(null);
-  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  const handleLogoClick = () => {
-    const newCount = clickCount + 1;
-    setClickCount(newCount);
-
-    if (clickTimeoutRef.current) {
-      clearTimeout(clickTimeoutRef.current);
-    }
-
-    if (newCount >= 5) {
-      setClickCount(0);
-      setClickMessage('🚀 Opening Solarstock Master Admin Dashboard...');
-      setTimeout(() => {
-        openAdmin();
-        setClickMessage(null);
-      }, 350);
-    } else {
-      const remaining = 5 - newCount;
-      setClickMessage(`Click ${remaining} more time${remaining > 1 ? 's' : ''} to open Admin Panel`);
-      clickTimeoutRef.current = setTimeout(() => {
-        setClickCount(0);
-        setClickMessage(null);
-      }, 3000);
-    }
-  };
+  const { branches, footerConfig, brandConfig } = useStore();
 
   return (
     <footer className="bg-neutral-950 text-neutral-300 pt-10 pb-20 md:pb-10 border-t border-neutral-800 text-xs relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-8">
         {/* Brand & Social Row matching video (00:34) */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-6 border-b border-neutral-800">
-          <div>
-            {/* 5-Click Trigger Area on Footer Logo */}
-            <div className="relative inline-block">
-              <div
-                id="footer-admin-trigger"
-                onClick={handleLogoClick}
-                className="flex items-center gap-2 mb-3 cursor-pointer select-none group p-1.5 -m-1.5 rounded-xl hover:bg-neutral-900 transition-all active:scale-95"
-                title="Click 5 times to open Admin Master Dashboard"
-              >
-                <div className="w-8 h-8 bg-amber-400 rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-                  <Sun className="w-5 h-5 text-neutral-950 stroke-[2.5]" />
-                </div>
-                <span className="text-2xl font-extrabold tracking-tight text-white font-['Outfit',sans-serif]">
-                  {brandConfig.logoMain}
-                  <span className="text-amber-400">{brandConfig.logoAccent}</span>
-                  <span className="text-xs font-semibold align-super ml-0.5 text-neutral-400">
-                    {brandConfig.logoSymbol}
-                  </span>
-                </span>
-                {clickCount > 0 && (
-                  <span className="ml-2 px-2 py-0.5 rounded-full bg-amber-400 text-neutral-950 font-black text-[10px] animate-bounce">
-                    {clickCount}/5
-                  </span>
-                )}
+          <div className="space-y-3">
+            {/* Standard Brand Logo */}
+            <div className="flex items-center gap-2 select-none">
+              <div className="w-8 h-8 bg-amber-400 rounded-lg flex items-center justify-center shadow-md">
+                <Sun className="w-5 h-5 text-neutral-950 stroke-[2.5]" />
               </div>
-
-              {/* Click Toast Feedback */}
-              {clickMessage && (
-                <div className="absolute left-0 -top-8 bg-amber-400 text-neutral-950 text-[11px] font-bold px-2.5 py-1 rounded-md shadow-lg flex items-center gap-1.5 whitespace-nowrap z-20 animate-in fade-in zoom-in-90 duration-150">
-                  <KeyRound className="w-3.5 h-3.5" />
-                  <span>{clickMessage}</span>
-                </div>
-              )}
+              <span className="text-2xl font-extrabold tracking-tight text-white font-['Outfit',sans-serif]">
+                {brandConfig.logoMain}
+                <span className="text-amber-400">{brandConfig.logoAccent}</span>
+                <span className="text-xs font-semibold align-super ml-0.5 text-neutral-400">
+                  {brandConfig.logoSymbol}
+                </span>
+              </span>
             </div>
 
             {/* Store Location Button matching video (00:34) */}

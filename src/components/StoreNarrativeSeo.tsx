@@ -1,35 +1,10 @@
 import React, { useState } from 'react';
 import { ChevronDown, HelpCircle, CheckCircle, MapPin, Phone } from 'lucide-react';
+import { useStore } from '../context/StoreContext';
 
 export const StoreNarrativeSeo: React.FC = () => {
+  const { faqs } = useStore();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-
-  const faqs = [
-    {
-      q: "7. Can I exchange my old IPS device or battery for a new one at Solarstock?",
-      a: "Yes! Solarstock offers an exclusive Solar Trade-In Exchange facility with up to 25% extra bonus value. Simply bring your old tubular battery or dead inverter to any of our 8+ branches, and our engineering team will evaluate its exchange value toward your brand-new pure sine wave hybrid inverter or LiFePO4 battery pack."
-    },
-    {
-      q: "8. Where are Solarstock's store locations in Bangladesh?",
-      a: "Solarstock operates premier flagship experience centers across Dhaka (Bashundhara City Level 7, Jamuna Future Park Level 4, Uttara Centre Point), Chittagong (Finlay Square & Meridian Kohinoor City), Bogura (Nawab Bari Road), Sylhet (Zindabazar), and Khulna (KDA Avenue) with nationwide delivery to all 64 districts."
-    },
-    {
-      q: "9. What customer support does Solarstock provide?",
-      a: "Solarstock offers 24/7 technical solar engineering hotline support to assist with rooftop solar load calculations, system design, inverter setup, warranty registrations, and net metering liaison. You can reach our engineers via hotline 09638001122 (10 AM - 10 PM) or our on-site technician dispatch desk."
-    },
-    {
-      q: "10. How can I be sure I'm getting a genuine product from Solarstock?",
-      a: "Solarstock guarantees 100% authenticity. We import directly from verified Tier-1 manufacturers (Growatt, LONGi, Luminous, Deye, Felicity Solar, Jinko) as authorized distributors. Every product is sealed with official brand barcodes and verified under our SolarCare+ registration portal."
-    },
-    {
-      q: "11. Does Solarstock accept pre-orders for specialized industrial solar equipment?",
-      a: "Yes! Use our interactive Pre-Order portal in the app to request specialized 3-phase commercial inverters (10kW to 100kW), custom high-voltage rack batteries, or agricultural solar irrigation systems. We source and deliver custom units within 10 to 15 business days."
-    },
-    {
-      q: "12. Can I return or exchange a product if I'm not satisfied?",
-      a: "Solarstock offers a 7-day hassle-free replacement policy and official manufacturer warranty up to 25 years. If your inverter, panel, or battery has any manufacturing discrepancy, our SolarCare+ team will exchange it with a brand-new unit immediately."
-    }
-  ];
 
   return (
     <section className="max-w-7xl mx-auto px-3 sm:px-4 py-6 sm:py-8 border-t border-neutral-200">
@@ -72,7 +47,7 @@ export const StoreNarrativeSeo: React.FC = () => {
           </div>
 
           <div className="space-y-3">
-            {faqs.map((faq, idx) => {
+            {(faqs || []).map((faq, idx) => {
               const isOpen = openFaq === idx;
               return (
                 <div

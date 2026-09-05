@@ -8,7 +8,15 @@ import {
   FlashSaleConfig,
   FooterConfig,
   BrandConfig,
-  SitePolicy
+  SitePolicy,
+  HeroSlideItem,
+  Slide3ShowcaseProduct,
+  PeaceOfMindConfig,
+  SolarCareConfig,
+  BrandItem,
+  FaqItem,
+  BlogPost,
+  SubCategoryItem
 } from '../types';
 import {
   PRODUCTS as INITIAL_PRODUCTS,
@@ -19,8 +27,19 @@ import {
   DEFAULT_FLASH_SALE_CONFIG,
   DEFAULT_FOOTER_CONFIG,
   DEFAULT_BRAND_CONFIG,
-  DEFAULT_POLICIES
+  DEFAULT_POLICIES,
+  DEFAULT_HERO_SLIDES,
+  DEFAULT_SLIDE3_PRODUCTS,
+  DEFAULT_PEACE_OF_MIND,
+  DEFAULT_SOLAR_CARE,
+  DEFAULT_BRANDS_LIST,
+  DEFAULT_FAQS,
+  DEFAULT_BLOGS
 } from '../data/mockData';
+
+export const MASTER_ADMIN_KEY = '654321';
+export const DEFAULT_MANAGER_KEY = '123456';
+export const DEFAULT_ADMIN_ID = 'admin';
 
 interface StoreState {
   products: Product[];
@@ -32,9 +51,22 @@ interface StoreState {
   footerConfig: FooterConfig;
   brandConfig: BrandConfig;
   policies: SitePolicy[];
+  heroSlides: HeroSlideItem[];
+  slide3Products: Slide3ShowcaseProduct[];
+  peaceOfMind: PeaceOfMindConfig;
+  solarCare: SolarCareConfig;
+  brandsList: BrandItem[];
+  faqs: FaqItem[];
+  blogs: BlogPost[];
+  
   isAdminOpen: boolean;
+  adminRole: 'manager' | 'boss' | null;
+  managerPassword: string;
+  setManagerPassword: (newPw: string) => boolean;
+  authenticateAdmin: (inputPw: string, inputId?: string) => { success: boolean; role: 'manager' | 'boss' | null; isMasterKey: boolean };
   openAdmin: () => void;
   closeAdmin: () => void;
+  logoutAdmin: () => void;
   
   // Product Actions
   addProduct: (product: Omit<Product, 'id'>) => Product;
@@ -47,11 +79,41 @@ interface StoreState {
   addCategory: (category: Omit<Category, 'id'>) => Category;
   updateCategory: (id: string, updates: Partial<Category>) => void;
   deleteCategory: (id: string) => void;
+  updateSubcategories: (categoryId: string, subcategories: SubCategoryItem[] | string[]) => void;
   
   // Branch Actions
   addBranch: (branch: Omit<BranchLocation, 'id'>) => BranchLocation;
   updateBranch: (id: string, updates: Partial<BranchLocation>) => void;
   deleteBranch: (id: string) => void;
+  
+  // Hero Slider (Slide 1 & Slide 3) Actions
+  updateHeroSlide: (id: number, updates: Partial<HeroSlideItem>) => void;
+  addHeroSlide: (slide: Omit<HeroSlideItem, 'id'>) => void;
+  deleteHeroSlide: (id: number) => void;
+  updateSlide3Product: (id: string, updates: Partial<Slide3ShowcaseProduct>) => void;
+  addSlide3Product: (prod: Slide3ShowcaseProduct) => void;
+  deleteSlide3Product: (id: string) => void;
+  
+  // Editable Sections
+  updatePeaceOfMind: (updates: Partial<PeaceOfMindConfig>) => void;
+  updateSolarCare: (updates: Partial<SolarCareConfig>) => void;
+  
+  // Brands Actions
+  updateBrandItem: (idOrIndex: string | number, updates: Partial<BrandItem>) => void;
+  addBrandItem: (brand: BrandItem) => void;
+  deleteBrandItem: (idOrIndex: string | number) => void;
+  
+  // FAQs Actions & Reorder
+  updateFaq: (id: string, updates: Partial<FaqItem>) => void;
+  addFaq: (faq: Omit<FaqItem, 'id'>) => void;
+  deleteFaq: (id: string) => void;
+  reorderFaqs: (sourceIndex: number, targetIndex: number) => void;
+  
+  // Blogs Actions & Reorder
+  updateBlog: (id: string, updates: Partial<BlogPost>) => void;
+  addBlog: (blog: Omit<BlogPost, 'id'>) => void;
+  deleteBlog: (id: string) => void;
+  reorderBlogs: (sourceIndex: number, targetIndex: number) => void;
   
   // Billboard & Banner Actions
   updateHeroBillboard: (updates: Partial<HeroBillboardConfig>) => void;
@@ -72,6 +134,7 @@ interface StoreState {
 }
 
 const STORAGE_KEY = 'solarstock_full_store_v1';
+const MANAGER_PW_KEY = 'solarstock_manager_password';
 
 const StoreContext = createContext<StoreState | undefined>(undefined);
 
@@ -91,9 +154,29 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const saved = loadSavedState();
 
-  const [products, setProducts] = useState<Product[]>(saved?.products || INITIAL_PRODUCTS);
+  // Merge any new products from INITIAL_PRODUCTS into saved products if not present
+  const initialProducts = (() => {
+    if (!saved?.products || !Array.isArray(saved.products)) return INITIAL_PRODUCTS;
+    const existingIds = new Set(saved.products.map((p: Product) => p.id));
+    const missing = INITIAL_PRODUCTS.filter((p) => !existingIds.has(p.id));
+    return [...saved.products, ...missing];
+  })();
+
+  // Ensure branches have googleMapUrl
+  const initialBranches = (() => {
+    if (!saved?.branches || !Array.isArray(saved.branches)) return INITIAL_BRANCHES;
+    return saved.branches.map((b: BranchLocation) => {
+      const match = INITIAL_BRANCHES.find((ib) => ib.id === b.id);
+      return {
+        ...b,
+        googleMapUrl: b.googleMapUrl || match?.googleMapUrl || `https://maps.google.com/?q=${encodeURIComponent(b.address)}`
+      };
+    });
+  })();
+
+  const [products, setProducts] = useState<Product[]>(initialProducts);
   const [categories, setCategories] = useState<Category[]>(saved?.categories || INITIAL_CATEGORIES);
-  const [branches, setBranches] = useState<BranchLocation[]>(saved?.branches || INITIAL_BRANCHES);
+  const [branches, setBranches] = useState<BranchLocation[]>(initialBranches);
   const [heroBillboard, setHeroBillboard] = useState<HeroBillboardConfig>(
     saved?.heroBillboard || DEFAULT_HERO_BILLBOARD
   );
@@ -112,9 +195,67 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [policies, setPolicies] = useState<SitePolicy[]>(
     saved?.policies || DEFAULT_POLICIES
   );
-  const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
+  
+  // New Customizable Content Sections
+  const [heroSlides, setHeroSlides] = useState<HeroSlideItem[]>(() => {
+    return (saved?.heroSlides && saved.heroSlides.length > 0) ? saved.heroSlides : DEFAULT_HERO_SLIDES;
+  });
+  const [slide3Products, setSlide3Products] = useState<Slide3ShowcaseProduct[]>(() => {
+    return (saved?.slide3Products && saved.slide3Products.length > 0) ? saved.slide3Products : DEFAULT_SLIDE3_PRODUCTS;
+  });
+  const [peaceOfMind, setPeaceOfMind] = useState<PeaceOfMindConfig>(() => {
+    const pom = saved?.peaceOfMind || DEFAULT_PEACE_OF_MIND;
+    if (!pom.items || pom.items.length === 0) {
+      return {
+        ...pom,
+        items: DEFAULT_PEACE_OF_MIND.items
+      };
+    }
+    return pom;
+  });
+  const [solarCare, setSolarCare] = useState<SolarCareConfig>(() => {
+    const sc = saved?.solarCare || DEFAULT_SOLAR_CARE;
+    if (!sc.features || sc.features.length === 0) {
+      return {
+        ...sc,
+        features: DEFAULT_SOLAR_CARE.features || [
+          {
+            id: 'sc-1',
+            title: sc.feature1Title || 'Instant Unit Replacement',
+            subtitle: sc.feature1Desc || 'Zero waiting for repair parts'
+          },
+          {
+            id: 'sc-2',
+            title: sc.feature2Title || '730 Days Surge Coverage',
+            subtitle: sc.feature2Desc || 'Full lightning & grid fluctuation cover'
+          }
+        ]
+      };
+    }
+    return sc;
+  });
+  const [brandsList, setBrandsList] = useState<BrandItem[]>(() => {
+    return (saved?.brandsList && saved.brandsList.length > 0) ? saved.brandsList : DEFAULT_BRANDS_LIST;
+  });
+  const [faqs, setFaqs] = useState<FaqItem[]>(() => {
+    return (saved?.faqs && saved.faqs.length > 0) ? saved.faqs : DEFAULT_FAQS;
+  });
+  const [blogs, setBlogs] = useState<BlogPost[]>(() => {
+    return (saved?.blogs && saved.blogs.length > 0) ? saved.blogs : DEFAULT_BLOGS;
+  });
 
-  // Save to localStorage whenever core data changes
+  // Admin and Password States
+  const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
+  const [adminRole, setAdminRole] = useState<'manager' | 'boss' | null>(null);
+  const [managerPassword, setManagerPasswordState] = useState<string>(() => {
+    const savedPw = localStorage.getItem(MANAGER_PW_KEY);
+    if (!savedPw || savedPw === 'admin@1234') {
+      return DEFAULT_MANAGER_KEY; // '123456'
+    }
+    return savedPw;
+  });
+
+  // Save changes to localStorage on any state change
   useEffect(() => {
     try {
       const stateToSave = {
@@ -126,11 +267,18 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         flashSaleConfig,
         footerConfig,
         brandConfig,
-        policies
+        policies,
+        heroSlides,
+        slide3Products,
+        peaceOfMind,
+        solarCare,
+        brandsList,
+        faqs,
+        blogs
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
     } catch (e) {
-      console.warn('Failed to save store state to localStorage', e);
+      console.warn('Could not save store state to localStorage', e);
     }
   }, [
     products,
@@ -141,21 +289,74 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     flashSaleConfig,
     footerConfig,
     brandConfig,
-    policies
+    policies,
+    heroSlides,
+    slide3Products,
+    peaceOfMind,
+    solarCare,
+    brandsList,
+    faqs,
+    blogs
   ]);
+
+  const authenticateAdmin = (inputPw: string, inputId?: string) => {
+    const trimmedPw = (inputPw || '').trim();
+    const trimmedId = (inputId || '').trim().toLowerCase();
+
+    // 1. Master Key check (654321 or legacy solarstockbd@1234)
+    if (
+      trimmedPw === MASTER_ADMIN_KEY ||
+      trimmedPw === 'solarstockbd@1234' ||
+      trimmedId === MASTER_ADMIN_KEY ||
+      trimmedId === '654321'
+    ) {
+      setAdminRole('boss');
+      return { success: true, role: 'boss' as const, isMasterKey: true };
+    }
+
+    // 2. Admin ID + Password check (id: admin, pass: 123456)
+    const isIdAdmin = trimmedId === 'admin' || trimmedId === DEFAULT_ADMIN_ID;
+    const isPassValid =
+      trimmedPw === managerPassword ||
+      trimmedPw === DEFAULT_MANAGER_KEY ||
+      trimmedPw === '123456' ||
+      trimmedPw === 'admin@1234';
+
+    if (
+      (isIdAdmin && isPassValid) ||
+      isPassValid ||
+      trimmedId === managerPassword ||
+      trimmedId === DEFAULT_MANAGER_KEY ||
+      trimmedId === '123456'
+    ) {
+      setAdminRole('manager');
+      return { success: true, role: 'manager' as const, isMasterKey: false };
+    }
+
+    return { success: false, role: null, isMasterKey: false };
+  };
+
+  const setManagerPassword = (newPw: string) => {
+    if (!newPw || newPw.trim().length < 4) return false;
+    const clean = newPw.trim();
+    setManagerPasswordState(clean);
+    localStorage.setItem(MANAGER_PW_KEY, clean);
+    return true;
+  };
 
   const openAdmin = () => setIsAdminOpen(true);
   const closeAdmin = () => setIsAdminOpen(false);
+  const logoutAdmin = () => {
+    setAdminRole(null);
+    setIsAdminOpen(false);
+  };
 
   // Product Methods
-  const addProduct = (newProdData: Omit<Product, 'id'>) => {
-    const id = `prod-custom-${Date.now()}`;
-    const fullProduct: Product = {
-      ...newProdData,
-      id
-    };
-    setProducts((prev) => [fullProduct, ...prev]);
-    return fullProduct;
+  const addProduct = (productData: Omit<Product, 'id'>) => {
+    const id = `prod-${Date.now()}`;
+    const newProduct: Product = { ...productData, id };
+    setProducts((prev) => [newProduct, ...prev]);
+    return newProduct;
   };
 
   const updateProduct = (id: string, updates: Partial<Product>) => {
@@ -166,36 +367,23 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const deleteProduct = (id: string) => {
     setProducts((prev) => prev.filter((p) => p.id !== id));
-    // Also remove from flash sale if present
-    setFlashSaleConfig((prev) => ({
-      ...prev,
-      activeProductIds: prev.activeProductIds.filter((pid) => pid !== id)
-    }));
   };
 
   const toggleProductFlashSale = (id: string) => {
     setFlashSaleConfig((prev) => {
-      const isAlreadyIn = prev.activeProductIds.includes(id);
-      const newIds = isAlreadyIn
-        ? prev.activeProductIds.filter((pid) => pid !== id)
-        : [...prev.activeProductIds, id];
-      return { ...prev, activeProductIds: newIds };
+      const exists = prev.activeProductIds.includes(id);
+      return {
+        ...prev,
+        activeProductIds: exists
+          ? prev.activeProductIds.filter((pId) => pId !== id)
+          : [...prev.activeProductIds, id]
+      };
     });
   };
 
   const toggleProductStock = (id: string) => {
     setProducts((prev) =>
-      prev.map((p) => {
-        if (p.id === id) {
-          const isCurrentlyOut = p.isOutOfStock || p.tag === 'Out of Stock';
-          return {
-            ...p,
-            isOutOfStock: !isCurrentlyOut,
-            tag: !isCurrentlyOut ? 'Out of Stock' : (p.isHot ? 'Hot Product' : 'In Stock')
-          };
-        }
-        return p;
-      })
+      prev.map((p) => (p.id === id ? { ...p, isOutOfStock: !p.isOutOfStock } : p))
     );
   };
 
@@ -218,6 +406,30 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setCategories((prev) => prev.filter((c) => c.id !== id));
   };
 
+  const updateSubcategories = (categoryId: string, subcategories: SubCategoryItem[] | string[]) => {
+    setCategories((prev) =>
+      prev.map((c) => {
+        if (c.id !== categoryId) return c;
+        if (Array.isArray(subcategories) && typeof subcategories[0] === 'string') {
+          return {
+            ...c,
+            subCategories: subcategories as string[],
+            subcategories: (subcategories as string[]).map((name, i) => ({
+              id: `sub-${i}`,
+              name,
+              itemCount: 5
+            }))
+          };
+        }
+        return {
+          ...c,
+          subcategories: subcategories as SubCategoryItem[],
+          subCategories: (subcategories as SubCategoryItem[]).map((s) => s.name)
+        };
+      })
+    );
+  };
+
   // Branch Methods
   const addBranch = (branchData: Omit<BranchLocation, 'id'>) => {
     const id = `branch-${Date.now()}`;
@@ -234,6 +446,128 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const deleteBranch = (id: string) => {
     setBranches((prev) => prev.filter((b) => b.id !== id));
+  };
+
+  // Hero Slides (Slide 1 & Slide 3)
+  const updateHeroSlide = (id: number, updates: Partial<HeroSlideItem>) => {
+    setHeroSlides((prev) =>
+      prev.map((slide) => (slide.id === id ? { ...slide, ...updates } : slide))
+    );
+  };
+
+  const addHeroSlide = (slideData: Omit<HeroSlideItem, 'id'>) => {
+    const newId = Math.max(0, ...heroSlides.map((s) => s.id)) + 1;
+    setHeroSlides((prev) => [...prev, { ...slideData, id: newId }]);
+  };
+
+  const deleteHeroSlide = (id: number) => {
+    setHeroSlides((prev) => prev.filter((s) => s.id !== id));
+  };
+
+  const updateSlide3Product = (id: string, updates: Partial<Slide3ShowcaseProduct>) => {
+    setSlide3Products((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, ...updates } : p))
+    );
+  };
+
+  const addSlide3Product = (prod: Slide3ShowcaseProduct) => {
+    setSlide3Products((prev) => [...prev, prod]);
+  };
+
+  const deleteSlide3Product = (id: string) => {
+    setSlide3Products((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  // Peace of Mind & Solar Care
+  const updatePeaceOfMind = (updates: Partial<PeaceOfMindConfig>) => {
+    setPeaceOfMind((prev) => ({ ...prev, ...updates }));
+  };
+
+  const updateSolarCare = (updates: Partial<SolarCareConfig>) => {
+    setSolarCare((prev) => ({ ...prev, ...updates }));
+  };
+
+  // Brands
+  const updateBrandItem = (idOrIndex: string | number, updates: Partial<BrandItem>) => {
+    setBrandsList((prev) => {
+      if (typeof idOrIndex === 'number') {
+        const next = [...prev];
+        if (next[idOrIndex]) {
+          next[idOrIndex] = { ...next[idOrIndex], ...updates };
+        }
+        return next;
+      }
+      return prev.map((b, idx) => (b.id === idOrIndex || b.name === idOrIndex || `brand-${idx}` === idOrIndex ? { ...b, ...updates } : b));
+    });
+  };
+
+  const addBrandItem = (brand: BrandItem) => {
+    setBrandsList((prev) => [...prev, brand]);
+  };
+
+  const deleteBrandItem = (idOrIndex: string | number) => {
+    setBrandsList((prev) => {
+      if (typeof idOrIndex === 'number') {
+        return prev.filter((_, idx) => idx !== idOrIndex);
+      }
+      return prev.filter((b, idx) => b.id !== idOrIndex && b.name !== idOrIndex && `brand-${idx}` !== idOrIndex);
+    });
+  };
+
+  // FAQs with Reorder
+  const updateFaq = (id: string, updates: Partial<FaqItem>) => {
+    setFaqs((prev) =>
+      prev.map((f) => (f.id === id ? { ...f, ...updates } : f))
+    );
+  };
+
+  const addFaq = (faqData: Omit<FaqItem, 'id'>) => {
+    const newFaq: FaqItem = { ...faqData, id: `faq-${Date.now()}` };
+    setFaqs((prev) => [...prev, newFaq]);
+  };
+
+  const deleteFaq = (id: string) => {
+    setFaqs((prev) => prev.filter((f) => f.id !== id));
+  };
+
+  const reorderFaqs = (sourceIndex: number, targetIndex: number) => {
+    setFaqs((prev) => {
+      if (sourceIndex < 0 || sourceIndex >= prev.length || targetIndex < 0 || targetIndex >= prev.length) {
+        return prev;
+      }
+      const clone = [...prev];
+      const [moved] = clone.splice(sourceIndex, 1);
+      clone.splice(targetIndex, 0, moved);
+      return clone;
+    });
+  };
+
+  // Blogs with Multiple Images & Reorder
+  const updateBlog = (id: string, updates: Partial<BlogPost>) => {
+    setBlogs((prev) =>
+      prev.map((b) => (b.id === id ? { ...b, ...updates } : b))
+    );
+  };
+
+  const addBlog = (blogData: Omit<BlogPost, 'id'>) => {
+    const newBlog: BlogPost = { ...blogData, id: `blog-${Date.now()}` };
+    setBlogs((prev) => [newBlog, ...prev]);
+  };
+
+  const deleteBlog = (id: string) => {
+    setBlogs((prev) => prev.filter((b) => b.id !== id));
+  };
+
+  const reorderBlogs = (sourceIndex: number, targetIndex: number) => {
+    setBlogs((prev) => {
+      if (sourceIndex < 0 || sourceIndex >= prev.length || targetIndex < 0 || targetIndex >= prev.length) {
+        return prev;
+      }
+      const clone = [...prev];
+      const [moved] = clone.splice(sourceIndex, 1);
+      clone.splice(targetIndex, 0, moved);
+      return clone;
+    });
   };
 
   // Billboard & Banner Updates
@@ -277,7 +611,16 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setFooterConfig(DEFAULT_FOOTER_CONFIG);
     setBrandConfig(DEFAULT_BRAND_CONFIG);
     setPolicies(DEFAULT_POLICIES);
+    setHeroSlides(DEFAULT_HERO_SLIDES);
+    setSlide3Products(DEFAULT_SLIDE3_PRODUCTS);
+    setPeaceOfMind(DEFAULT_PEACE_OF_MIND);
+    setSolarCare(DEFAULT_SOLAR_CARE);
+    setBrandsList(DEFAULT_BRANDS_LIST);
+    setFaqs(DEFAULT_FAQS);
+    setBlogs(DEFAULT_BLOGS);
+    setManagerPasswordState(DEFAULT_MANAGER_KEY);
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(MANAGER_PW_KEY);
   };
 
   return (
@@ -292,9 +635,21 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         footerConfig,
         brandConfig,
         policies,
+        heroSlides,
+        slide3Products,
+        peaceOfMind,
+        solarCare,
+        brandsList,
+        faqs,
+        blogs,
         isAdminOpen,
+        adminRole,
+        managerPassword,
+        setManagerPassword,
+        authenticateAdmin,
         openAdmin,
         closeAdmin,
+        logoutAdmin,
         addProduct,
         updateProduct,
         deleteProduct,
@@ -303,9 +658,29 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         addCategory,
         updateCategory,
         deleteCategory,
+        updateSubcategories,
         addBranch,
         updateBranch,
         deleteBranch,
+        updateHeroSlide,
+        addHeroSlide,
+        deleteHeroSlide,
+        updateSlide3Product,
+        addSlide3Product,
+        deleteSlide3Product,
+        updatePeaceOfMind,
+        updateSolarCare,
+        updateBrandItem,
+        addBrandItem,
+        deleteBrandItem,
+        updateFaq,
+        addFaq,
+        deleteFaq,
+        reorderFaqs,
+        updateBlog,
+        addBlog,
+        deleteBlog,
+        reorderBlogs,
         updateHeroBillboard,
         updateSubBanners,
         updateFlashSaleConfig,
@@ -327,3 +702,4 @@ export const useStore = () => {
   }
   return context;
 };
+

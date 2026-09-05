@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { ChevronLeft, ChevronRight, Award } from 'lucide-react';
-import { BRANDS } from '../data/mockData';
+import { useStore } from '../context/StoreContext';
 
 interface BrandsSectionProps {
   onSelectBrand: (brandName: string) => void;
@@ -8,6 +8,7 @@ interface BrandsSectionProps {
 }
 
 export const BrandsSection: React.FC<BrandsSectionProps> = ({ onSelectBrand, onSeeAll }) => {
+  const { brandsList } = useStore();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -58,15 +59,23 @@ export const BrandsSection: React.FC<BrandsSectionProps> = ({ onSelectBrand, onS
         ref={scrollRef}
         className="flex items-center gap-3 overflow-x-auto scrollbar-none py-1.5 scroll-smooth"
       >
-        {BRANDS.map((brand, idx) => (
+        {(brandsList || []).map((brand, idx) => (
           <button
-            key={idx}
+            key={brand.id || idx}
             onClick={() => onSelectBrand(brand.name)}
             className="flex-shrink-0 min-w-[130px] sm:min-w-[160px] h-16 sm:h-20 bg-white hover:bg-amber-50/60 border border-neutral-200 hover:border-amber-400 rounded-xl flex items-center justify-center p-3 shadow-2xs hover:shadow-xs transition-all group"
           >
-            <span className="text-xs sm:text-sm font-extrabold tracking-tight text-neutral-800 group-hover:text-amber-600 font-['Outfit',sans-serif] text-center">
-              {brand.logo}
-            </span>
+            {brand.image ? (
+              <img
+                src={brand.image}
+                alt={brand.name}
+                className="max-h-12 max-w-[120px] object-contain"
+              />
+            ) : (
+              <span className="text-xs sm:text-sm font-extrabold tracking-tight text-neutral-800 group-hover:text-amber-600 font-['Outfit',sans-serif] text-center">
+                {brand.logo || brand.name}
+              </span>
+            )}
           </button>
         ))}
       </div>

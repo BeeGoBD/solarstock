@@ -1,5 +1,6 @@
 import React from 'react';
-import { Gift, ShoppingCart, User, Clock, MapPin } from 'lucide-react';
+import { Gift, ShoppingCart, User, Clock, MapPin, ShieldAlert } from 'lucide-react';
+import { useStore } from '../context/StoreContext';
 
 interface BottomNavProps {
   activeView: string;
@@ -16,6 +17,8 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   onOpenCart,
   onOpenAuth
 }) => {
+  const { adminRole, openAdmin } = useStore();
+
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-neutral-200/90 shadow-lg px-2 py-1.5 flex items-center justify-around md:hidden">
       {/* OFFER */}
@@ -56,18 +59,31 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         </span>
       </button>
 
-      {/* PROFILE */}
+      {/* PROFILE / ADMIN */}
       <button
-        onClick={onOpenAuth}
+        onClick={() => {
+          if (adminRole) {
+            openAdmin();
+          } else {
+            onOpenAuth();
+          }
+        }}
         className={`flex flex-col items-center justify-center p-1 rounded-lg transition-colors flex-1 ${
-          activeView === 'profile' ? 'text-amber-700 font-black' : 'text-neutral-600 hover:text-neutral-900'
+          adminRole ? 'text-amber-600 font-black' : activeView === 'profile' ? 'text-amber-700 font-black' : 'text-neutral-600 hover:text-neutral-900'
         }`}
       >
         <div className="relative">
-          <User className="w-5 h-5 stroke-[2]" />
+          {adminRole ? (
+            <ShieldAlert className="w-5 h-5 stroke-[2.2] text-amber-600" />
+          ) : (
+            <User className="w-5 h-5 stroke-[2]" />
+          )}
+          {adminRole && (
+            <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-500" />
+          )}
         </div>
         <span className="text-[10px] uppercase font-bold tracking-wider mt-0.5">
-          PROFILE
+          {adminRole ? 'ADMIN' : 'PROFILE'}
         </span>
       </button>
 

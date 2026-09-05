@@ -10,10 +10,7 @@ import {
   Compass
 } from 'lucide-react';
 import { SolarInverterFlow } from './SolarInverterFlow';
-import flagshipSolarArray from '../assets/images/flagship_solar_array_1788247199655.jpg';
-import rooftopSolarHome from '../assets/images/rooftop_solar_home_1788246756735.jpg';
-import familySolarLiving from '../assets/images/family_solar_living_1788246770378.jpg';
-import travelPortableSolar from '../assets/images/travel_portable_solar_1788246785319.jpg';
+import { useStore } from '../context/StoreContext';
 
 interface HeroSliderProps {
   onBannerClick?: (category?: string) => void;
@@ -27,62 +24,26 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
   onSelectProduct,
   onExploreCategory
 }) => {
+  const { heroSlides } = useStore();
   // 1. Top Main Hero Slider State
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const totalSlides = 4;
+  const totalSlides = heroSlides.length || 1;
   const slideTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const slides = [
-    {
-      id: 0,
-      image: flagshipSolarArray,
-      alt: 'Next-Generation Smart Solar Energy Showroom',
-      tag: 'SMART SOLAR ARCHITECTURE',
-      tagIcon: Zap,
-      title: 'Next-Generation Solar Energy Systems',
-      subtitle: 'Pure Sine Wave Hybrid Inverters & LiFePO4 Battery Storage for 24/7 Power Freedom.',
-      badge: 'Up to 90% Bill Savings',
-      category: 'hybrid-inverters',
-      buttonText: 'Explore Solar Systems'
-    },
-    {
-      id: 1,
-      image: rooftopSolarHome,
-      alt: 'Modern Rooftop Solar Home under Sunny Sky',
-      tag: 'RESIDENTIAL ROOFTOP',
-      tagIcon: Sun,
-      title: 'Power Your Home From Your Own Roof',
-      subtitle: 'Sleek monocrystalline rooftop installations engineered for 25+ years of silent, zero-emission electricity.',
-      badge: '25-Year Linear Warranty',
-      category: 'solar-packages',
-      buttonText: 'View Rooftop Packages'
-    },
-    {
-      id: 2,
-      image: familySolarLiving,
-      alt: 'Family Relaxing in Solar Powered Living Room',
-      tag: '24/7 UNINTERRUPTED LIVING',
-      tagIcon: Sparkles,
-      title: 'Zero Load Shedding, Pure Family Comfort',
-      subtitle: 'Instant zero-millisecond power transfer keeps lights, fans, WiFi, and refrigerators running continuously.',
-      badge: '100% Silent & Safe LiFePO4',
-      category: 'lithium-batteries',
-      buttonText: 'Discover Home Backup'
-    },
-    {
-      id: 3,
-      image: travelPortableSolar,
-      alt: 'Friends Camping Powered by Portable Solar Generator',
-      tag: 'OFF-GRID & ADVENTURE',
-      tagIcon: Compass,
-      title: 'Take Limitless Solar Anywhere Under the Sky',
-      subtitle: 'Lightweight LiFePO4 portable power stations and folding solar panels for travel, camping & field work.',
-      badge: '220V Pure Sine Output',
-      category: 'ips-systems',
-      buttonText: 'Explore Portable Power'
+  const getTagIcon = (index: number) => {
+    switch (index % 4) {
+      case 0: return Zap;
+      case 1: return Sun;
+      case 2: return Sparkles;
+      default: return Compass;
     }
-  ];
+  };
+
+  const slides = (heroSlides || []).map((s, idx) => ({
+    ...s,
+    tagIcon: getTagIcon(idx)
+  }));
 
   // Top Hero Carousel timer (5.0 seconds per slide)
   useEffect(() => {

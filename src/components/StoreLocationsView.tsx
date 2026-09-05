@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { ChevronRight, MapPin, Phone, Clock, Navigation, X, ShieldCheck } from 'lucide-react';
-import { BRANCHES } from '../data/mockData';
+import { ChevronRight, MapPin, Phone, Clock, Navigation, X, ShieldCheck, ExternalLink, Globe } from 'lucide-react';
+import { useStore } from '../context/StoreContext';
 import { BranchLocation } from '../types';
 
 interface StoreLocationsViewProps {
@@ -8,6 +8,7 @@ interface StoreLocationsViewProps {
 }
 
 export const StoreLocationsView: React.FC<StoreLocationsViewProps> = ({ onBackToHome }) => {
+  const { branches } = useStore();
   const [selectedBranch, setSelectedBranch] = useState<BranchLocation | null>(null);
   const [modalMode, setModalMode] = useState<'map' | 'details' | null>(null);
 
@@ -43,7 +44,7 @@ export const StoreLocationsView: React.FC<StoreLocationsViewProps> = ({ onBackTo
 
       {/* Branches List matching video (01:00 - 01:09) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {BRANCHES.map((branch) => (
+        {branches.map((branch) => (
           <div
             key={branch.id}
             className="bg-white rounded-2xl border border-neutral-200/90 shadow-xs hover:shadow-md overflow-hidden flex flex-col justify-between transition-all group"
@@ -86,6 +87,21 @@ export const StoreLocationsView: React.FC<StoreLocationsViewProps> = ({ onBackTo
                     <div className="flex items-center gap-2 text-red-600 font-medium">
                       <Clock className="w-3.5 h-3.5 shrink-0" />
                       <span>Weekly Off-Day: {branch.offDay} (10:00 AM - 9:30 PM)</span>
+                    </div>
+                  )}
+
+                  {branch.googleMapUrl && (
+                    <div className="pt-1">
+                      <a
+                        href={branch.googleMapUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-[11px] font-bold text-sky-600 hover:text-sky-700 hover:underline"
+                      >
+                        <Globe className="w-3.5 h-3.5 text-sky-600" />
+                        <span>View on Google Maps</span>
+                        <ExternalLink className="w-3 h-3 text-neutral-400" />
+                      </a>
                     </div>
                   )}
                 </div>
@@ -148,16 +164,17 @@ export const StoreLocationsView: React.FC<StoreLocationsViewProps> = ({ onBackTo
                     {selectedBranch.landmark}
                   </span>
                   <p className="text-[11px] text-neutral-500 max-w-xs relative z-10 mt-1">
-                    Latitude & Longitude GPS Coordinates locked. Navigate via Google Maps directions.
+                    {selectedBranch.address}
                   </p>
                   <a
-                    href={`https://maps.google.com/?q=${encodeURIComponent(selectedBranch.address)}`}
+                    href={selectedBranch.googleMapUrl || `https://maps.google.com/?q=${encodeURIComponent(selectedBranch.address)}`}
                     target="_blank"
-                    rel="noreferrer"
-                    className="mt-3 bg-amber-400 text-neutral-950 px-4 py-2 rounded-lg text-xs font-bold relative z-10 inline-flex items-center gap-1.5 shadow-sm"
+                    rel="noopener noreferrer"
+                    className="mt-3 bg-amber-400 hover:bg-amber-300 text-neutral-950 px-4 py-2 rounded-lg text-xs font-black relative z-10 inline-flex items-center gap-2 shadow-sm transition-colors"
                   >
+                    <Globe className="w-3.5 h-3.5 text-neutral-950" />
                     <span>Open in Google Maps</span>
-                    <Navigation className="w-3 h-3" />
+                    <ExternalLink className="w-3 h-3 text-neutral-950" />
                   </a>
                 </div>
               ) : (

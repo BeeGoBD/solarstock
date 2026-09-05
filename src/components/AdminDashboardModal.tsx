@@ -28,10 +28,17 @@ import {
   Mail,
   Globe,
   Check,
-  ChevronDown
+  ChevronDown,
+  Crown,
+  LogOut
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { Product, Category, BranchLocation } from '../types';
+import { AdminHeroSlidesTab } from './admin/AdminHeroSlidesTab';
+import { AdminSubCategoriesTab } from './admin/AdminSubCategoriesTab';
+import { AdminBrandsTab } from './admin/AdminBrandsTab';
+import { AdminContentSectionsTab } from './admin/AdminContentSectionsTab';
+import { AdminSecurityTab } from './admin/AdminSecurityTab';
 
 interface AdminDashboardModalProps {
   isOpen: boolean;
@@ -45,6 +52,8 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
   onSelectCategory
 }) => {
   const {
+    adminRole,
+    logoutAdmin,
     products,
     categories,
     branches,
@@ -75,7 +84,19 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
   } = useStore();
 
   const [activeTab, setActiveTab] = useState<
-    'overview' | 'products' | 'categories' | 'flashsale' | 'billboard' | 'branches' | 'footer' | 'branding'
+    | 'overview'
+    | 'hero_slides'
+    | 'subcategories'
+    | 'brands'
+    | 'content_sections'
+    | 'products'
+    | 'categories'
+    | 'flashsale'
+    | 'billboard'
+    | 'branches'
+    | 'footer'
+    | 'branding'
+    | 'security'
   >('overview');
 
   const [notification, setNotification] = useState<string | null>(null);
@@ -133,9 +154,16 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   Live Sync Active
                 </span>
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${
+                  adminRole === 'boss'
+                    ? 'bg-amber-400 text-neutral-950'
+                    : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                }`}>
+                  {adminRole === 'boss' ? '👑 Master Admin (Boss)' : '⚡ Store Manager'}
+                </span>
               </div>
               <p className="text-xs text-neutral-400">
-                Manage products, categories, hero billboards, flash sales, footer and store locations
+                Manage hero carousel, slide 3 showcase, sub-categories, brands, guarantees, products & store security
               </p>
             </div>
           </div>
@@ -149,6 +177,20 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Reset Defaults</span>
+            </button>
+
+            {/* Admin Logout */}
+            <button
+              id="admin-logout-btn"
+              onClick={() => {
+                logoutAdmin();
+                onClose();
+              }}
+              className="bg-neutral-800 hover:bg-rose-950 text-rose-400 hover:text-rose-300 border border-neutral-700 hover:border-rose-600/50 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors shadow-xs"
+              title="Log out of Admin Panel and return to store profile"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Logout</span>
             </button>
 
             {/* Exit & Return to Store */}
@@ -180,13 +222,16 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
         <div className="bg-neutral-900/90 border-b border-neutral-800 px-4 flex items-center gap-1 overflow-x-auto scrollbar-none shrink-0 text-xs">
           {[
             { id: 'overview', label: 'Dashboard', icon: Layout },
+            { id: 'hero_slides', label: 'Hero & Slide 3', icon: Zap },
+            { id: 'subcategories', label: 'Sub-Categories & SDG', icon: Layers },
+            { id: 'brands', label: 'Brand Partners', icon: Tag },
+            { id: 'content_sections', label: 'Guarantees & FAQs', icon: ShieldCheck },
             { id: 'products', label: `Products (${products.length})`, icon: Package },
             { id: 'categories', label: `Categories (${categories.length})`, icon: Layers },
             { id: 'flashsale', label: 'Flash Sale', icon: Flame },
-            { id: 'billboard', label: 'Hero Billboard', icon: Sliders },
             { id: 'branches', label: `Store Branches (${branches.length})`, icon: MapPin },
             { id: 'footer', label: 'Footer & Policies', icon: FileText },
-            { id: 'branding', label: 'Brand & Global', icon: Settings }
+            { id: 'security', label: 'Security & Access', icon: Settings }
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -209,6 +254,12 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
 
         {/* Tab Content Body */}
         <div className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-6">
+          {/* Custom Editable Modules */}
+          {activeTab === 'hero_slides' && <AdminHeroSlidesTab />}
+          {activeTab === 'subcategories' && <AdminSubCategoriesTab />}
+          {activeTab === 'brands' && <AdminBrandsTab />}
+          {activeTab === 'content_sections' && <AdminContentSectionsTab />}
+          {activeTab === 'security' && <AdminSecurityTab />}
           
           {/* TAB 1: OVERVIEW */}
           {activeTab === 'overview' && (
@@ -972,9 +1023,30 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                         </div>
                       </div>
 
+                      {b.image && (
+                        <div className="w-full h-24 rounded-lg overflow-hidden mb-2.5 border border-neutral-800 bg-neutral-900">
+                          <img src={b.image} alt={b.name} className="w-full h-full object-cover" />
+                        </div>
+                      )}
+
                       <h4 className="text-sm font-bold text-white mb-1">{b.name}</h4>
                       <p className="text-xs text-neutral-400">{b.address}</p>
-                      <p className="text-xs text-amber-400 font-mono mt-2">Hotline: {b.phone}</p>
+                      <p className="text-xs text-amber-400 font-mono mt-1.5">Hotline: {b.phone}</p>
+
+                      {b.googleMapUrl && (
+                        <div className="mt-2 pt-2 border-t border-neutral-900">
+                          <a
+                            href={b.googleMapUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-[11px] font-bold text-sky-400 hover:text-sky-300 hover:underline"
+                          >
+                            <Globe className="w-3 h-3 text-sky-400" />
+                            <span>View on Google Map</span>
+                            <ExternalLink className="w-3 h-3 text-neutral-500" />
+                          </a>
+                        </div>
+                      )}
                     </div>
 
                     <div className="text-[11px] text-neutral-500">
@@ -1628,10 +1700,20 @@ const BranchFormModal: React.FC<{
   const [landmark, setLandmark] = useState(branch?.landmark || '');
   const [phone, setPhone] = useState(branch?.phone || '09638001122');
   const [offDay, setOffDay] = useState(branch?.offDay || 'Friday');
+  const [googleMapUrl, setGoogleMapUrl] = useState(
+    branch?.googleMapUrl || (branch?.address ? `https://maps.google.com/?q=${encodeURIComponent(branch.address)}` : '')
+  );
+  const [image, setImage] = useState(
+    branch?.image ||
+      'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80'
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !address.trim()) return;
+
+    const finalMapUrl =
+      googleMapUrl.trim() || `https://maps.google.com/?q=${encodeURIComponent(address + (landmark ? ' ' + landmark : ''))}`;
 
     onSave({
       name,
@@ -1640,15 +1722,14 @@ const BranchFormModal: React.FC<{
       landmark,
       phone,
       offDay,
-      image:
-        branch?.image ||
-        'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80'
+      googleMapUrl: finalMapUrl,
+      image
     });
   };
 
   return (
     <div className="fixed inset-0 z-60 bg-black/80 flex items-center justify-center p-4">
-      <div className="bg-neutral-900 border border-neutral-700 text-white rounded-2xl max-w-lg w-full p-5 space-y-4 animate-in zoom-in-95">
+      <div className="bg-neutral-900 border border-neutral-700 text-white rounded-2xl max-w-lg w-full p-5 space-y-4 max-h-[90vh] overflow-y-auto animate-in zoom-in-95">
         <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
           <h3 className="text-base font-bold text-white">
             {branch ? `Edit "${branch.name}"` : 'Add New Branch Outlet'}
@@ -1658,7 +1739,7 @@ const BranchFormModal: React.FC<{
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+        <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
           <div>
             <label className="font-bold text-neutral-300 block mb-1">Branch Name *</label>
             <input
@@ -1727,6 +1808,73 @@ const BranchFormModal: React.FC<{
                 placeholder="e.g. 09638001122"
               />
             </div>
+          </div>
+
+          {/* Google Map Link Input */}
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <label className="font-bold text-neutral-300 block">Google Map Link / Location URL *</label>
+              {address && (
+                <button
+                  type="button"
+                  onClick={() => setGoogleMapUrl(`https://maps.google.com/?q=${encodeURIComponent(address + (landmark ? ' ' + landmark : ''))}`)}
+                  className="text-[10px] text-amber-400 hover:underline flex items-center gap-1 font-semibold"
+                >
+                  <Globe className="w-3 h-3" />
+                  Auto-generate from Address
+                </button>
+              )}
+            </div>
+            <input
+              type="text"
+              value={googleMapUrl}
+              onChange={(e) => setGoogleMapUrl(e.target.value)}
+              className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2.5 text-white outline-none focus:border-amber-400 font-mono text-[11px]"
+              placeholder="https://maps.google.com/?q=..."
+            />
+            <p className="text-[10px] text-neutral-400 mt-1">
+              Customers can tap this link on the Store Locations page to view your shop on Google Maps directly.
+            </p>
+          </div>
+
+          {/* Shop Photo Upload / URL */}
+          <div>
+            <label className="font-bold text-neutral-300 block mb-1">Store / Shop Photo</label>
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+                className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2 text-white outline-none focus:border-amber-400 text-xs"
+                placeholder="Image URL or upload below"
+              />
+              <label className="shrink-0 bg-neutral-800 hover:bg-neutral-700 text-amber-400 px-3 py-2 rounded-lg font-bold cursor-pointer transition-colors border border-neutral-700">
+                Upload
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = () => {
+                        if (typeof reader.result === 'string') setImage(reader.result);
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                />
+              </label>
+            </div>
+            {image && (
+              <div className="mt-2 w-full h-24 rounded-lg overflow-hidden border border-neutral-800 relative bg-neutral-950">
+                <img src={image} alt="Shop preview" className="w-full h-full object-cover" />
+                <span className="absolute bottom-1 right-2 text-[9px] bg-black/75 px-1.5 py-0.5 rounded text-neutral-300">
+                  Shop Photo Preview
+                </span>
+              </div>
+            )}
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-800">
