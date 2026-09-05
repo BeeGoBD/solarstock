@@ -192,9 +192,16 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [subBanners, setSubBanners] = useState<SubBannerConfig>(
     saved?.subBanners || DEFAULT_SUB_BANNERS
   );
-  const [flashSaleConfig, setFlashSaleConfig] = useState<FlashSaleConfig>(
-    saved?.flashSaleConfig || DEFAULT_FLASH_SALE_CONFIG
-  );
+  const [flashSaleConfig, setFlashSaleConfig] = useState<FlashSaleConfig>(() => {
+    if (!saved?.flashSaleConfig) return DEFAULT_FLASH_SALE_CONFIG;
+    return {
+      ...DEFAULT_FLASH_SALE_CONFIG,
+      ...saved.flashSaleConfig,
+      activeProductIds: Array.isArray(saved.flashSaleConfig.activeProductIds)
+        ? saved.flashSaleConfig.activeProductIds
+        : DEFAULT_FLASH_SALE_CONFIG.activeProductIds
+    };
+  });
   const [footerConfig, setFooterConfig] = useState<FooterConfig>(
     saved?.footerConfig || DEFAULT_FOOTER_CONFIG
   );
@@ -255,7 +262,29 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Admin and Password States
   const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
-  const [adminRole, setAdminRole] = useState<'manager' | 'boss' | null>(null);
+  const [adminRole, setAdminRoleState] = useState<'manager' | 'boss' | null>(() => {
+    try {
+      const saved = localStorage.getItem('solarstock_admin_role');
+      if (saved === 'manager' || saved === 'boss') return saved;
+    } catch {
+      // Ignore storage errors
+    }
+    return null;
+  });
+
+  const setAdminRole = (role: 'manager' | 'boss' | null) => {
+    setAdminRoleState(role);
+    try {
+      if (role) {
+        localStorage.setItem('solarstock_admin_role', role);
+      } else {
+        localStorage.removeItem('solarstock_admin_role');
+      }
+    } catch (e) {
+      console.warn('Could not persist admin role to localStorage', e);
+    }
+  };
+
   const [managerPassword, setManagerPasswordState] = useState<string>(() => {
     const savedPw = localStorage.getItem(MANAGER_PW_KEY);
     if (!savedPw || savedPw === 'admin@1234' || savedPw === '123456') {
@@ -309,14 +338,22 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   ]);
 
   const authenticateAdmin = (inputPw: string, inputId?: string) => {
-    const trimmedPw = (inputPw || '').trim();
-    const rawId = (inputId || '').trim();
+    let rawPw = (inputPw || '').trim();
+    let rawId = (inputId || '').trim();
+
+    // Strip accidental copy-pasted prefixes
+    rawId = rawId.replace(/^(admin\s*id|id|username|email)\s*:\s*/i, '').trim();
+    rawPw = rawPw.replace(/^(pass|password|key|main\s*key)\s*:\s*/i, '').trim();
+
+    const trimmedPw = rawPw;
     const trimmedId = rawId.toLowerCase();
 
     // 1. Master Key check (main key: SS@Admin@2026#SolarSS)
     if (
       trimmedPw === MASTER_ADMIN_KEY ||
-      rawId === MASTER_ADMIN_KEY
+      rawId === MASTER_ADMIN_KEY ||
+      trimmedPw.includes(MASTER_ADMIN_KEY) ||
+      rawId.includes(MASTER_ADMIN_KEY)
     ) {
       setAdminRole('boss');
       return { success: true, role: 'boss' as const, isMasterKey: true };
@@ -325,7 +362,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     // 2. Admin ID + Password check (id: admin@workforsolarstock.com, pass: SolarStock@2026#SS)
     const isTargetAdminId =
       trimmedId === DEFAULT_ADMIN_ID.toLowerCase() ||
-      trimmedId === 'admin';
+      trimmedId === 'admin' ||
+      trimmedId.startsWith('admin@workforsolarstock');
 
     const isPassValid =
       trimmedPw === managerPassword ||
@@ -347,8 +385,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       }
     }
 
-    // Direct password match (manager)
-    if (isPassValid && (trimmedId === '' || trimmedId === 'manager')) {
+    // Direct password match (grants manager access even if browser autofilled personal email in username field)
+    if (isPassValid) {
       setAdminRole('manager');
       return { success: true, role: 'manager' as const, isMasterKey: false };
     }
@@ -384,6 +422,11 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const logoutAdmin = () => {
     setAdminRole(null);
     setIsAdminOpen(false);
+    try {
+      localStorage.removeItem('solarstock_admin_role');
+    } catch {
+      // Ignore
+    }
   };
 
   // Product Methods

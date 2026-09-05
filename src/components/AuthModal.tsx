@@ -44,9 +44,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       );
       setIsLoggedIn(true);
       setFailedAttempts(0);
+      // Immediately open admin panel
+      openAdmin();
       setTimeout(() => {
         onClose();
-        openAdmin();
         setAdminRoleNotice(null);
         setPassword('');
       }, 700);
@@ -112,16 +113,31 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         </button>
 
         {isLoggedIn ? (
-          <div className="text-center py-8 space-y-3">
+          <div className="text-center py-6 space-y-4">
             <div className={`w-14 h-14 ${adminRoleNotice ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'} rounded-full flex items-center justify-center mx-auto`}>
               {adminRoleNotice ? <KeyRound className="w-8 h-8" /> : <ShieldCheck className="w-8 h-8" />}
             </div>
-            <h3 className="text-xl font-bold text-neutral-900">
-              {adminRoleNotice ? 'Admin Access Authorized' : `Welcome back, ${username}!`}
-            </h3>
-            <p className="text-xs text-neutral-500 font-medium">
-              {adminRoleNotice || 'Logged in to Solarstock Account & SolarCare+ Portal.'}
-            </p>
+            <div className="space-y-1">
+              <h3 className="text-xl font-bold text-neutral-900">
+                {adminRoleNotice ? 'Admin Access Authorized' : `Welcome back, ${username}!`}
+              </h3>
+              <p className="text-xs text-neutral-500 font-medium">
+                {adminRoleNotice || 'Logged in to Solarstock Account & SolarCare+ Portal.'}
+              </p>
+            </div>
+            {adminRoleNotice && (
+              <button
+                type="button"
+                onClick={() => {
+                  openAdmin();
+                  onClose();
+                }}
+                className="w-full bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black py-3 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition-transform active:scale-98"
+              >
+                <span>Enter Admin Panel Now</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            )}
           </div>
         ) : (
           <div className="space-y-5">
@@ -217,11 +233,26 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               )}
 
               {authMode === 'login' && (
-                <div className="flex items-center justify-between text-[11px]">
-                  <span className="text-neutral-400">Admin credentials accepted</span>
-                  <a href="#forgot" className="font-semibold text-neutral-500 hover:text-amber-600">
-                    Forgot Password?
-                  </a>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="text-neutral-400">Admin credentials accepted</span>
+                    <a href="#forgot" className="font-semibold text-neutral-500 hover:text-amber-600">
+                      Forgot Password?
+                    </a>
+                  </div>
+
+                  {/* Quick Fill Admin ID Chip */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setUsername(DEFAULT_ADMIN_ID);
+                      if (errorMessage) setErrorMessage(null);
+                    }}
+                    className="w-full text-[11px] text-amber-800 bg-amber-50/80 hover:bg-amber-100 border border-amber-200 px-2.5 py-1.5 rounded-lg font-medium transition-colors flex items-center justify-center gap-1.5"
+                  >
+                    <KeyRound className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                    <span>Auto-fill Admin ID: <strong className="font-mono font-bold text-amber-950">{DEFAULT_ADMIN_ID}</strong></span>
+                  </button>
                 </div>
               )}
 

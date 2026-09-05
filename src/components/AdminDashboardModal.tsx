@@ -125,18 +125,20 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
 
   if (!isOpen) return null;
 
-  // Filtered Products for Product Tab
-  const filteredProductsList = products.filter((p) => {
-    const matchesSearch =
-      p.name.toLowerCase().includes(productSearch.toLowerCase()) ||
-      p.brand.toLowerCase().includes(productSearch.toLowerCase());
+  // Filtered Products for Product Tab (with null-safe fallbacks)
+  const filteredProductsList = (products || []).filter((p) => {
+    if (!p) return false;
+    const pName = (p.name || '').toLowerCase();
+    const pBrand = (p.brand || '').toLowerCase();
+    const search = (productSearch || '').toLowerCase();
+    const matchesSearch = pName.includes(search) || pBrand.includes(search);
     const matchesCategory =
       productCategoryFilter === 'all' ? true : p.category === productCategoryFilter;
     return matchesSearch && matchesCategory;
   });
 
   return (
-    <div className="fixed inset-0 z-50 bg-neutral-950/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 overflow-y-auto animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[100] bg-neutral-950/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 overflow-y-auto animate-in fade-in duration-200">
       <div className="bg-neutral-900 border border-neutral-800 text-neutral-100 rounded-2xl w-full max-w-6xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
         
         {/* Top Header Bar */}
@@ -284,7 +286,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                   <span className="text-xs font-semibold text-neutral-400 block mb-1">Flash Sale Items</span>
                   <div className="flex items-baseline justify-between">
                     <span className="text-2xl font-black text-rose-400">
-                      {flashSaleConfig.activeProductIds.length}
+                      {(flashSaleConfig?.activeProductIds || []).length}
                     </span>
                     <span className="text-xs text-rose-400/80 font-bold">Active Promo</span>
                   </div>
@@ -366,14 +368,14 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                       className="p-3 rounded-xl bg-neutral-950 border border-neutral-800 flex items-center gap-3"
                     >
                       <img
-                        src={p.images[0]}
+                        src={p.images?.[0] || p.image || ''}
                         alt={p.name}
                         className="w-12 h-12 object-cover rounded-lg bg-neutral-800 border border-neutral-700 shrink-0"
                       />
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-bold text-white truncate">{p.name}</p>
                         <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-xs font-black text-amber-400">৳ {p.price.toLocaleString()}</span>
+                          <span className="text-xs font-black text-amber-400">৳ {(p.price || 0).toLocaleString()}</span>
                           <span className="text-[10px] bg-neutral-800 text-neutral-300 px-1.5 py-0.2 rounded">
                             {p.category}
                           </span>
@@ -441,14 +443,14 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                   </thead>
                   <tbody className="divide-y divide-neutral-850">
                     {filteredProductsList.map((prod) => {
-                      const isInFlash = flashSaleConfig.activeProductIds.includes(prod.id);
+                      const isInFlash = (flashSaleConfig?.activeProductIds || []).includes(prod.id);
                       const isOutOfStock = prod.isOutOfStock || prod.tag === 'Out of Stock';
                       return (
                         <tr key={prod.id} className="hover:bg-neutral-900/50 transition-colors">
                           <td className="p-3">
                             <div className="flex items-center gap-3">
                               <img
-                                src={prod.images[0]}
+                                src={prod.images?.[0] || prod.image || ''}
                                 alt={prod.name}
                                 className="w-10 h-10 object-cover rounded-lg bg-neutral-900 border border-neutral-800 shrink-0"
                               />
@@ -745,7 +747,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                   {products.map((p) => {
-                    const isChecked = flashSaleConfig.activeProductIds.includes(p.id);
+                    const isChecked = (flashSaleConfig?.activeProductIds || []).includes(p.id);
                     return (
                       <div
                         key={p.id}
@@ -758,14 +760,14 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                       >
                         <div className="flex items-center gap-2.5 min-w-0">
                           <img
-                            src={p.images[0]}
+                            src={p.images?.[0] || p.image || ''}
                             alt={p.name}
                             className="w-9 h-9 object-cover rounded-md bg-neutral-900 shrink-0"
                           />
                           <div className="min-w-0">
                             <p className="text-xs font-bold text-white truncate">{p.name}</p>
                             <span className="text-[11px] text-amber-400 font-black">
-                              ৳ {p.price.toLocaleString()}
+                              ৳ {(p.price || 0).toLocaleString()}
                             </span>
                           </div>
                         </div>
