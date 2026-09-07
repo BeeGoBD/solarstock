@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { StoreProvider, useStore } from './context/StoreContext';
 import { Header } from './components/Header';
 import { TrustBar } from './components/TrustBar';
@@ -37,7 +37,9 @@ function StoreMainApp() {
     categories,
     branches,
     isAdminOpen,
+    openAdmin,
     closeAdmin,
+    adminRole,
     brandConfig
   } = useStore();
 
@@ -171,23 +173,27 @@ function StoreMainApp() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Filtered Products for Search or Category Page
-  const filteredProducts = products.filter((p) => {
-    const matchesCategory = selectedCategoryFilter ? p.category === selectedCategoryFilter : true;
-    const matchesSearch = searchQuery.trim()
-      ? p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.category.toLowerCase().includes(searchQuery.toLowerCase())
-      : true;
-    return matchesCategory && matchesSearch;
-  });
+  // Filtered Products for Search or Category Page (Memoized to prevent lag during scroll/events)
+  const filteredProducts = useMemo(() => {
+    return products.filter((p) => {
+      const matchesCategory = selectedCategoryFilter ? p.category === selectedCategoryFilter : true;
+      const matchesSearch = searchQuery.trim()
+        ? p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          p.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          p.category.toLowerCase().includes(searchQuery.toLowerCase())
+        : true;
+      return matchesCategory && matchesSearch;
+    });
+  }, [products, selectedCategoryFilter, searchQuery]);
 
-  const activeCategoryObj = categories.find((c) => c.id === selectedCategoryFilter);
+  const activeCategoryObj = useMemo(() => {
+    return categories.find((c) => c.id === selectedCategoryFilter);
+  }, [categories, selectedCategoryFilter]);
 
-  // Slices for front-page sections from dynamic store
-  const bestDealsProducts = products.filter((p) => p.isDeal || p.discountPercent >= 15).slice(0, 10);
-  const recentProducts = products.filter((p) => p.isNewArrival || p.isHot).slice(0, 8);
-  const trendingProducts = products.filter((p) => (p.rating || 0) >= 4.7).slice(0, 8);
+  // Slices for front-page sections from dynamic store (Memoized for high scroll performance)
+  const bestDealsProducts = useMemo(() => products.filter((p) => p.isDeal || p.discountPercent >= 15).slice(0, 10), [products]);
+  const recentProducts = useMemo(() => products.filter((p) => p.isNewArrival || p.isHot).slice(0, 8), [products]);
+  const trendingProducts = useMemo(() => products.filter((p) => (p.rating || 0) >= 4.7).slice(0, 8), [products]);
 
   return (
     <div className="min-h-screen bg-white text-neutral-900 flex flex-col font-['Plus_Jakarta_Sans',sans-serif] selection:bg-amber-400 selection:text-neutral-950">
@@ -462,6 +468,23 @@ function StoreMainApp() {
         }}
         allProducts={products}
       />
+
+      {/* Active Admin Session Quick Launcher */}
+      {adminRole && !isAdminOpen && (
+        <button
+          type="button"
+          onClick={openAdmin}
+          className="fixed bottom-20 sm:bottom-6 right-4 z-40 bg-neutral-900 text-white border-2 border-amber-400 hover:bg-neutral-800 shadow-xl px-4 py-2.5 rounded-full flex items-center gap-2.5 text-xs font-bold transition-all hover:scale-105 active:scale-95 cursor-pointer"
+          title="Open Admin Dashboard"
+        >
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+          </span>
+          <span className="text-amber-400 font-extrabold tracking-wide uppercase">Admin Active</span>
+          <span className="text-neutral-300">Open Dashboard →</span>
+        </button>
+      )}
 
       {/* Admin Dashboard Modal (Opens on 5 clicks of footer logo) */}
       <AdminDashboardModal

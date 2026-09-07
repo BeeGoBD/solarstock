@@ -126,21 +126,21 @@ export const AdminSubCategoriesTab: React.FC = () => {
   return (
     <div className="space-y-6">
       {toast && (
-        <div className="p-3 bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold rounded-xl flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4" />
+        <div className="p-3 bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold rounded-xl flex items-center gap-2 shadow-2xs">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
           <span>{toast}</span>
         </div>
       )}
 
       {/* Header & Category Switcher */}
-      <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 sm:p-6 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-neutral-800">
+      <div className="bg-white border border-neutral-200 rounded-2xl p-4 sm:p-6 space-y-4 shadow-2xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-neutral-200">
           <div>
-            <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-              <Layers className="w-5 h-5 text-amber-400" />
+            <h3 className="text-base sm:text-lg font-bold text-neutral-900 flex items-center gap-2">
+              <Layers className="w-5 h-5 text-amber-500" />
               Sub-Category & SDG Icon Management
             </h3>
-            <p className="text-xs text-neutral-400">
+            <p className="text-xs text-neutral-500">
               Manage subcategories, customize SDG / SVG icons, and upload gallery imagery with automatic size & dimension validation.
             </p>
           </div>
@@ -159,7 +159,7 @@ export const AdminSubCategoriesTab: React.FC = () => {
               setIsAddingNew(true);
               setValidationReport(null);
             }}
-            className="px-3.5 py-2 bg-amber-400 hover:bg-amber-300 text-neutral-950 text-xs font-bold rounded-xl flex items-center gap-1.5 self-start sm:self-auto shadow-xs"
+            className="px-3.5 py-2 bg-amber-400 hover:bg-amber-300 text-neutral-950 text-xs font-bold rounded-xl flex items-center gap-1.5 self-start sm:self-auto shadow-2xs transition-colors"
           >
             <Plus className="w-4 h-4" />
             <span>Add Sub-Category</span>
@@ -168,7 +168,7 @@ export const AdminSubCategoriesTab: React.FC = () => {
 
         {/* Category Selector Tabs */}
         <div>
-          <label className="text-xs font-bold text-neutral-300 block mb-2">
+          <label className="text-xs font-bold text-neutral-700 block mb-2">
             Select Parent Category to Manage:
           </label>
           <div className="flex flex-wrap gap-2">
@@ -183,8 +183,8 @@ export const AdminSubCategoriesTab: React.FC = () => {
                 }}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
                   selectedCatId === cat.id
-                    ? 'bg-amber-400 text-neutral-950'
-                    : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'
+                    ? 'bg-amber-400 text-neutral-950 shadow-2xs'
+                    : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 border border-neutral-200'
                 }`}
               >
                 {cat.name} ({cat.subcategories?.length || 0})
@@ -195,13 +195,13 @@ export const AdminSubCategoriesTab: React.FC = () => {
       </div>
 
       {/* Sub-categories Table / Cards */}
-      <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 sm:p-6">
-        <h4 className="text-sm font-bold text-white mb-4">
-          Subcategories for <span className="text-amber-400">{currentCategory?.name}</span>:
+      <div className="bg-white border border-neutral-200 rounded-2xl p-4 sm:p-6 shadow-2xs">
+        <h4 className="text-sm font-bold text-neutral-900 mb-4">
+          Subcategories for <span className="text-amber-600 font-extrabold">{currentCategory?.name}</span>:
         </h4>
 
         {subcategories.length === 0 ? (
-          <div className="p-8 text-center bg-neutral-950 rounded-xl border border-neutral-800 text-neutral-400 text-xs">
+          <div className="p-8 text-center bg-neutral-50 rounded-xl border border-neutral-200 text-neutral-500 text-xs">
             No sub-categories yet for this category. Click "Add Sub-Category" above.
           </div>
         ) : (
@@ -209,27 +209,27 @@ export const AdminSubCategoriesTab: React.FC = () => {
             {subcategories.map((sub, idx) => (
               <div
                 key={sub.id || idx}
-                className="bg-neutral-950 border border-neutral-800 rounded-xl p-3.5 flex items-center justify-between gap-3 group hover:border-neutral-700 transition-colors"
+                className="bg-neutral-50/70 border border-neutral-200 rounded-xl p-3.5 flex items-center justify-between gap-3 group hover:border-amber-400 transition-colors shadow-2xs"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   {sub.image ? (
                     <img
                       src={sub.image}
                       alt={sub.name}
-                      className="w-12 h-12 object-cover rounded-lg border border-neutral-800 shrink-0"
+                      className="w-12 h-12 object-cover rounded-lg border border-neutral-200 shrink-0 bg-white"
                     />
                   ) : (
-                    <div className="w-12 h-12 rounded-lg bg-neutral-800 flex items-center justify-center text-amber-400 font-mono text-xs font-bold shrink-0">
+                    <div className="w-12 h-12 rounded-lg bg-neutral-200/80 border border-neutral-300 flex items-center justify-center text-amber-700 font-mono text-xs font-bold shrink-0">
                       {sub.icon || 'SDG'}
                     </div>
                   )}
                   <div className="min-w-0">
-                    <h5 className="text-xs font-bold text-white truncate">{sub.name}</h5>
-                    <span className="text-[11px] text-neutral-400 block font-mono">
+                    <h5 className="text-xs font-bold text-neutral-900 truncate">{sub.name}</h5>
+                    <span className="text-[11px] text-neutral-500 block font-mono">
                       {sub.productCount || 0} Products • ID: {sub.slug || sub.id}
                     </span>
                     {sub.icon && (
-                      <span className="text-[9px] bg-neutral-800 text-amber-300 px-1.5 py-0.5 rounded font-mono mt-0.5 inline-block">
+                      <span className="text-[9px] bg-amber-100 text-amber-800 border border-amber-300 px-1.5 py-0.5 rounded font-mono mt-0.5 inline-block font-semibold">
                         Icon: {sub.icon}
                       </span>
                     )}
@@ -244,7 +244,7 @@ export const AdminSubCategoriesTab: React.FC = () => {
                       setIsAddingNew(false);
                       setValidationReport(null);
                     }}
-                    className="p-1.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-lg transition-colors"
+                    className="p-1.5 bg-white hover:bg-neutral-100 text-neutral-700 border border-neutral-300 rounded-lg transition-colors shadow-2xs"
                     title="Edit Sub-Category"
                   >
                     <Edit2 className="w-3.5 h-3.5" />
@@ -252,7 +252,7 @@ export const AdminSubCategoriesTab: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => handleDeleteSubcategory(sub.id)}
-                    className="p-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 rounded-lg transition-colors"
+                    className="p-1.5 bg-white hover:bg-rose-50 text-rose-600 border border-neutral-300 hover:border-rose-300 rounded-lg transition-colors shadow-2xs"
                     title="Delete Sub-Category"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -266,10 +266,10 @@ export const AdminSubCategoriesTab: React.FC = () => {
 
       {/* EDIT / CREATE SUB-CATEGORY MODAL */}
       {editingSub && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-neutral-900 border border-neutral-800 rounded-2xl max-w-md w-full p-5 space-y-4 max-h-[90vh] overflow-y-auto">
-            <h4 className="text-base font-bold text-white flex items-center gap-2">
-              <Edit2 className="w-4 h-4 text-amber-400" />
+        <div className="fixed inset-0 z-50 bg-neutral-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-neutral-200 rounded-2xl max-w-md w-full p-5 space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl text-neutral-900">
+            <h4 className="text-base font-bold text-neutral-900 flex items-center gap-2">
+              <Edit2 className="w-4 h-4 text-amber-500" />
               {isAddingNew ? 'Add New Sub-Category' : `Edit Sub-Category: ${editingSub.name}`}
             </h4>
 
@@ -277,13 +277,13 @@ export const AdminSubCategoriesTab: React.FC = () => {
               {/* Image Upload & Size Validation */}
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-bold text-neutral-300">
+                  <label className="text-xs font-bold text-neutral-700">
                     Sub-Category Image (Recommended 500×500px, Max 2MB)
                   </label>
                 </div>
 
                 {editingSub.image && (
-                  <div className="w-20 h-20 rounded-lg overflow-hidden bg-neutral-950 border border-neutral-800 mb-2">
+                  <div className="w-20 h-20 rounded-lg overflow-hidden bg-neutral-100 border border-neutral-200 mb-2">
                     <img
                       src={editingSub.image}
                       alt="Preview"
@@ -298,9 +298,9 @@ export const AdminSubCategoriesTab: React.FC = () => {
                     value={editingSub.image || ''}
                     onChange={(e) => setEditingSub({ ...editingSub, image: e.target.value })}
                     placeholder="Image URL or upload from gallery"
-                    className="flex-1 bg-neutral-950 border border-neutral-700 text-xs text-white p-2 rounded-lg outline-none focus:border-amber-400"
+                    className="flex-1 bg-neutral-50 border border-neutral-300 text-xs text-neutral-900 p-2 rounded-lg outline-none focus:border-amber-400 focus:bg-white"
                   />
-                  <label className="px-3 py-2 bg-neutral-800 hover:bg-neutral-700 text-xs font-bold text-white rounded-lg flex items-center gap-1.5 cursor-pointer">
+                  <label className="px-3 py-2 bg-neutral-100 hover:bg-neutral-200 text-xs font-bold text-neutral-800 border border-neutral-300 rounded-lg flex items-center gap-1.5 cursor-pointer transition-colors">
                     <Upload className="w-3.5 h-3.5" />
                     <span>Upload</span>
                     <input
@@ -321,14 +321,14 @@ export const AdminSubCategoriesTab: React.FC = () => {
                   <div
                     className={`mt-2 p-2.5 rounded-lg border text-xs flex items-center gap-2 ${
                       validationReport.isValid
-                        ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300'
-                        : 'bg-rose-500/15 border-rose-500/30 text-rose-300'
+                        ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
+                        : 'bg-rose-50 border-rose-300 text-rose-800'
                     }`}
                   >
                     {validationReport.isValid ? (
-                      <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+                      <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
                     ) : (
-                      <AlertTriangle className="w-4 h-4 shrink-0 text-rose-400" />
+                      <AlertTriangle className="w-4 h-4 shrink-0 text-rose-600" />
                     )}
                     <span>{validationReport.message}</span>
                   </div>
@@ -336,20 +336,20 @@ export const AdminSubCategoriesTab: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-neutral-300 block mb-1">
+                <label className="text-xs font-bold text-neutral-700 block mb-1">
                   Sub-Category Name
                 </label>
                 <input
                   type="text"
                   value={editingSub.name}
                   onChange={(e) => setEditingSub({ ...editingSub, name: e.target.value })}
-                  className="w-full bg-neutral-950 border border-neutral-700 text-xs text-white p-2 rounded-lg outline-none focus:border-amber-400"
+                  className="w-full bg-neutral-50 border border-neutral-300 text-xs text-neutral-900 p-2 rounded-lg outline-none focus:border-amber-400 focus:bg-white"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-bold text-neutral-300 block mb-1">
+                  <label className="text-xs font-bold text-neutral-700 block mb-1">
                     Slug / URL ID
                   </label>
                   <input
@@ -362,12 +362,12 @@ export const AdminSubCategoriesTab: React.FC = () => {
                         id: e.target.value
                       })
                     }
-                    className="w-full bg-neutral-950 border border-neutral-700 text-xs text-white p-2 rounded-lg outline-none focus:border-amber-400"
+                    className="w-full bg-neutral-50 border border-neutral-300 text-xs text-neutral-900 p-2 rounded-lg outline-none focus:border-amber-400 focus:bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-neutral-300 block mb-1">
+                  <label className="text-xs font-bold text-neutral-700 block mb-1">
                     Estimated Products
                   </label>
                   <input
@@ -379,13 +379,13 @@ export const AdminSubCategoriesTab: React.FC = () => {
                         productCount: parseInt(e.target.value) || 0
                       })
                     }
-                    className="w-full bg-neutral-950 border border-neutral-700 text-xs text-white p-2 rounded-lg outline-none focus:border-amber-400"
+                    className="w-full bg-neutral-50 border border-neutral-300 text-xs text-neutral-900 p-2 rounded-lg outline-none focus:border-amber-400 focus:bg-white"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="text-xs font-bold text-amber-400 block mb-1">
+                <label className="text-xs font-bold text-neutral-700 block mb-1">
                   SDG / Vector Icon Code
                 </label>
                 <input
@@ -393,26 +393,26 @@ export const AdminSubCategoriesTab: React.FC = () => {
                   value={editingSub.icon || ''}
                   onChange={(e) => setEditingSub({ ...editingSub, icon: e.target.value })}
                   placeholder="e.g. SDG-7, Sun, Zap, BatteryCharging, ShieldCheck"
-                  className="w-full bg-neutral-950 border border-neutral-700 text-xs text-white p-2 rounded-lg outline-none focus:border-amber-400 font-mono"
+                  className="w-full bg-neutral-50 border border-neutral-300 text-xs text-neutral-900 p-2 rounded-lg outline-none focus:border-amber-400 font-mono focus:bg-white"
                 />
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-3 border-t border-neutral-800">
+            <div className="flex items-center justify-end gap-2 pt-3 border-t border-neutral-200">
               <button
                 type="button"
                 onClick={() => {
                   setEditingSub(null);
                   setIsAddingNew(false);
                 }}
-                className="px-4 py-2 bg-neutral-800 text-neutral-300 text-xs font-bold rounded-xl hover:bg-neutral-700"
+                className="px-4 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-bold rounded-xl transition-colors border border-neutral-300"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={() => handleSaveSubcategory(editingSub)}
-                className="px-4 py-2 bg-amber-400 text-neutral-950 text-xs font-bold rounded-xl hover:bg-amber-300 flex items-center gap-1.5"
+                className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-neutral-950 text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-2xs transition-colors"
               >
                 <Save className="w-3.5 h-3.5" />
                 <span>Save Sub-Category</span>

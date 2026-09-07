@@ -138,33 +138,33 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
   });
 
   return (
-    <div className="fixed inset-0 z-[100] bg-neutral-950/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 overflow-y-auto animate-in fade-in duration-200">
-      <div className="bg-neutral-900 border border-neutral-800 text-neutral-100 rounded-2xl w-full max-w-6xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-[100] bg-neutral-900/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 overflow-y-auto animate-in fade-in duration-200">
+      <div className="bg-white border border-neutral-200 text-neutral-900 rounded-2xl w-full max-w-6xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
         
         {/* Top Header Bar */}
-        <div className="bg-neutral-950 px-4 sm:px-6 py-3.5 border-b border-neutral-800 flex flex-wrap items-center justify-between gap-3 shrink-0">
+        <div className="bg-neutral-50 px-4 sm:px-6 py-3.5 border-b border-neutral-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-amber-400 text-neutral-950 flex items-center justify-center font-black shadow-md shadow-amber-400/20">
+            <div className="w-9 h-9 rounded-xl bg-amber-400 text-neutral-950 flex items-center justify-center font-black shadow-sm">
               <Zap className="w-5 h-5 fill-neutral-950" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-base sm:text-lg font-black text-white font-['Outfit',sans-serif] tracking-tight">
+                <h2 className="text-base sm:text-lg font-black text-neutral-900 font-['Outfit',sans-serif] tracking-tight">
                   Solarstock Admin Master Panel
                 </h2>
-                <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="bg-emerald-50 text-emerald-700 border border-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                   Live Sync Active
                 </span>
                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${
                   adminRole === 'boss'
-                    ? 'bg-amber-400 text-neutral-950'
-                    : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                    ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                    : 'bg-emerald-100 text-emerald-800 border border-emerald-300'
                 }`}>
                   {adminRole === 'boss' ? '👑 Master Admin (Boss)' : '⚡ Store Manager'}
                 </span>
               </div>
-              <p className="text-xs text-neutral-400">
+              <p className="text-xs text-neutral-500">
                 Manage hero carousel, slide 3 showcase, sub-categories, brands, guarantees, products & store security
               </p>
             </div>
@@ -174,7 +174,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
             {/* Factory Reset */}
             <button
               onClick={() => setShowResetConfirm(true)}
-              className="bg-neutral-800 hover:bg-rose-950 hover:text-rose-300 hover:border-rose-700 text-neutral-300 border border-neutral-700 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors"
+              className="bg-white hover:bg-rose-50 text-neutral-600 hover:text-rose-700 hover:border-rose-300 border border-neutral-300 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs"
               title="Reset all store data to factory defaults"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -188,7 +188,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                 logoutAdmin();
                 onClose();
               }}
-              className="bg-neutral-800 hover:bg-rose-950 text-rose-400 hover:text-rose-300 border border-neutral-700 hover:border-rose-600/50 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors shadow-xs"
+              className="bg-white hover:bg-rose-50 text-rose-600 hover:text-rose-700 border border-neutral-300 hover:border-rose-300 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors shadow-2xs"
               title="Log out of Admin Panel and return to store profile"
             >
               <LogOut className="w-3.5 h-3.5" />
@@ -198,7 +198,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
             {/* Exit & Return to Store */}
             <button
               onClick={onClose}
-              className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-md hover:scale-105"
+              className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm hover:scale-102"
             >
               <Eye className="w-4 h-4" />
               <span>Exit & View Live Store</span>
@@ -221,7 +221,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
         )}
 
         {/* Navigation Tabs Header */}
-        <div className="bg-neutral-900/90 border-b border-neutral-800 px-4 flex items-center gap-1 overflow-x-auto scrollbar-none shrink-0 text-xs">
+        <div className="bg-neutral-100/90 border-b border-neutral-200 px-4 flex items-center gap-1 overflow-x-auto scrollbar-none shrink-0 text-xs">
           {[
             { id: 'overview', label: 'Dashboard', icon: Layout },
             { id: 'hero_slides', label: 'Hero & Slide 3', icon: Zap },
@@ -243,8 +243,8 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center gap-1.5 px-3.5 py-3 font-bold border-b-2 whitespace-nowrap transition-colors ${
                   isActive
-                    ? 'border-amber-400 text-amber-400 bg-neutral-800/50'
-                    : 'border-transparent text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800/30'
+                    ? 'border-amber-500 text-neutral-950 bg-white shadow-2xs'
+                    : 'border-transparent text-neutral-600 hover:text-neutral-950 hover:bg-neutral-200/50'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -255,7 +255,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
         </div>
 
         {/* Tab Content Body */}
-        <div className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-6">
+        <div className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-6 bg-neutral-50/60">
           {/* Custom Editable Modules */}
           {activeTab === 'hero_slides' && <AdminHeroSlidesTab />}
           {activeTab === 'subcategories' && <AdminSubCategoriesTab />}
@@ -268,41 +268,41 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
             <div className="space-y-6">
               {/* Quick Metrics */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-                <div className="p-4 rounded-xl bg-neutral-950 border border-neutral-800">
-                  <span className="text-xs font-semibold text-neutral-400 block mb-1">Total Live Products</span>
+                <div className="p-4 rounded-xl bg-white border border-neutral-200 shadow-2xs">
+                  <span className="text-xs font-semibold text-neutral-500 block mb-1">Total Live Products</span>
                   <div className="flex items-baseline justify-between">
-                    <span className="text-2xl font-black text-white">{products.length}</span>
-                    <span className="text-xs text-amber-400 font-bold">Catalog</span>
+                    <span className="text-2xl font-black text-neutral-900">{products.length}</span>
+                    <span className="text-xs text-amber-600 font-bold">Catalog</span>
                   </div>
                 </div>
-                <div className="p-4 rounded-xl bg-neutral-950 border border-neutral-800">
-                  <span className="text-xs font-semibold text-neutral-400 block mb-1">Shop Categories</span>
+                <div className="p-4 rounded-xl bg-white border border-neutral-200 shadow-2xs">
+                  <span className="text-xs font-semibold text-neutral-500 block mb-1">Shop Categories</span>
                   <div className="flex items-baseline justify-between">
-                    <span className="text-2xl font-black text-amber-400">{categories.length}</span>
-                    <span className="text-xs text-neutral-400">Sections</span>
+                    <span className="text-2xl font-black text-amber-600">{categories.length}</span>
+                    <span className="text-xs text-neutral-500">Sections</span>
                   </div>
                 </div>
-                <div className="p-4 rounded-xl bg-neutral-950 border border-neutral-800">
-                  <span className="text-xs font-semibold text-neutral-400 block mb-1">Flash Sale Items</span>
+                <div className="p-4 rounded-xl bg-white border border-neutral-200 shadow-2xs">
+                  <span className="text-xs font-semibold text-neutral-500 block mb-1">Flash Sale Items</span>
                   <div className="flex items-baseline justify-between">
-                    <span className="text-2xl font-black text-rose-400">
+                    <span className="text-2xl font-black text-rose-600">
                       {(flashSaleConfig?.activeProductIds || []).length}
                     </span>
-                    <span className="text-xs text-rose-400/80 font-bold">Active Promo</span>
+                    <span className="text-xs text-rose-600/80 font-bold">Active Promo</span>
                   </div>
                 </div>
-                <div className="p-4 rounded-xl bg-neutral-950 border border-neutral-800">
-                  <span className="text-xs font-semibold text-neutral-400 block mb-1">Store Branches</span>
+                <div className="p-4 rounded-xl bg-white border border-neutral-200 shadow-2xs">
+                  <span className="text-xs font-semibold text-neutral-500 block mb-1">Store Branches</span>
                   <div className="flex items-baseline justify-between">
-                    <span className="text-2xl font-black text-sky-400">{branches.length}</span>
-                    <span className="text-xs text-sky-400 font-bold">Outlets</span>
+                    <span className="text-2xl font-black text-sky-600">{branches.length}</span>
+                    <span className="text-xs text-sky-600 font-bold">Outlets</span>
                   </div>
                 </div>
               </div>
 
               {/* Quick Action Shortcuts */}
-              <div className="p-5 rounded-2xl bg-gradient-to-r from-neutral-950 via-neutral-900 to-neutral-950 border border-neutral-800">
-                <h3 className="text-sm font-black text-amber-400 uppercase tracking-wider mb-3">
+              <div className="p-5 rounded-2xl bg-white border border-neutral-200 shadow-2xs">
+                <h3 className="text-sm font-black text-amber-600 uppercase tracking-wider mb-3">
                   Quick Actions
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -311,40 +311,40 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                       setActiveTab('products');
                       setIsNewProductModalOpen(true);
                     }}
-                    className="p-3 rounded-xl bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 hover:border-amber-400/50 flex items-center gap-3 text-left transition-all group"
+                    className="p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100/80 border border-neutral-200 hover:border-amber-400 flex items-center gap-3 text-left transition-all group shadow-2xs"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-amber-400 text-neutral-950 flex items-center justify-center shrink-0">
+                    <div className="w-9 h-9 rounded-lg bg-amber-400 text-neutral-950 flex items-center justify-center shrink-0 shadow-xs">
                       <Plus className="w-5 h-5" />
                     </div>
                     <div>
-                      <span className="text-xs font-bold text-white block group-hover:text-amber-400">Add New Product</span>
-                      <span className="text-[11px] text-neutral-400">Create new solar equipment</span>
+                      <span className="text-xs font-bold text-neutral-900 block group-hover:text-amber-700">Add New Product</span>
+                      <span className="text-[11px] text-neutral-500">Create new solar equipment</span>
                     </div>
                   </button>
 
                   <button
                     onClick={() => setActiveTab('flashsale')}
-                    className="p-3 rounded-xl bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 hover:border-rose-400/50 flex items-center gap-3 text-left transition-all group"
+                    className="p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100/80 border border-neutral-200 hover:border-rose-400 flex items-center gap-3 text-left transition-all group shadow-2xs"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-rose-500 text-white flex items-center justify-center shrink-0">
+                    <div className="w-9 h-9 rounded-lg bg-rose-500 text-white flex items-center justify-center shrink-0 shadow-xs">
                       <Flame className="w-5 h-5" />
                     </div>
                     <div>
-                      <span className="text-xs font-bold text-white block group-hover:text-rose-400">Manage Flash Sale</span>
-                      <span className="text-[11px] text-neutral-400">Edit Beat The Clock timing</span>
+                      <span className="text-xs font-bold text-neutral-900 block group-hover:text-rose-600">Manage Flash Sale</span>
+                      <span className="text-[11px] text-neutral-500">Edit Beat The Clock timing</span>
                     </div>
                   </button>
 
                   <button
-                    onClick={() => setActiveTab('billboard')}
-                    className="p-3 rounded-xl bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 hover:border-sky-400/50 flex items-center gap-3 text-left transition-all group"
+                    onClick={() => setActiveTab('hero_slides')}
+                    className="p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100/80 border border-neutral-200 hover:border-sky-400 flex items-center gap-3 text-left transition-all group shadow-2xs"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-sky-500 text-white flex items-center justify-center shrink-0">
+                    <div className="w-9 h-9 rounded-lg bg-sky-500 text-white flex items-center justify-center shrink-0 shadow-xs">
                       <Sliders className="w-5 h-5" />
                     </div>
                     <div>
-                      <span className="text-xs font-bold text-white block group-hover:text-sky-400">Edit Billboard</span>
-                      <span className="text-[11px] text-neutral-400">Change hero mega sale banners</span>
+                      <span className="text-xs font-bold text-neutral-900 block group-hover:text-sky-600">Hero & Banners</span>
+                      <span className="text-[11px] text-neutral-500">Change hero slides & showcase</span>
                     </div>
                   </button>
                 </div>
@@ -353,10 +353,10 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
               {/* Recent Products Snapshot */}
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-sm font-bold text-neutral-200">Catalog Preview</h3>
+                  <h3 className="text-sm font-bold text-neutral-800">Catalog Preview</h3>
                   <button
                     onClick={() => setActiveTab('products')}
-                    className="text-xs text-amber-400 hover:underline font-semibold"
+                    className="text-xs text-amber-700 hover:text-amber-800 hover:underline font-semibold"
                   >
                     View & Edit All {products.length} Products →
                   </button>
@@ -365,18 +365,18 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                   {products.slice(0, 6).map((p) => (
                     <div
                       key={p.id}
-                      className="p-3 rounded-xl bg-neutral-950 border border-neutral-800 flex items-center gap-3"
+                      className="p-3 rounded-xl bg-white border border-neutral-200 flex items-center gap-3 shadow-2xs"
                     >
                       <img
                         src={p.images?.[0] || p.image || ''}
                         alt={p.name}
-                        className="w-12 h-12 object-cover rounded-lg bg-neutral-800 border border-neutral-700 shrink-0"
+                        className="w-12 h-12 object-cover rounded-lg bg-neutral-100 border border-neutral-200 shrink-0"
                       />
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-bold text-white truncate">{p.name}</p>
+                        <p className="text-xs font-bold text-neutral-900 truncate">{p.name}</p>
                         <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-xs font-black text-amber-400">৳ {(p.price || 0).toLocaleString()}</span>
-                          <span className="text-[10px] bg-neutral-800 text-neutral-300 px-1.5 py-0.2 rounded">
+                          <span className="text-xs font-black text-amber-600">৳ {(p.price || 0).toLocaleString()}</span>
+                          <span className="text-[10px] bg-neutral-100 text-neutral-600 px-1.5 py-0.5 rounded font-medium">
                             {p.category}
                           </span>
                         </div>
@@ -392,23 +392,23 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
           {activeTab === 'products' && (
             <div className="space-y-4">
               {/* Product Actions Bar */}
-              <div className="flex flex-wrap items-center justify-between gap-3 bg-neutral-950 p-3 rounded-xl border border-neutral-800">
+              <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-xl border border-neutral-200 shadow-2xs">
                 <div className="flex flex-wrap items-center gap-2 flex-1 max-w-xl">
                   <div className="relative flex-1 min-w-[180px]">
-                    <Search className="w-4 h-4 text-neutral-500 absolute left-3 top-2.5" />
+                    <Search className="w-4 h-4 text-neutral-400 absolute left-3 top-2.5" />
                     <input
                       type="text"
                       placeholder="Search products by title or brand..."
                       value={productSearch}
                       onChange={(e) => setProductSearch(e.target.value)}
-                      className="w-full bg-neutral-900 border border-neutral-700 text-xs rounded-lg pl-9 pr-3 py-2 text-white outline-none focus:border-amber-400"
+                      className="w-full bg-neutral-50 border border-neutral-200 text-xs rounded-lg pl-9 pr-3 py-2 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
                     />
                   </div>
 
                   <select
                     value={productCategoryFilter}
                     onChange={(e) => setProductCategoryFilter(e.target.value)}
-                    className="bg-neutral-900 border border-neutral-700 text-xs text-neutral-200 rounded-lg px-3 py-2 outline-none focus:border-amber-400"
+                    className="bg-neutral-50 border border-neutral-200 text-xs text-neutral-700 rounded-lg px-3 py-2 outline-none focus:border-amber-400 focus:bg-white"
                   >
                     <option value="all">All Categories</option>
                     {categories.map((c) => (
@@ -421,7 +421,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
 
                 <button
                   onClick={() => setIsNewProductModalOpen(true)}
-                  className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-md shrink-0"
+                  className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm shrink-0"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Add New Product</span>
@@ -429,9 +429,9 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
               </div>
 
               {/* Products Table */}
-              <div className="bg-neutral-950 rounded-xl border border-neutral-800 overflow-x-auto">
-                <table className="w-full text-left text-xs text-neutral-300">
-                  <thead className="bg-neutral-900/80 text-neutral-400 uppercase font-mono text-[10px] border-b border-neutral-800">
+              <div className="bg-white rounded-xl border border-neutral-200 overflow-x-auto shadow-2xs">
+                <table className="w-full text-left text-xs text-neutral-700">
+                  <thead className="bg-neutral-100 text-neutral-600 uppercase font-mono text-[10px] border-b border-neutral-200">
                     <tr>
                       <th className="p-3">Product</th>
                       <th className="p-3">Category</th>
@@ -441,43 +441,43 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                       <th className="p-3 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-neutral-850">
+                  <tbody className="divide-y divide-neutral-200">
                     {filteredProductsList.map((prod) => {
                       const isInFlash = (flashSaleConfig?.activeProductIds || []).includes(prod.id);
                       const isOutOfStock = prod.isOutOfStock || prod.tag === 'Out of Stock';
                       return (
-                        <tr key={prod.id} className="hover:bg-neutral-900/50 transition-colors">
+                        <tr key={prod.id} className="hover:bg-neutral-50 transition-colors">
                           <td className="p-3">
                             <div className="flex items-center gap-3">
                               <img
                                 src={prod.images?.[0] || prod.image || ''}
                                 alt={prod.name}
-                                className="w-10 h-10 object-cover rounded-lg bg-neutral-900 border border-neutral-800 shrink-0"
+                                className="w-10 h-10 object-cover rounded-lg bg-neutral-100 border border-neutral-200 shrink-0"
                               />
                               <div className="max-w-xs">
-                                <span className="font-bold text-white block line-clamp-1">
+                                <span className="font-bold text-neutral-900 block line-clamp-1">
                                   {prod.name}
                                 </span>
-                                <span className="text-[10px] text-neutral-400">
-                                  Brand: <strong className="text-amber-400">{prod.brand}</strong>
+                                <span className="text-[10px] text-neutral-500">
+                                  Brand: <strong className="text-amber-700">{prod.brand}</strong>
                                 </span>
                               </div>
                             </div>
                           </td>
 
                           <td className="p-3">
-                            <span className="bg-neutral-900 border border-neutral-800 px-2 py-0.5 rounded text-[11px] text-neutral-300 font-medium">
+                            <span className="bg-neutral-100 border border-neutral-200 px-2 py-0.5 rounded text-[11px] text-neutral-700 font-medium">
                               {categories.find((c) => c.id === prod.category)?.name || prod.category}
                             </span>
                           </td>
 
                           <td className="p-3">
                             <div className="font-mono">
-                              <span className="font-black text-amber-400 block">
+                              <span className="font-black text-amber-700 block">
                                 ৳ {prod.price.toLocaleString()}
                               </span>
                               {prod.originalPrice > prod.price && (
-                                <span className="text-[10px] line-through text-neutral-500">
+                                <span className="text-[10px] line-through text-neutral-400">
                                   ৳ {prod.originalPrice.toLocaleString()}
                                 </span>
                               )}
@@ -492,8 +492,8 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                               }}
                               className={`px-2.5 py-1 rounded-md text-[11px] font-bold flex items-center gap-1 transition-colors ${
                                 isInFlash
-                                  ? 'bg-rose-500/20 text-rose-300 border border-rose-500/50'
-                                  : 'bg-neutral-900 text-neutral-500 border border-neutral-800 hover:text-neutral-300'
+                                  ? 'bg-rose-100 text-rose-700 border border-rose-300'
+                                  : 'bg-neutral-100 text-neutral-500 border border-neutral-200 hover:text-neutral-800'
                               }`}
                             >
                               <Flame className="w-3 h-3" />
@@ -509,8 +509,8 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                               }}
                               className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-colors ${
                                 !isOutOfStock
-                                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
-                                  : 'bg-rose-500/20 text-rose-400 border border-rose-500/40'
+                                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                                  : 'bg-rose-100 text-rose-700 border border-rose-300'
                               }`}
                             >
                               {!isOutOfStock ? '● In Stock' : '✕ Out of Stock'}
@@ -521,7 +521,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                             <div className="flex items-center justify-end gap-1.5">
                               <button
                                 onClick={() => setEditingProduct(prod)}
-                                className="p-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-amber-400 border border-neutral-800 hover:border-amber-400/40 transition-colors"
+                                className="p-1.5 rounded-lg bg-neutral-100 hover:bg-amber-100 text-amber-700 border border-neutral-200 hover:border-amber-300 transition-colors"
                                 title="Edit Product"
                               >
                                 <Edit2 className="w-3.5 h-3.5" />
@@ -533,7 +533,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                                     showToast(`Deleted ${prod.name}`);
                                   }
                                 }}
-                                className="p-1.5 rounded-lg bg-neutral-900 hover:bg-rose-950 text-rose-400 border border-neutral-800 hover:border-rose-600 transition-colors"
+                                className="p-1.5 rounded-lg bg-neutral-100 hover:bg-rose-100 text-rose-600 border border-neutral-200 hover:border-rose-300 transition-colors"
                                 title="Delete Product"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -552,16 +552,16 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
           {/* TAB 3: CATEGORIES MANAGER */}
           {activeTab === 'categories' && (
             <div className="space-y-4">
-              <div className="flex items-center justify-between bg-neutral-950 p-3 rounded-xl border border-neutral-800">
+              <div className="flex items-center justify-between bg-white p-3 rounded-xl border border-neutral-200 shadow-2xs">
                 <div>
-                  <h3 className="text-sm font-bold text-white">Shop by Category Configuration</h3>
-                  <p className="text-xs text-neutral-400">
+                  <h3 className="text-sm font-bold text-neutral-900">Shop by Category Configuration</h3>
+                  <p className="text-xs text-neutral-500">
                     Add, edit, rename, and manage subcategories for the main storefront
                   </p>
                 </div>
                 <button
                   onClick={() => setIsNewCategoryModalOpen(true)}
-                  className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-md shrink-0"
+                  className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm shrink-0"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Add New Category</span>
@@ -572,12 +572,12 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                 {categories.map((cat) => (
                   <div
                     key={cat.id}
-                    className="p-4 rounded-xl bg-neutral-950 border border-neutral-800 flex flex-col justify-between space-y-3 group hover:border-amber-400/50 transition-colors"
+                    className="p-4 rounded-xl bg-white border border-neutral-200 flex flex-col justify-between space-y-3 group hover:border-amber-400 shadow-2xs transition-colors"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
-                          <span className="text-xs font-mono bg-neutral-900 text-amber-400 px-2 py-0.5 rounded border border-neutral-800">
+                          <span className="text-xs font-mono bg-neutral-100 text-amber-700 px-2 py-0.5 rounded border border-neutral-200 font-semibold">
                             {cat.id}
                           </span>
                           <span className="text-[11px] text-neutral-500 font-medium">
@@ -587,7 +587,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                         <div className="flex items-center gap-1">
                           <button
                             onClick={() => setEditingCategory(cat)}
-                            className="p-1 rounded bg-neutral-900 hover:bg-neutral-800 text-amber-400"
+                            className="p-1 rounded bg-neutral-100 hover:bg-amber-100 text-amber-700 border border-neutral-200"
                             title="Edit Category"
                           >
                             <Edit2 className="w-3.5 h-3.5" />
@@ -599,7 +599,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                                 showToast(`Deleted category ${cat.name}`);
                               }
                             }}
-                            className="p-1 rounded bg-neutral-900 hover:bg-rose-950 text-rose-400"
+                            className="p-1 rounded bg-neutral-100 hover:bg-rose-100 text-rose-600 border border-neutral-200"
                             title="Delete Category"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -607,14 +607,14 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                         </div>
                       </div>
 
-                      <h4 className="text-sm font-bold text-white">{cat.name}</h4>
+                      <h4 className="text-sm font-bold text-neutral-900">{cat.name}</h4>
 
                       {/* Subcategories tags */}
                       <div className="mt-2 flex flex-wrap gap-1">
                         {cat.subCategories?.map((sub, sIdx) => (
                           <span
                             key={sIdx}
-                            className="text-[10px] bg-neutral-900 text-neutral-300 px-2 py-0.5 rounded border border-neutral-800/80"
+                            className="text-[10px] bg-neutral-100 text-neutral-700 px-2 py-0.5 rounded border border-neutral-200"
                           >
                             {sub}
                           </span>
@@ -627,7 +627,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                         if (onSelectCategory) onSelectCategory(cat.id);
                         onClose();
                       }}
-                      className="w-full text-center text-xs text-amber-400 hover:text-amber-300 font-bold bg-neutral-900 hover:bg-neutral-850 py-1.5 rounded-lg transition-colors flex items-center justify-center gap-1"
+                      className="w-full text-center text-xs text-amber-800 hover:text-amber-900 font-bold bg-amber-50 hover:bg-amber-100/80 border border-amber-200/80 py-1.5 rounded-lg transition-colors flex items-center justify-center gap-1 shadow-2xs"
                     >
                       <span>View Products in Store</span>
                       <ExternalLink className="w-3 h-3" />
@@ -641,9 +641,9 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
           {/* TAB 4: FLASH SALE MANAGER */}
           {activeTab === 'flashsale' && (
             <div className="space-y-6">
-              <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800 space-y-4">
-                <div className="flex items-center gap-2 text-rose-400">
-                  <Flame className="w-5 h-5 fill-rose-400" />
+              <div className="bg-white p-5 rounded-2xl border border-neutral-200 shadow-2xs space-y-4">
+                <div className="flex items-center gap-2 text-rose-600">
+                  <Flame className="w-5 h-5 fill-rose-600" />
                   <h3 className="text-base font-black uppercase tracking-tight font-['Outfit',sans-serif]">
                     Flash Sale Campaign & Countdown Timer
                   </h3>
@@ -651,38 +651,38 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs font-bold text-neutral-300 block mb-1.5">
+                    <label className="text-xs font-bold text-neutral-700 block mb-1.5">
                       Flash Sale Banner Title
                     </label>
                     <input
                       type="text"
                       value={flashSaleConfig.title}
                       onChange={(e) => updateFlashSaleConfig({ title: e.target.value })}
-                      className="w-full bg-neutral-900 border border-neutral-700 text-xs rounded-lg p-2.5 text-white outline-none focus:border-amber-400 font-medium"
+                      className="w-full bg-neutral-50 border border-neutral-300 text-xs rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-medium"
                     />
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold text-neutral-300 block mb-1.5">
+                    <label className="text-xs font-bold text-neutral-700 block mb-1.5">
                       Flash Sale Subtitle Tag
                     </label>
                     <input
                       type="text"
                       value={flashSaleConfig.subtitle}
                       onChange={(e) => updateFlashSaleConfig({ subtitle: e.target.value })}
-                      className="w-full bg-neutral-900 border border-neutral-700 text-xs rounded-lg p-2.5 text-white outline-none focus:border-amber-400 font-medium"
+                      className="w-full bg-neutral-50 border border-neutral-300 text-xs rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-medium"
                     />
                   </div>
                 </div>
 
                 {/* Countdown Settings */}
                 <div>
-                  <label className="text-xs font-bold text-neutral-300 block mb-2">
+                  <label className="text-xs font-bold text-neutral-700 block mb-2">
                     Countdown Timer Duration (Hours : Minutes : Seconds)
                   </label>
                   <div className="flex items-center gap-3 max-w-sm">
                     <div className="flex-1">
-                      <span className="text-[10px] text-neutral-400 block mb-1">Hours</span>
+                      <span className="text-[10px] text-neutral-500 block mb-1">Hours</span>
                       <input
                         type="number"
                         min="0"
@@ -691,12 +691,12 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                         onChange={(e) =>
                           updateFlashSaleConfig({ countdownHours: parseInt(e.target.value) || 0 })
                         }
-                        className="w-full bg-neutral-900 border border-neutral-700 text-xs rounded-lg p-2 text-white font-mono text-center"
+                        className="w-full bg-neutral-50 border border-neutral-300 text-xs rounded-lg p-2 text-neutral-900 font-mono text-center focus:bg-white focus:border-amber-400"
                       />
                     </div>
-                    <span className="text-neutral-500 font-black mt-4">:</span>
+                    <span className="text-neutral-400 font-black mt-4">:</span>
                     <div className="flex-1">
-                      <span className="text-[10px] text-neutral-400 block mb-1">Minutes</span>
+                      <span className="text-[10px] text-neutral-500 block mb-1">Minutes</span>
                       <input
                         type="number"
                         min="0"
@@ -705,12 +705,12 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                         onChange={(e) =>
                           updateFlashSaleConfig({ countdownMinutes: parseInt(e.target.value) || 0 })
                         }
-                        className="w-full bg-neutral-900 border border-neutral-700 text-xs rounded-lg p-2 text-white font-mono text-center"
+                        className="w-full bg-neutral-50 border border-neutral-300 text-xs rounded-lg p-2 text-neutral-900 font-mono text-center focus:bg-white focus:border-amber-400"
                       />
                     </div>
-                    <span className="text-neutral-500 font-black mt-4">:</span>
+                    <span className="text-neutral-400 font-black mt-4">:</span>
                     <div className="flex-1">
-                      <span className="text-[10px] text-neutral-400 block mb-1">Seconds</span>
+                      <span className="text-[10px] text-neutral-500 block mb-1">Seconds</span>
                       <input
                         type="number"
                         min="0"
@@ -719,7 +719,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                         onChange={(e) =>
                           updateFlashSaleConfig({ countdownSeconds: parseInt(e.target.value) || 0 })
                         }
-                        className="w-full bg-neutral-900 border border-neutral-700 text-xs rounded-lg p-2 text-white font-mono text-center"
+                        className="w-full bg-neutral-50 border border-neutral-300 text-xs rounded-lg p-2 text-neutral-900 font-mono text-center focus:bg-white focus:border-amber-400"
                       />
                     </div>
                   </div>
@@ -728,7 +728,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                 <div className="pt-2 flex justify-end">
                   <button
                     onClick={() => showToast('Flash Sale settings updated successfully!')}
-                    className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 shadow-md"
+                    className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 shadow-sm"
                   >
                     <Save className="w-4 h-4" />
                     <span>Save Flash Sale Settings</span>
@@ -738,10 +738,10 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
 
               {/* Flash Sale Product Selector */}
               <div>
-                <h4 className="text-sm font-bold text-white mb-2">
+                <h4 className="text-sm font-bold text-neutral-900 mb-2">
                   Select Products to Showcase in Flash Sale Grid
                 </h4>
-                <p className="text-xs text-neutral-400 mb-3">
+                <p className="text-xs text-neutral-500 mb-3">
                   Check or uncheck products to immediately add or remove them from the Flash Sale section
                 </p>
 
@@ -752,21 +752,21 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                       <div
                         key={p.id}
                         onClick={() => toggleProductFlashSale(p.id)}
-                        className={`p-3 rounded-xl border cursor-pointer transition-all flex items-center justify-between gap-3 ${
+                        className={`p-3 rounded-xl border cursor-pointer transition-all flex items-center justify-between gap-3 shadow-2xs ${
                           isChecked
-                            ? 'bg-rose-950/30 border-rose-500/60 text-white'
-                            : 'bg-neutral-950 border-neutral-800 text-neutral-400 hover:border-neutral-700'
+                            ? 'bg-rose-50 border-rose-400 text-neutral-900'
+                            : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300'
                         }`}
                       >
                         <div className="flex items-center gap-2.5 min-w-0">
                           <img
                             src={p.images?.[0] || p.image || ''}
                             alt={p.name}
-                            className="w-9 h-9 object-cover rounded-md bg-neutral-900 shrink-0"
+                            className="w-9 h-9 object-cover rounded-md bg-neutral-100 border border-neutral-200 shrink-0"
                           />
                           <div className="min-w-0">
-                            <p className="text-xs font-bold text-white truncate">{p.name}</p>
-                            <span className="text-[11px] text-amber-400 font-black">
+                            <p className="text-xs font-bold text-neutral-900 truncate">{p.name}</p>
+                            <span className="text-[11px] text-amber-700 font-black">
                               ৳ {(p.price || 0).toLocaleString()}
                             </span>
                           </div>
@@ -775,8 +775,8 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                         <div
                           className={`w-5 h-5 rounded-md flex items-center justify-center border shrink-0 ${
                             isChecked
-                              ? 'bg-rose-500 border-rose-400 text-white'
-                              : 'border-neutral-700 bg-neutral-900'
+                              ? 'bg-rose-500 border-rose-500 text-white'
+                              : 'border-neutral-300 bg-neutral-100'
                           }`}
                         >
                           {isChecked && <Check className="w-3.5 h-3.5 stroke-[3]" />}
@@ -793,8 +793,8 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
           {activeTab === 'billboard' && (
             <div className="space-y-6">
               {/* Main Top Billboard */}
-              <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800 space-y-4">
-                <div className="flex items-center gap-2 text-amber-400">
+              <div className="bg-white p-5 rounded-2xl border border-neutral-200 shadow-2xs space-y-4">
+                <div className="flex items-center gap-2 text-amber-600">
                   <Sliders className="w-5 h-5" />
                   <h3 className="text-base font-black uppercase tracking-tight font-['Outfit',sans-serif]">
                     Top Hero Mega Sale Billboard
@@ -803,58 +803,58 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
                   <div>
-                    <label className="font-bold text-neutral-300 block mb-1">Ribbon Top Tag</label>
+                    <label className="font-bold text-neutral-700 block mb-1">Ribbon Top Tag</label>
                     <input
                       type="text"
                       value={heroBillboard.megaSaleRibbon}
                       onChange={(e) => updateHeroBillboard({ megaSaleRibbon: e.target.value })}
-                      className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-2 text-white font-medium outline-none focus:border-amber-400"
+                      className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2 text-neutral-900 font-medium outline-none focus:border-amber-400 focus:bg-white"
                     />
                   </div>
                   <div>
-                    <label className="font-bold text-neutral-300 block mb-1">Mega Sale Title</label>
+                    <label className="font-bold text-neutral-700 block mb-1">Mega Sale Title</label>
                     <input
                       type="text"
                       value={heroBillboard.megaSaleTitle}
                       onChange={(e) => updateHeroBillboard({ megaSaleTitle: e.target.value })}
-                      className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-2 text-white font-medium outline-none focus:border-amber-400"
+                      className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2 text-neutral-900 font-medium outline-none focus:border-amber-400 focus:bg-white"
                     />
                   </div>
                   <div>
-                    <label className="font-bold text-neutral-300 block mb-1">Lowest Price Tag</label>
+                    <label className="font-bold text-neutral-700 block mb-1">Lowest Price Tag</label>
                     <input
                       type="text"
                       value={heroBillboard.lowestPriceTag}
                       onChange={(e) => updateHeroBillboard({ lowestPriceTag: e.target.value })}
-                      className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-2 text-white font-medium outline-none focus:border-amber-400"
+                      className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2 text-neutral-900 font-medium outline-none focus:border-amber-400 focus:bg-white"
                     />
                   </div>
 
                   <div>
-                    <label className="font-bold text-neutral-300 block mb-1">Guarantee Badge Title</label>
+                    <label className="font-bold text-neutral-700 block mb-1">Guarantee Badge Title</label>
                     <input
                       type="text"
                       value={heroBillboard.guaranteeBadgeTitle}
                       onChange={(e) => updateHeroBillboard({ guaranteeBadgeTitle: e.target.value })}
-                      className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-2 text-white font-medium outline-none focus:border-amber-400"
+                      className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2 text-neutral-900 font-medium outline-none focus:border-amber-400 focus:bg-white"
                     />
                   </div>
                   <div>
-                    <label className="font-bold text-neutral-300 block mb-1">Guarantee Subtitle</label>
+                    <label className="font-bold text-neutral-700 block mb-1">Guarantee Subtitle</label>
                     <input
                       type="text"
                       value={heroBillboard.guaranteeBadgeSubtitle}
                       onChange={(e) => updateHeroBillboard({ guaranteeBadgeSubtitle: e.target.value })}
-                      className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-2 text-white font-medium outline-none focus:border-amber-400"
+                      className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2 text-neutral-900 font-medium outline-none focus:border-amber-400 focus:bg-white"
                     />
                   </div>
                   <div>
-                    <label className="font-bold text-neutral-300 block mb-1">Free Delivery Label</label>
+                    <label className="font-bold text-neutral-700 block mb-1">Free Delivery Label</label>
                     <input
                       type="text"
                       value={heroBillboard.freeDeliverySubtitle}
                       onChange={(e) => updateHeroBillboard({ freeDeliverySubtitle: e.target.value })}
-                      className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-2 text-white font-medium outline-none focus:border-amber-400"
+                      className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2 text-neutral-900 font-medium outline-none focus:border-amber-400 focus:bg-white"
                     />
                   </div>
                 </div>
@@ -862,7 +862,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                 <div className="pt-2 flex justify-end">
                   <button
                     onClick={() => showToast('Hero Billboard updated successfully!')}
-                    className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 shadow-md"
+                    className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 shadow-sm"
                   >
                     <Save className="w-4 h-4" />
                     <span>Save Billboard Changes</span>
@@ -871,8 +871,8 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
               </div>
 
               {/* Sub Banners (Dual Promo Cards) */}
-              <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800 space-y-4">
-                <div className="flex items-center gap-2 text-amber-400">
+              <div className="bg-white p-5 rounded-2xl border border-neutral-200 shadow-2xs space-y-4">
+                <div className="flex items-center gap-2 text-amber-600">
                   <Layout className="w-5 h-5" />
                   <h3 className="text-base font-black uppercase tracking-tight font-['Outfit',sans-serif]">
                     Dual Promo Cards Under Hero
@@ -881,10 +881,10 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                   {/* Left Banner */}
-                  <div className="p-4 rounded-xl bg-neutral-900 border border-neutral-800 space-y-2.5">
-                    <h4 className="font-bold text-amber-400">Left Promo Card</h4>
+                  <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200 space-y-2.5">
+                    <h4 className="font-bold text-amber-700">Left Promo Card</h4>
                     <div>
-                      <label className="text-neutral-400 block mb-1">Top Tag</label>
+                      <label className="text-neutral-600 block mb-1">Top Tag</label>
                       <input
                         type="text"
                         value={subBanners.leftBanner.topTag}
@@ -893,11 +893,11 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                             leftBanner: { ...subBanners.leftBanner, topTag: e.target.value }
                           })
                         }
-                        className="w-full bg-neutral-950 border border-neutral-700 rounded p-2 text-white"
+                        className="w-full bg-white border border-neutral-300 rounded p-2 text-neutral-900"
                       />
                     </div>
                     <div>
-                      <label className="text-neutral-400 block mb-1">Title</label>
+                      <label className="text-neutral-600 block mb-1">Title</label>
                       <input
                         type="text"
                         value={subBanners.leftBanner.title}
@@ -906,11 +906,11 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                             leftBanner: { ...subBanners.leftBanner, title: e.target.value }
                           })
                         }
-                        className="w-full bg-neutral-950 border border-neutral-700 rounded p-2 text-white"
+                        className="w-full bg-white border border-neutral-300 rounded p-2 text-neutral-900"
                       />
                     </div>
                     <div>
-                      <label className="text-neutral-400 block mb-1">Guarantee Badge</label>
+                      <label className="text-neutral-600 block mb-1">Guarantee Badge</label>
                       <input
                         type="text"
                         value={subBanners.leftBanner.guaranteeText}
@@ -919,16 +919,16 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                             leftBanner: { ...subBanners.leftBanner, guaranteeText: e.target.value }
                           })
                         }
-                        className="w-full bg-neutral-950 border border-neutral-700 rounded p-2 text-white"
+                        className="w-full bg-white border border-neutral-300 rounded p-2 text-neutral-900"
                       />
                     </div>
                   </div>
 
                   {/* Right Banner */}
-                  <div className="p-4 rounded-xl bg-neutral-900 border border-neutral-800 space-y-2.5">
-                    <h4 className="font-bold text-cyan-400">Right Promo Card</h4>
+                  <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200 space-y-2.5">
+                    <h4 className="font-bold text-cyan-700">Right Promo Card</h4>
                     <div>
-                      <label className="text-neutral-400 block mb-1">Top Italic Script</label>
+                      <label className="text-neutral-600 block mb-1">Top Italic Script</label>
                       <input
                         type="text"
                         value={subBanners.rightBanner.topScript}
@@ -937,11 +937,11 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                             rightBanner: { ...subBanners.rightBanner, topScript: e.target.value }
                           })
                         }
-                        className="w-full bg-neutral-950 border border-neutral-700 rounded p-2 text-white"
+                        className="w-full bg-white border border-neutral-300 rounded p-2 text-neutral-900"
                       />
                     </div>
                     <div>
-                      <label className="text-neutral-400 block mb-1">Discount Tag</label>
+                      <label className="text-neutral-600 block mb-1">Discount Tag</label>
                       <input
                         type="text"
                         value={subBanners.rightBanner.discountBadge}
@@ -950,11 +950,11 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                             rightBanner: { ...subBanners.rightBanner, discountBadge: e.target.value }
                           })
                         }
-                        className="w-full bg-neutral-950 border border-neutral-700 rounded p-2 text-white"
+                        className="w-full bg-white border border-neutral-300 rounded p-2 text-neutral-900"
                       />
                     </div>
                     <div>
-                      <label className="text-neutral-400 block mb-1">Store Locations Highlight</label>
+                      <label className="text-neutral-600 block mb-1">Store Locations Highlight</label>
                       <input
                         type="text"
                         value={subBanners.rightBanner.locationText}
@@ -963,7 +963,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                             rightBanner: { ...subBanners.rightBanner, locationText: e.target.value }
                           })
                         }
-                        className="w-full bg-neutral-950 border border-neutral-700 rounded p-2 text-white"
+                        className="w-full bg-white border border-neutral-300 rounded p-2 text-neutral-900"
                       />
                     </div>
                   </div>
@@ -975,16 +975,16 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
           {/* TAB 6: STORE BRANCHES */}
           {activeTab === 'branches' && (
             <div className="space-y-4">
-              <div className="flex items-center justify-between bg-neutral-950 p-3 rounded-xl border border-neutral-800">
+              <div className="flex items-center justify-between bg-white p-3 rounded-xl border border-neutral-200 shadow-2xs">
                 <div>
-                  <h3 className="text-sm font-bold text-white">Experience Center Outlets</h3>
-                  <p className="text-xs text-neutral-400">
+                  <h3 className="text-sm font-bold text-neutral-900">Experience Center Outlets</h3>
+                  <p className="text-xs text-neutral-500">
                     Physical stores displayed in header, footer, and locations view
                   </p>
                 </div>
                 <button
                   onClick={() => setIsNewBranchModalOpen(true)}
-                  className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-md shrink-0"
+                  className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm shrink-0"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Add New Store Branch</span>
@@ -995,17 +995,17 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                 {branches.map((b) => (
                   <div
                     key={b.id}
-                    className="p-4 rounded-xl bg-neutral-950 border border-neutral-800 flex flex-col justify-between space-y-3"
+                    className="p-4 rounded-xl bg-white border border-neutral-200 flex flex-col justify-between space-y-3 shadow-2xs"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-[10px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/40 px-2 py-0.5 rounded">
+                        <span className="text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-300 px-2 py-0.5 rounded">
                           {b.badge || 'Store Outlet'}
                         </span>
                         <div className="flex items-center gap-1">
                           <button
                             onClick={() => setEditingBranch(b)}
-                            className="p-1 rounded bg-neutral-900 hover:bg-neutral-800 text-amber-400"
+                            className="p-1 rounded bg-neutral-100 hover:bg-amber-100 text-amber-700 border border-neutral-200"
                             title="Edit Branch"
                           >
                             <Edit2 className="w-3.5 h-3.5" />
@@ -1017,7 +1017,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                                 showToast(`Deleted ${b.name}`);
                               }
                             }}
-                            className="p-1 rounded bg-neutral-900 hover:bg-rose-950 text-rose-400"
+                            className="p-1 rounded bg-neutral-100 hover:bg-rose-100 text-rose-600 border border-neutral-200"
                             title="Delete Branch"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -1026,33 +1026,33 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                       </div>
 
                       {b.image && (
-                        <div className="w-full h-24 rounded-lg overflow-hidden mb-2.5 border border-neutral-800 bg-neutral-900">
+                        <div className="w-full h-24 rounded-lg overflow-hidden mb-2.5 border border-neutral-200 bg-neutral-100">
                           <img src={b.image} alt={b.name} className="w-full h-full object-cover" />
                         </div>
                       )}
 
-                      <h4 className="text-sm font-bold text-white mb-1">{b.name}</h4>
-                      <p className="text-xs text-neutral-400">{b.address}</p>
-                      <p className="text-xs text-amber-400 font-mono mt-1.5">Hotline: {b.phone}</p>
+                      <h4 className="text-sm font-bold text-neutral-900 mb-1">{b.name}</h4>
+                      <p className="text-xs text-neutral-600">{b.address}</p>
+                      <p className="text-xs text-amber-700 font-mono mt-1.5 font-bold">Hotline: {b.phone}</p>
 
                       {b.googleMapUrl && (
-                        <div className="mt-2 pt-2 border-t border-neutral-900">
+                        <div className="mt-2 pt-2 border-t border-neutral-100">
                           <a
                             href={b.googleMapUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 text-[11px] font-bold text-sky-400 hover:text-sky-300 hover:underline"
+                            className="inline-flex items-center gap-1.5 text-[11px] font-bold text-sky-700 hover:text-sky-800 hover:underline"
                           >
-                            <Globe className="w-3 h-3 text-sky-400" />
+                            <Globe className="w-3 h-3 text-sky-600" />
                             <span>View on Google Map</span>
-                            <ExternalLink className="w-3 h-3 text-neutral-500" />
+                            <ExternalLink className="w-3 h-3 text-neutral-400" />
                           </a>
                         </div>
                       )}
                     </div>
 
                     <div className="text-[11px] text-neutral-500">
-                      Weekly Off-day: <strong className="text-neutral-300">{b.offDay || 'None'}</strong>
+                      Weekly Off-day: <strong className="text-neutral-700">{b.offDay || 'None'}</strong>
                     </div>
                   </div>
                 ))}
@@ -1064,42 +1064,42 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
           {activeTab === 'footer' && (
             <div className="space-y-6">
               {/* Footer Contact & Socials */}
-              <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800 space-y-4">
-                <h3 className="text-base font-black text-amber-400 uppercase tracking-tight font-['Outfit',sans-serif]">
+              <div className="bg-white p-5 rounded-2xl border border-neutral-200 shadow-2xs space-y-4">
+                <h3 className="text-base font-black text-amber-600 uppercase tracking-tight font-['Outfit',sans-serif]">
                   Footer Contact & Social Media
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
                   <div>
-                    <label className="font-bold text-neutral-300 block mb-1">Customer Support Email</label>
+                    <label className="font-bold text-neutral-700 block mb-1">Customer Support Email</label>
                     <input
                       type="email"
                       value={footerConfig.email}
                       onChange={(e) => updateFooterConfig({ email: e.target.value })}
-                      className="w-full bg-neutral-900 border border-neutral-700 rounded p-2 text-white font-medium"
+                      className="w-full bg-neutral-50 border border-neutral-300 rounded p-2 text-neutral-900 font-medium outline-none focus:border-amber-400 focus:bg-white"
                     />
                   </div>
                   <div>
-                    <label className="font-bold text-neutral-300 block mb-1">Hotline Phone Number</label>
+                    <label className="font-bold text-neutral-700 block mb-1">Hotline Phone Number</label>
                     <input
                       type="text"
                       value={footerConfig.hotline}
                       onChange={(e) => updateFooterConfig({ hotline: e.target.value })}
-                      className="w-full bg-neutral-900 border border-neutral-700 rounded p-2 text-white font-medium"
+                      className="w-full bg-neutral-50 border border-neutral-300 rounded p-2 text-neutral-900 font-medium outline-none focus:border-amber-400 focus:bg-white"
                     />
                   </div>
                   <div>
-                    <label className="font-bold text-neutral-300 block mb-1">ISO Certification Tag</label>
+                    <label className="font-bold text-neutral-700 block mb-1">ISO Certification Tag</label>
                     <input
                       type="text"
                       value={footerConfig.isoText}
                       onChange={(e) => updateFooterConfig({ isoText: e.target.value })}
-                      className="w-full bg-neutral-900 border border-neutral-700 rounded p-2 text-white font-medium"
+                      className="w-full bg-neutral-50 border border-neutral-300 rounded p-2 text-neutral-900 font-medium outline-none focus:border-amber-400 focus:bg-white"
                     />
                   </div>
 
                   <div>
-                    <label className="font-bold text-neutral-300 block mb-1">Facebook Page URL</label>
+                    <label className="font-bold text-neutral-700 block mb-1">Facebook Page URL</label>
                     <input
                       type="text"
                       value={footerConfig.socialLinks.facebook}
@@ -1108,11 +1108,11 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                           socialLinks: { ...footerConfig.socialLinks, facebook: e.target.value }
                         })
                       }
-                      className="w-full bg-neutral-900 border border-neutral-700 rounded p-2 text-white"
+                      className="w-full bg-neutral-50 border border-neutral-300 rounded p-2 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
                     />
                   </div>
                   <div>
-                    <label className="font-bold text-neutral-300 block mb-1">WhatsApp Hotline URL</label>
+                    <label className="font-bold text-neutral-700 block mb-1">WhatsApp Hotline URL</label>
                     <input
                       type="text"
                       value={footerConfig.socialLinks.whatsapp}
@@ -1121,11 +1121,11 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                           socialLinks: { ...footerConfig.socialLinks, whatsapp: e.target.value }
                         })
                       }
-                      className="w-full bg-neutral-900 border border-neutral-700 rounded p-2 text-white"
+                      className="w-full bg-neutral-50 border border-neutral-300 rounded p-2 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
                     />
                   </div>
                   <div>
-                    <label className="font-bold text-neutral-300 block mb-1">YouTube Channel URL</label>
+                    <label className="font-bold text-neutral-700 block mb-1">YouTube Channel URL</label>
                     <input
                       type="text"
                       value={footerConfig.socialLinks.youtube}
@@ -1134,7 +1134,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                           socialLinks: { ...footerConfig.socialLinks, youtube: e.target.value }
                         })
                       }
-                      className="w-full bg-neutral-900 border border-neutral-700 rounded p-2 text-white"
+                      className="w-full bg-neutral-50 border border-neutral-300 rounded p-2 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
                     />
                   </div>
                 </div>
@@ -1142,7 +1142,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                 <div className="pt-2 flex justify-end">
                   <button
                     onClick={() => showToast('Footer information updated!')}
-                    className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 shadow-md"
+                    className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 shadow-sm"
                   >
                     <Save className="w-4 h-4" />
                     <span>Save Footer Settings</span>
@@ -1151,23 +1151,23 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
               </div>
 
               {/* Site Policies Editor */}
-              <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800 space-y-4">
-                <h3 className="text-base font-black text-amber-400 uppercase tracking-tight font-['Outfit',sans-serif]">
+              <div className="bg-white p-5 rounded-2xl border border-neutral-200 shadow-2xs space-y-4">
+                <h3 className="text-base font-black text-amber-600 uppercase tracking-tight font-['Outfit',sans-serif]">
                   Terms & Site Policies Content
                 </h3>
 
                 <div className="space-y-3">
                   {policies.map((pol) => (
-                    <div key={pol.id} className="p-3.5 rounded-xl bg-neutral-900 border border-neutral-800 space-y-2">
+                    <div key={pol.id} className="p-3.5 rounded-xl bg-neutral-50 border border-neutral-200 space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white">{pol.title}</span>
+                        <span className="text-xs font-bold text-neutral-900">{pol.title}</span>
                         <span className="text-[10px] font-mono text-neutral-500">ID: {pol.id}</span>
                       </div>
                       <textarea
                         rows={3}
                         value={pol.content}
                         onChange={(e) => updatePolicy(pol.id, e.target.value)}
-                        className="w-full bg-neutral-950 border border-neutral-700 text-xs rounded-lg p-2 text-neutral-200 outline-none focus:border-amber-400 font-sans"
+                        className="w-full bg-white border border-neutral-300 text-xs rounded-lg p-2 text-neutral-900 outline-none focus:border-amber-400 font-sans"
                       />
                     </div>
                   ))}
@@ -1178,57 +1178,57 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
 
           {/* TAB 8: BRAND & GLOBAL SETTINGS */}
           {activeTab === 'branding' && (
-            <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800 space-y-4">
-              <h3 className="text-base font-black text-amber-400 uppercase tracking-tight font-['Outfit',sans-serif]">
+            <div className="bg-white p-5 rounded-2xl border border-neutral-200 shadow-2xs space-y-4">
+              <h3 className="text-base font-black text-amber-600 uppercase tracking-tight font-['Outfit',sans-serif]">
                 Global Branding & Header Announcement
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
                 <div>
-                  <label className="font-bold text-neutral-300 block mb-1">Logo Main Text</label>
+                  <label className="font-bold text-neutral-700 block mb-1">Logo Main Text</label>
                   <input
                     type="text"
                     value={brandConfig.logoMain}
                     onChange={(e) => updateBrandConfig({ logoMain: e.target.value })}
-                    className="w-full bg-neutral-900 border border-neutral-700 rounded p-2 text-white font-medium"
+                    className="w-full bg-neutral-50 border border-neutral-300 rounded p-2 text-neutral-900 font-medium outline-none focus:border-amber-400 focus:bg-white"
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-neutral-300 block mb-1">Logo Accent Text</label>
+                  <label className="font-bold text-neutral-700 block mb-1">Logo Accent Text</label>
                   <input
                     type="text"
                     value={brandConfig.logoAccent}
                     onChange={(e) => updateBrandConfig({ logoAccent: e.target.value })}
-                    className="w-full bg-neutral-900 border border-neutral-700 rounded p-2 text-white font-medium"
+                    className="w-full bg-neutral-50 border border-neutral-300 rounded p-2 text-neutral-900 font-medium outline-none focus:border-amber-400 focus:bg-white"
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-neutral-300 block mb-1">Trademark Symbol</label>
+                  <label className="font-bold text-neutral-700 block mb-1">Trademark Symbol</label>
                   <input
                     type="text"
                     value={brandConfig.logoSymbol}
                     onChange={(e) => updateBrandConfig({ logoSymbol: e.target.value })}
-                    className="w-full bg-neutral-900 border border-neutral-700 rounded p-2 text-white font-medium"
+                    className="w-full bg-neutral-50 border border-neutral-300 rounded p-2 text-neutral-900 font-medium outline-none focus:border-amber-400 focus:bg-white"
                   />
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="font-bold text-neutral-300 block mb-1">Top Announcement Bar Text</label>
+                  <label className="font-bold text-neutral-700 block mb-1">Top Announcement Bar Text</label>
                   <input
                     type="text"
                     value={brandConfig.announcementText}
                     onChange={(e) => updateBrandConfig({ announcementText: e.target.value })}
-                    className="w-full bg-neutral-900 border border-neutral-700 rounded p-2 text-white font-medium"
+                    className="w-full bg-neutral-50 border border-neutral-300 rounded p-2 text-neutral-900 font-medium outline-none focus:border-amber-400 focus:bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="font-bold text-neutral-300 block mb-1">Currency Symbol</label>
+                  <label className="font-bold text-neutral-700 block mb-1">Currency Symbol</label>
                   <input
                     type="text"
                     value={brandConfig.currencySymbol}
                     onChange={(e) => updateBrandConfig({ currencySymbol: e.target.value })}
-                    className="w-full bg-neutral-900 border border-neutral-700 rounded p-2 text-white font-mono font-bold"
+                    className="w-full bg-neutral-50 border border-neutral-300 rounded p-2 text-neutral-900 font-mono font-bold outline-none focus:border-amber-400 focus:bg-white"
                   />
                 </div>
               </div>
@@ -1236,7 +1236,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
               <div className="pt-2 flex justify-end">
                 <button
                   onClick={() => showToast('Brand configuration saved!')}
-                  className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 shadow-md"
+                  className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 shadow-sm"
                 >
                   <Save className="w-4 h-4" />
                   <span>Save Branding Changes</span>
@@ -1316,20 +1316,20 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
 
       {/* MODAL: RESET CONFIRMATION */}
       {showResetConfirm && (
-        <div className="fixed inset-0 z-60 bg-black/80 flex items-center justify-center p-4">
-          <div className="bg-neutral-900 border border-neutral-700 rounded-2xl max-w-md w-full p-6 text-center space-y-4 animate-in zoom-in-95">
-            <div className="w-12 h-12 bg-rose-500/20 border border-rose-500/40 text-rose-400 rounded-full flex items-center justify-center mx-auto">
+        <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-neutral-200 rounded-2xl max-w-md w-full p-6 text-center space-y-4 shadow-2xl animate-in zoom-in-95">
+            <div className="w-12 h-12 bg-rose-50 border border-rose-200 text-rose-600 rounded-full flex items-center justify-center mx-auto">
               <AlertTriangle className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-bold text-white">Reset to Factory Defaults?</h3>
-            <p className="text-xs text-neutral-400">
+            <h3 className="text-base font-bold text-neutral-900">Reset to Factory Defaults?</h3>
+            <p className="text-xs text-neutral-600">
               This will restore all default products, categories, hero billboards, and store locations.
               Any custom products or edits created in this session will be replaced.
             </p>
             <div className="flex items-center justify-center gap-3 pt-2">
               <button
                 onClick={() => setShowResetConfirm(false)}
-                className="px-4 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 text-xs font-bold"
+                className="px-4 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-bold border border-neutral-200"
               >
                 Cancel
               </button>
@@ -1339,7 +1339,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                   setShowResetConfirm(false);
                   showToast('Store reset to factory defaults.');
                 }}
-                className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold"
+                className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow-sm"
               >
                 Yes, Reset All Data
               </button>
@@ -1413,37 +1413,37 @@ const ProductFormModal: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 z-60 bg-black/80 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
-      <div className="bg-neutral-900 border border-neutral-700 text-white rounded-2xl max-w-2xl w-full p-5 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto animate-in zoom-in-95">
-        <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
-          <h3 className="text-base font-bold text-white">
+    <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+      <div className="bg-white border border-neutral-200 text-neutral-900 rounded-2xl max-w-2xl w-full p-5 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl animate-in zoom-in-95">
+        <div className="flex items-center justify-between border-b border-neutral-200 pb-3">
+          <h3 className="text-base font-bold text-neutral-900">
             {product ? `Edit "${product.name}"` : 'Add New Product'}
           </h3>
-          <button onClick={onClose} className="p-1 rounded bg-neutral-800 text-neutral-400 hover:text-white">
+          <button onClick={onClose} className="p-1 rounded bg-neutral-100 hover:bg-neutral-200 text-neutral-500 hover:text-neutral-900 transition-colors">
             <X className="w-4 h-4" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           <div>
-            <label className="font-bold text-neutral-300 block mb-1">Product Title *</label>
+            <label className="font-bold text-neutral-700 block mb-1">Product Title *</label>
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2.5 text-white outline-none focus:border-amber-400 font-medium"
+              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-medium"
               placeholder="e.g. SolarStock NEO 600L Smart Power Station"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="font-bold text-neutral-300 block mb-1">Category *</label>
+              <label className="font-bold text-neutral-700 block mb-1">Category *</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2.5 text-white outline-none focus:border-amber-400 font-medium"
+                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-medium"
               >
                 {categories.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -1454,12 +1454,12 @@ const ProductFormModal: React.FC<{
             </div>
 
             <div>
-              <label className="font-bold text-neutral-300 block mb-1">Subcategory</label>
+              <label className="font-bold text-neutral-700 block mb-1">Subcategory</label>
               <input
                 type="text"
                 value={subCategory}
                 onChange={(e) => setSubCategory(e.target.value)}
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2.5 text-white outline-none focus:border-amber-400"
+                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-medium"
                 placeholder="e.g. Portable Power Station"
               />
             </div>
@@ -1467,42 +1467,42 @@ const ProductFormModal: React.FC<{
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="font-bold text-neutral-300 block mb-1">Brand</label>
+              <label className="font-bold text-neutral-700 block mb-1">Brand</label>
               <input
                 type="text"
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2.5 text-white outline-none focus:border-amber-400"
+                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-medium"
               />
             </div>
             <div>
-              <label className="font-bold text-neutral-300 block mb-1">Selling Price (৳)</label>
+              <label className="font-bold text-neutral-700 block mb-1">Selling Price (৳)</label>
               <input
                 type="number"
                 required
                 value={price}
                 onChange={(e) => setPrice(Number(e.target.value))}
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2.5 text-amber-400 font-bold outline-none focus:border-amber-400 font-mono"
+                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-amber-700 font-bold outline-none focus:border-amber-400 focus:bg-white font-mono"
               />
             </div>
             <div>
-              <label className="font-bold text-neutral-300 block mb-1">Original / MRP Price (৳)</label>
+              <label className="font-bold text-neutral-700 block mb-1">Original / MRP Price (৳)</label>
               <input
                 type="number"
                 value={originalPrice}
                 onChange={(e) => setOriginalPrice(Number(e.target.value))}
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2.5 text-neutral-300 outline-none focus:border-amber-400 font-mono"
+                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-700 outline-none focus:border-amber-400 focus:bg-white font-mono"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="font-bold text-neutral-300 block mb-1">Product Tag / Badge</label>
+              <label className="font-bold text-neutral-700 block mb-1">Product Tag / Badge</label>
               <select
                 value={tag}
                 onChange={(e) => setTag(e.target.value)}
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2.5 text-white outline-none focus:border-amber-400"
+                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-medium"
               >
                 <option value="Hot Product">Hot Product</option>
                 <option value="Beat The Clock">Beat The Clock</option>
@@ -1514,34 +1514,34 @@ const ProductFormModal: React.FC<{
               </select>
             </div>
             <div>
-              <label className="font-bold text-neutral-300 block mb-1">Warranty Term</label>
+              <label className="font-bold text-neutral-700 block mb-1">Warranty Term</label>
               <input
                 type="text"
                 value={warranty}
                 onChange={(e) => setWarranty(e.target.value)}
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2.5 text-white outline-none focus:border-amber-400"
+                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-medium"
                 placeholder="e.g. 5 Years SolarCare+ Replacement"
               />
             </div>
           </div>
 
           <div>
-            <label className="font-bold text-neutral-300 block mb-1">Primary Image URL</label>
+            <label className="font-bold text-neutral-700 block mb-1">Primary Image URL</label>
             <input
               type="text"
               value={image}
               onChange={(e) => setImage(e.target.value)}
-              className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2.5 text-neutral-300 outline-none focus:border-amber-400 font-mono text-[11px]"
+              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-800 outline-none focus:border-amber-400 focus:bg-white font-mono text-[11px]"
             />
           </div>
 
           <div>
-            <label className="font-bold text-neutral-300 block mb-1">Short Description</label>
+            <label className="font-bold text-neutral-700 block mb-1">Short Description</label>
             <textarea
               rows={2}
               value={shortDesc}
               onChange={(e) => setShortDesc(e.target.value)}
-              className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2 text-white outline-none focus:border-amber-400"
+              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
               placeholder="Brief summary displayed on listings..."
             />
           </div>
@@ -1552,9 +1552,9 @@ const ProductFormModal: React.FC<{
                 type="checkbox"
                 checked={isHot}
                 onChange={(e) => setIsHot(e.target.checked)}
-                className="w-4 h-4 accent-amber-400"
+                className="w-4 h-4 accent-amber-500"
               />
-              <span className="font-bold text-neutral-200">Highlight as Featured / Hot</span>
+              <span className="font-bold text-neutral-800">Highlight as Featured / Hot</span>
             </label>
 
             <label className="flex items-center gap-2 cursor-pointer">
@@ -1562,23 +1562,23 @@ const ProductFormModal: React.FC<{
                 type="checkbox"
                 checked={isOutOfStock}
                 onChange={(e) => setIsOutOfStock(e.target.checked)}
-                className="w-4 h-4 accent-rose-500"
+                className="w-4 h-4 accent-rose-600"
               />
-              <span className="font-bold text-rose-400">Mark as Out of Stock</span>
+              <span className="font-bold text-rose-600">Mark as Out of Stock</span>
             </label>
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-800">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-200">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 font-bold"
+              className="px-4 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-bold border border-neutral-200"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black flex items-center gap-1.5 shadow-md"
+              className="px-5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black flex items-center gap-1.5 shadow-sm"
             >
               <Save className="w-4 h-4" />
               <span>Save Product</span>
@@ -1621,64 +1621,64 @@ const CategoryFormModal: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 z-60 bg-black/80 flex items-center justify-center p-4">
-      <div className="bg-neutral-900 border border-neutral-700 text-white rounded-2xl max-w-md w-full p-5 space-y-4 animate-in zoom-in-95">
-        <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
-          <h3 className="text-base font-bold text-white">
+    <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+      <div className="bg-white border border-neutral-200 text-neutral-900 rounded-2xl max-w-md w-full p-5 space-y-4 shadow-2xl animate-in zoom-in-95">
+        <div className="flex items-center justify-between border-b border-neutral-200 pb-3">
+          <h3 className="text-base font-bold text-neutral-900">
             {category ? `Edit "${category.name}"` : 'Add New Category'}
           </h3>
-          <button onClick={onClose} className="p-1 rounded bg-neutral-800 text-neutral-400 hover:text-white">
+          <button onClick={onClose} className="p-1 rounded bg-neutral-100 hover:bg-neutral-200 text-neutral-500 hover:text-neutral-900 transition-colors">
             <X className="w-4 h-4" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           <div>
-            <label className="font-bold text-neutral-300 block mb-1">Category Name *</label>
+            <label className="font-bold text-neutral-700 block mb-1">Category Name *</label>
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2.5 text-white outline-none focus:border-amber-400 font-medium"
+              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-medium"
               placeholder="e.g. Lithium Phosphate"
             />
           </div>
 
           <div>
-            <label className="font-bold text-neutral-300 block mb-1">Estimated Item Count</label>
+            <label className="font-bold text-neutral-700 block mb-1">Estimated Item Count</label>
             <input
               type="number"
               value={itemCount}
               onChange={(e) => setItemCount(Number(e.target.value))}
-              className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2.5 text-white outline-none focus:border-amber-400"
+              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
             />
           </div>
 
           <div>
-            <label className="font-bold text-neutral-300 block mb-1">
+            <label className="font-bold text-neutral-700 block mb-1">
               Subcategories (comma separated)
             </label>
             <textarea
               rows={3}
               value={subCategoriesText}
               onChange={(e) => setSubCategoriesText(e.target.value)}
-              className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2 text-white outline-none focus:border-amber-400"
+              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
               placeholder="e.g. 48V 100Ah LiFePO4, 51.2V Powerwall, Portable Solar Pack"
             />
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-800">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-200">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 font-bold"
+              className="px-4 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-bold border border-neutral-200"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black flex items-center gap-1.5 shadow-md"
+              className="px-5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black flex items-center gap-1.5 shadow-sm"
             >
               <Save className="w-4 h-4" />
               <span>Save Category</span>
@@ -1730,83 +1730,83 @@ const BranchFormModal: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 z-60 bg-black/80 flex items-center justify-center p-4">
-      <div className="bg-neutral-900 border border-neutral-700 text-white rounded-2xl max-w-lg w-full p-5 space-y-4 max-h-[90vh] overflow-y-auto animate-in zoom-in-95">
-        <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
-          <h3 className="text-base font-bold text-white">
+    <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+      <div className="bg-white border border-neutral-200 text-neutral-900 rounded-2xl max-w-lg w-full p-5 space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl animate-in zoom-in-95">
+        <div className="flex items-center justify-between border-b border-neutral-200 pb-3">
+          <h3 className="text-base font-bold text-neutral-900">
             {branch ? `Edit "${branch.name}"` : 'Add New Branch Outlet'}
           </h3>
-          <button onClick={onClose} className="p-1 rounded bg-neutral-800 text-neutral-400 hover:text-white">
+          <button onClick={onClose} className="p-1 rounded bg-neutral-100 hover:bg-neutral-200 text-neutral-500 hover:text-neutral-900 transition-colors">
             <X className="w-4 h-4" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
           <div>
-            <label className="font-bold text-neutral-300 block mb-1">Branch Name *</label>
+            <label className="font-bold text-neutral-700 block mb-1">Branch Name *</label>
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2.5 text-white outline-none focus:border-amber-400 font-medium"
+              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-medium"
               placeholder="e.g. Solarstock Flagship - Bashundhara City"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="font-bold text-neutral-300 block mb-1">Badge / Tag</label>
+              <label className="font-bold text-neutral-700 block mb-1">Badge / Tag</label>
               <input
                 type="text"
                 value={badge}
                 onChange={(e) => setBadge(e.target.value)}
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2.5 text-white outline-none focus:border-amber-400"
+                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
                 placeholder="e.g. Flagship Store"
               />
             </div>
             <div>
-              <label className="font-bold text-neutral-300 block mb-1">Weekly Off-Day</label>
+              <label className="font-bold text-neutral-700 block mb-1">Weekly Off-Day</label>
               <input
                 type="text"
                 value={offDay}
                 onChange={(e) => setOffDay(e.target.value)}
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2.5 text-white outline-none focus:border-amber-400"
+                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
                 placeholder="e.g. Tuesday"
               />
             </div>
           </div>
 
           <div>
-            <label className="font-bold text-neutral-300 block mb-1">Full Address *</label>
+            <label className="font-bold text-neutral-700 block mb-1">Full Address *</label>
             <textarea
               rows={2}
               required
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2 text-white outline-none focus:border-amber-400"
+              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
               placeholder="Shop No, Level, Mall name, Area, City"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="font-bold text-neutral-300 block mb-1">Landmark</label>
+              <label className="font-bold text-neutral-700 block mb-1">Landmark</label>
               <input
                 type="text"
                 value={landmark}
                 onChange={(e) => setLandmark(e.target.value)}
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2.5 text-white outline-none focus:border-amber-400"
+                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
                 placeholder="e.g. Panthapath, Dhaka"
               />
             </div>
             <div>
-              <label className="font-bold text-neutral-300 block mb-1">Hotline Phone</label>
+              <label className="font-bold text-neutral-700 block mb-1">Hotline Phone</label>
               <input
                 type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2.5 text-white outline-none focus:border-amber-400"
+                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
                 placeholder="e.g. 09638001122"
               />
             </div>
@@ -1815,12 +1815,12 @@ const BranchFormModal: React.FC<{
           {/* Google Map Link Input */}
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="font-bold text-neutral-300 block">Google Map Link / Location URL *</label>
+              <label className="font-bold text-neutral-700 block">Google Map Link / Location URL *</label>
               {address && (
                 <button
                   type="button"
                   onClick={() => setGoogleMapUrl(`https://maps.google.com/?q=${encodeURIComponent(address + (landmark ? ' ' + landmark : ''))}`)}
-                  className="text-[10px] text-amber-400 hover:underline flex items-center gap-1 font-semibold"
+                  className="text-[10px] text-amber-700 hover:underline flex items-center gap-1 font-semibold"
                 >
                   <Globe className="w-3 h-3" />
                   Auto-generate from Address
@@ -1831,26 +1831,26 @@ const BranchFormModal: React.FC<{
               type="text"
               value={googleMapUrl}
               onChange={(e) => setGoogleMapUrl(e.target.value)}
-              className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2.5 text-white outline-none focus:border-amber-400 font-mono text-[11px]"
+              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-mono text-[11px]"
               placeholder="https://maps.google.com/?q=..."
             />
-            <p className="text-[10px] text-neutral-400 mt-1">
+            <p className="text-[10px] text-neutral-500 mt-1">
               Customers can tap this link on the Store Locations page to view your shop on Google Maps directly.
             </p>
           </div>
 
           {/* Shop Photo Upload / URL */}
           <div>
-            <label className="font-bold text-neutral-300 block mb-1">Store / Shop Photo</label>
+            <label className="font-bold text-neutral-700 block mb-1">Store / Shop Photo</label>
             <div className="flex items-center gap-2">
               <input
                 type="text"
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
-                className="w-full bg-neutral-950 border border-neutral-700 rounded-lg p-2 text-white outline-none focus:border-amber-400 text-xs"
+                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white text-xs"
                 placeholder="Image URL or upload below"
               />
-              <label className="shrink-0 bg-neutral-800 hover:bg-neutral-700 text-amber-400 px-3 py-2 rounded-lg font-bold cursor-pointer transition-colors border border-neutral-700">
+              <label className="shrink-0 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 px-3 py-2 rounded-lg font-bold cursor-pointer transition-colors border border-neutral-300">
                 Upload
                 <input
                   type="file"
@@ -1870,26 +1870,26 @@ const BranchFormModal: React.FC<{
               </label>
             </div>
             {image && (
-              <div className="mt-2 w-full h-24 rounded-lg overflow-hidden border border-neutral-800 relative bg-neutral-950">
+              <div className="mt-2 w-full h-24 rounded-lg overflow-hidden border border-neutral-200 relative bg-neutral-100">
                 <img src={image} alt="Shop preview" className="w-full h-full object-cover" />
-                <span className="absolute bottom-1 right-2 text-[9px] bg-black/75 px-1.5 py-0.5 rounded text-neutral-300">
+                <span className="absolute bottom-1 right-2 text-[9px] bg-black/60 px-1.5 py-0.5 rounded text-white font-medium">
                   Shop Photo Preview
                 </span>
               </div>
             )}
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-800">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-200">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 font-bold"
+              className="px-4 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-bold border border-neutral-200"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black flex items-center gap-1.5 shadow-md"
+              className="px-5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black flex items-center gap-1.5 shadow-sm"
             >
               <Save className="w-4 h-4" />
               <span>Save Branch</span>

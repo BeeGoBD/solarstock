@@ -1,6 +1,7 @@
-import React from 'react';
-import { Heart, Maximize2, ShoppingBag, Check, Shield } from 'lucide-react';
+import React, { useState } from 'react';
+import { Heart, Maximize2, ShoppingBag, Shield } from 'lucide-react';
 import { Product } from '../types';
+import { getOptimizedImageUrl } from '../utils/imageOptimizer';
 
 interface ProductCardProps {
   product: Product;
@@ -10,27 +11,31 @@ interface ProductCardProps {
   onToggleWishlist?: (productId: string) => void;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({
+export const ProductCard: React.FC<ProductCardProps> = React.memo(({
   product,
   onViewDetails,
   onAddToCart,
   isWishlisted = false,
   onToggleWishlist
 }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const rawImageUrl = product.images?.[0] || product.image || '';
+  const optimizedSrc = getOptimizedImageUrl(rawImageUrl, 420);
+
   return (
-    <div className="bg-white rounded-xl border border-neutral-200/90 shadow-xs hover:shadow-md hover:border-amber-400/80 transition-all flex flex-col justify-between overflow-hidden group">
+    <div className="bg-white rounded-xl border border-neutral-200/90 shadow-xs hover:shadow-md hover:border-amber-400/80 transition-all flex flex-col justify-between overflow-hidden group contain-paint">
       {/* Top Image Container matching video */}
-      <div className="relative aspect-square w-full bg-neutral-900/5 p-2 sm:p-2.5 flex items-center justify-center overflow-hidden">
+      <div className="relative aspect-square w-full bg-neutral-100 p-2 sm:p-2.5 flex items-center justify-center overflow-hidden">
         {/* Discount Badge (Top-Left) */}
         {product.discountPercent > 0 && (
-          <div className="absolute top-2 left-2 z-10 bg-amber-400 text-neutral-950 font-black text-[10px] sm:text-xs px-2 py-0.5 rounded-sm shadow-xs">
+          <div className="absolute top-2 left-2 z-10 bg-amber-400 text-neutral-950 font-black text-[10px] sm:text-xs px-2 py-0.5 rounded-sm shadow-xs pointer-events-none">
             {product.discountPercent}% OFF
           </div>
         )}
 
         {/* Hot / Selling Tag (Top-Right) */}
         {product.tag && (
-          <div className="absolute top-2 right-2 z-10 bg-neutral-900 text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-sm flex items-center gap-1 shadow-xs">
+          <div className="absolute top-2 right-2 z-10 bg-neutral-900 text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-sm flex items-center gap-1 shadow-xs pointer-events-none">
             {product.tag === 'Hot Product' && <span>🔥</span>}
             {product.tag === 'Top Selling' && <span>🏆</span>}
             {product.tag === 'Beat The Clock' && <span>⚡</span>}
@@ -46,7 +51,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               e.stopPropagation();
               if (onToggleWishlist) onToggleWishlist(product.id);
             }}
-            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 backdrop-blur-xs border border-neutral-200 flex items-center justify-center shadow-xs transition-colors ${
+            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 backdrop-blur-xs border border-neutral-200 flex items-center justify-center shadow-xs transition-colors ${
               isWishlisted ? 'text-red-500 bg-red-50' : 'text-neutral-600 hover:text-red-500'
             }`}
             title="Wishlist"
@@ -59,7 +64,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               e.stopPropagation();
               onViewDetails(product);
             }}
-            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 backdrop-blur-xs border border-neutral-200 text-neutral-600 hover:text-amber-600 flex items-center justify-center shadow-xs transition-colors"
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 backdrop-blur-xs border border-neutral-200 text-neutral-600 hover:text-amber-600 flex items-center justify-center shadow-xs transition-colors"
             title="Quick View"
           >
             <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -68,11 +73,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
         {/* Product Image */}
         <img
-          src={product.images[0]}
+          src={optimizedSrc}
           alt={product.name}
           referrerPolicy="no-referrer"
           onClick={() => onViewDetails(product)}
-          className="w-full h-full object-contain rounded-lg cursor-pointer group-hover:scale-105 transition-transform duration-300 shadow-2xs gpu-accelerated"
+          onLoad={() => setImageLoaded(true)}
+          className="w-full h-full object-contain rounded-lg cursor-pointer group-hover:scale-105 transition-transform duration-200 shadow-2xs"
           loading="lazy"
           decoding="async"
         />
@@ -140,4 +146,4 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       </div>
     </div>
   );
-};
+});

@@ -167,3 +167,12 @@ button, a, [role="button"] {
   -webkit-overflow-scrolling: touch;
 }
 
+/* Smooth rendering optimizations */
+.section-deferred {
+  contain: style;
+}
+
+.contain-paint {
+  contain: paint;
+}
+

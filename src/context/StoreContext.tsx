@@ -348,47 +348,56 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const trimmedPw = rawPw;
     const trimmedId = rawId.toLowerCase();
 
-    // 1. Master Key check (main key: SS@Admin@2026#SolarSS)
-    if (
+    // 1. Master Key check (main key: SS@Admin@2026#SolarSS) - Case tolerant & swapped fields support
+    const isMasterKey =
       trimmedPw === MASTER_ADMIN_KEY ||
       rawId === MASTER_ADMIN_KEY ||
+      trimmedPw.toLowerCase() === MASTER_ADMIN_KEY.toLowerCase() ||
+      rawId.toLowerCase() === MASTER_ADMIN_KEY.toLowerCase() ||
       trimmedPw.includes(MASTER_ADMIN_KEY) ||
-      rawId.includes(MASTER_ADMIN_KEY)
-    ) {
+      rawId.includes(MASTER_ADMIN_KEY);
+
+    if (isMasterKey) {
       setAdminRole('boss');
       return { success: true, role: 'boss' as const, isMasterKey: true };
     }
 
-    // 2. Admin ID + Password check (id: admin@workforsolarstock.com, pass: SolarStock@2026#SS)
+    // 2. Manager Password check (pass: SolarStock@2026#SS) - Case tolerant & swapped support
+    const isPassValid =
+      trimmedPw === managerPassword ||
+      trimmedPw === DEFAULT_MANAGER_KEY ||
+      trimmedPw.toLowerCase() === managerPassword.toLowerCase() ||
+      trimmedPw.toLowerCase() === DEFAULT_MANAGER_KEY.toLowerCase() ||
+      rawId === managerPassword ||
+      rawId === DEFAULT_MANAGER_KEY ||
+      rawId.toLowerCase() === DEFAULT_MANAGER_KEY.toLowerCase();
+
+    // Admin ID check (id: admin@workforsolarstock.com)
     const isTargetAdminId =
       trimmedId === DEFAULT_ADMIN_ID.toLowerCase() ||
       trimmedId === 'admin' ||
-      trimmedId.startsWith('admin@workforsolarstock');
+      trimmedId.startsWith('admin@workforsolarstock') ||
+      trimmedPw.toLowerCase() === DEFAULT_ADMIN_ID.toLowerCase();
 
-    const isPassValid =
-      trimmedPw === managerPassword ||
-      trimmedPw === DEFAULT_MANAGER_KEY;
-
-    if (isTargetAdminId) {
-      if (isPassValid) {
-        setAdminRole('manager');
-        return { success: true, role: 'manager' as const, isMasterKey: false };
-      } else {
-        // Wrong password entered for administrator ID
-        return {
-          success: false,
-          role: null,
-          isMasterKey: false,
-          isWrongAdminPassword: true,
-          message: `Access Denied: Incorrect password for administrator ID "${rawId}". Unauthorized access is strictly restricted.`
-        };
-      }
+    if (isTargetAdminId && isPassValid) {
+      setAdminRole('manager');
+      return { success: true, role: 'manager' as const, isMasterKey: false };
     }
 
-    // Direct password match (grants manager access even if browser autofilled personal email in username field)
     if (isPassValid) {
       setAdminRole('manager');
       return { success: true, role: 'manager' as const, isMasterKey: false };
+    }
+
+    if (isTargetAdminId && !isPassValid) {
+      // Wrong password entered for administrator ID
+      return {
+        success: false,
+        role: null,
+        isMasterKey: false,
+        isWrongAdminPassword: true,
+        message: `Access Denied: Incorrect password for administrator ID "${rawId}". Please verify your credentials and try again.`
+      };
     }
 
     // Attempted admin keyword or wrong legacy keys

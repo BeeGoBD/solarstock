@@ -8,7 +8,7 @@ interface AuthModalProps {
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
-  const { authenticateAdmin, openAdmin } = useStore();
+  const { authenticateAdmin, openAdmin, adminRole, logoutAdmin } = useStore();
   const [authMode, setAuthMode] = useState<'login' | 'phone'>('login');
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState('');
@@ -37,20 +37,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     // Check if secret master or manager key entered
     const authResult = authenticateAdmin(enteredPassword, enteredUsername);
     if (authResult.success) {
-      setAdminRoleNotice(
-        authResult.role === 'boss'
-          ? '👑 Main Master Key Verified! Boss Level Administrative Access Granted.'
-          : `⚡ Manager Verified (${DEFAULT_ADMIN_ID})! Solarstock Operations Portal Access Granted.`
-      );
       setIsLoggedIn(true);
       setFailedAttempts(0);
-      // Immediately open admin panel
+      setPassword('');
+      // Directly open admin dashboard and close auth modal
       openAdmin();
-      setTimeout(() => {
-        onClose();
-        setAdminRoleNotice(null);
-        setPassword('');
-      }, 700);
+      onClose();
       return;
     }
 
@@ -68,17 +60,21 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
     // If user entered admin id or keywords but failed password
     const lowerUser = enteredUsername.toLowerCase();
+    const lowerPass = enteredPassword.toLowerCase();
     const isTargetAdmin =
       lowerUser === DEFAULT_ADMIN_ID.toLowerCase() ||
       lowerUser === 'admin' ||
       lowerUser.includes('solarstock.com') ||
-      lowerUser.includes('workfor');
+      lowerUser.includes('workfor') ||
+      lowerPass.includes('solarstock') ||
+      lowerPass.includes('2026') ||
+      lowerPass.includes('admin');
 
     if (isTargetAdmin) {
       const newAttempts = failedAttempts + 1;
       setFailedAttempts(newAttempts);
       setErrorMessage(
-        `⚠️ Access Denied: Incorrect password for administrator ID "${enteredUsername}". Please verify your credentials and try again (Attempt ${newAttempts}).`
+        `⚠️ Access Denied: Incorrect credentials for administrator "${enteredUsername}". Please verify your credentials and try again (Attempt ${newAttempts}).`
       );
       triggerShake();
       return;
@@ -141,6 +137,36 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           </div>
         ) : (
           <div className="space-y-5">
+            {/* Active Admin Session Card */}
+            {adminRole && (
+              <div className="p-3.5 bg-amber-50 border border-amber-300 rounded-xl text-center space-y-2">
+                <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-amber-900">
+                  <ShieldCheck className="w-4 h-4 text-amber-600" />
+                  <span>Active Session: {adminRole === 'boss' ? '👑 Master Admin (Boss)' : '⚡ Operations Manager'}</span>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      openAdmin();
+                      onClose();
+                    }}
+                    className="flex-1 bg-amber-400 hover:bg-amber-300 text-neutral-950 font-bold py-2 rounded-lg text-xs flex items-center justify-center gap-1.5 shadow-2xs"
+                  >
+                    <span>Open Admin Panel Now</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => logoutAdmin()}
+                    className="px-3 bg-white hover:bg-rose-50 text-rose-600 border border-neutral-300 hover:border-rose-300 font-bold py-2 rounded-lg text-xs transition-colors"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Header Graphic */}
             <div className="flex flex-col items-center text-center">
               <div className="w-14 h-14 bg-amber-400 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-400/30 mb-2">

@@ -12,38 +12,27 @@ interface FlashSaleSectionProps {
   onToggleWishlist: (id: string) => void;
 }
 
-export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
-  onViewDetails,
-  onAddToCart,
-  wishlist,
-  onToggleWishlist
-}) => {
-  const { flashSaleConfig, products } = useStore();
-
-  // Color cycling state every 2 seconds (Yellow and Black themes)
-  const [colorThemeIndex, setColorThemeIndex] = useState(0);
-
-  useEffect(() => {
-    const cycleInterval = setInterval(() => {
-      setColorThemeIndex((prev) => (prev + 1) % 4);
-    }, 2000);
-    return () => clearInterval(cycleInterval);
-  }, []);
-
-  // Initialize countdown from store configuration
+// Memoized Countdown Timer to isolate 1-second ticks from re-rendering the product grid
+const CountdownTimer: React.FC<{
+  initialHours: number;
+  initialMinutes: number;
+  initialSeconds: number;
+  boxClass: string;
+  digitClass: string;
+}> = React.memo(({ initialHours, initialMinutes, initialSeconds, boxClass, digitClass }) => {
   const [timeLeft, setTimeLeft] = useState({
-    hours: flashSaleConfig.countdownHours || 14,
-    minutes: flashSaleConfig.countdownMinutes || 32,
-    seconds: flashSaleConfig.countdownSeconds || 48
+    hours: initialHours,
+    minutes: initialMinutes,
+    seconds: initialSeconds
   });
 
   useEffect(() => {
     setTimeLeft({
-      hours: flashSaleConfig.countdownHours || 14,
-      minutes: flashSaleConfig.countdownMinutes || 32,
-      seconds: flashSaleConfig.countdownSeconds || 48
+      hours: initialHours,
+      minutes: initialMinutes,
+      seconds: initialSeconds
     });
-  }, [flashSaleConfig.countdownHours, flashSaleConfig.countdownMinutes, flashSaleConfig.countdownSeconds]);
+  }, [initialHours, initialMinutes, initialSeconds]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -61,15 +50,55 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
     return () => clearInterval(timer);
   }, []);
 
-  // Filter products that are in activeProductIds
-  const flashSaleProducts = products.filter((p) =>
-    flashSaleConfig.activeProductIds.includes(p.id)
+  return (
+    <div
+      className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold transition-all duration-700 ${boxClass}`}
+    >
+      <span className="text-[10px] uppercase mr-1">Ends in:</span>
+      <span className={`px-1.5 py-0.5 rounded transition-colors duration-700 ${digitClass}`}>
+        {String(timeLeft.hours).padStart(2, '0')}h
+      </span>
+      <span>:</span>
+      <span className={`px-1.5 py-0.5 rounded transition-colors duration-700 ${digitClass}`}>
+        {String(timeLeft.minutes).padStart(2, '0')}m
+      </span>
+      <span>:</span>
+      <span className={`px-1.5 py-0.5 rounded animate-pulse transition-colors duration-700 ${digitClass}`}>
+        {String(timeLeft.seconds).padStart(2, '0')}s
+      </span>
+    </div>
   );
+});
+
+export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
+  onViewDetails,
+  onAddToCart,
+  wishlist,
+  onToggleWishlist
+}) => {
+  const { flashSaleConfig, products } = useStore();
+
+  // Color cycling state every 3 seconds
+  const [colorThemeIndex, setColorThemeIndex] = useState(0);
+
+  useEffect(() => {
+    const cycleInterval = setInterval(() => {
+      setColorThemeIndex((prev) => (prev + 1) % 4);
+    }, 3000);
+    return () => clearInterval(cycleInterval);
+  }, []);
+
+  // Filter products that are in activeProductIds
+  const flashSaleProducts = React.useMemo(() => {
+    return products.filter((p) => flashSaleConfig.activeProductIds.includes(p.id));
+  }, [products, flashSaleConfig.activeProductIds]);
 
   // Fallback if none selected
-  const displayProducts = flashSaleProducts.length > 0
-    ? flashSaleProducts
-    : products.filter((p) => p.isHot || p.discountPercent >= 20).slice(0, 5);
+  const displayProducts = React.useMemo(() => {
+    return flashSaleProducts.length > 0
+      ? flashSaleProducts
+      : products.filter((p) => p.isHot || p.discountPercent >= 20).slice(0, 5);
+  }, [flashSaleProducts, products]);
 
   // Dynamic style sets for yellow & black 2-second automatic color cycling
   const colorThemes = [
@@ -155,29 +184,14 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
           </div>
         </div>
 
-        {/* Countdown Timer Display */}
-        <div
-          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold transition-all duration-700 ${currentTheme.countdownBox}`}
-        >
-          <span className="text-[10px] uppercase mr-1">Ends in:</span>
-          <span
-            className={`px-1.5 py-0.5 rounded transition-colors duration-700 ${currentTheme.countdownDigits}`}
-          >
-            {String(timeLeft.hours).padStart(2, '0')}h
-          </span>
-          <span>:</span>
-          <span
-            className={`px-1.5 py-0.5 rounded transition-colors duration-700 ${currentTheme.countdownDigits}`}
-          >
-            {String(timeLeft.minutes).padStart(2, '0')}m
-          </span>
-          <span>:</span>
-          <span
-            className={`px-1.5 py-0.5 rounded animate-pulse transition-colors duration-700 ${currentTheme.countdownDigits}`}
-          >
-            {String(timeLeft.seconds).padStart(2, '0')}s
-          </span>
-        </div>
+        {/* Countdown Timer Display (Isolated Micro-Component) */}
+        <CountdownTimer
+          initialHours={flashSaleConfig.countdownHours || 14}
+          initialMinutes={flashSaleConfig.countdownMinutes || 32}
+          initialSeconds={flashSaleConfig.countdownSeconds || 48}
+          boxClass={currentTheme.countdownBox}
+          digitClass={currentTheme.countdownDigits}
+        />
       </div>
 
       {/* Products Grid */}

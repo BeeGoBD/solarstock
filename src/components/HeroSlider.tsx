@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { SolarInverterFlow } from './SolarInverterFlow';
 import { useStore } from '../context/StoreContext';
+import { getOptimizedImageUrl } from '../utils/imageOptimizer';
 
 interface HeroSliderProps {
   onBannerClick?: (category?: string) => void;
@@ -100,9 +101,11 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
             >
               {/* Full-Bleed Photographic Background - Bright & Vibrant */}
               <img
-                src={slide.image}
+                src={getOptimizedImageUrl(slide.image, 1200)}
                 alt={slide.alt}
                 referrerPolicy="no-referrer"
+                loading={idx === 0 ? 'eager' : 'lazy'}
+                decoding="async"
                 className="w-full h-full object-cover brightness-[1.08] contrast-[1.03] transform scale-100 group-hover:scale-105 transition-transform duration-1000 ease-out"
               />
 
