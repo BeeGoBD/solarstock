@@ -1,6 +1,6 @@
 {
-  "name": "Solarstock - Solar, IPS & Inverter Megastore",
-  "description": "Premium e-commerce platform for Solar Panels, Hybrid Inverters, IPS systems, Lithium Batteries, and Solar Accessories.",
+  "name": "SolarStock - Regional Solar Solutions | Infrastructure & Energy Platform",
+  "description": "SolarStock connects sourcing, storage, and execution into a single coordinated system — helping teams move faster from planning to live deployment across regions.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

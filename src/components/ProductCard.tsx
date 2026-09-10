@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Heart, Maximize2, ShoppingBag, Shield } from 'lucide-react';
+import { Heart, Maximize2, ShoppingBag, Shield, Building2 } from 'lucide-react';
 import { Product } from '../types';
 import { getOptimizedImageUrl } from '../utils/imageOptimizer';
+import { useStore } from '../context/StoreContext';
 
 interface ProductCardProps {
   product: Product;
@@ -9,6 +10,7 @@ interface ProductCardProps {
   onAddToCart: (product: Product) => void;
   isWishlisted?: boolean;
   onToggleWishlist?: (productId: string) => void;
+  onOpenCustomerAccess?: () => void;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = React.memo(({
@@ -16,8 +18,10 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
   onViewDetails,
   onAddToCart,
   isWishlisted = false,
-  onToggleWishlist
+  onToggleWishlist,
+  onOpenCustomerAccess
 }) => {
+  const { currentCustomer, openCustomerAccess } = useStore();
   const [imageLoaded, setImageLoaded] = useState(false);
   const rawImageUrl = product.images?.[0] || product.image || '';
   const optimizedSrc = getOptimizedImageUrl(rawImageUrl, 420);
@@ -96,10 +100,17 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
       {/* Product Content Details */}
       <div className="p-3 sm:p-4 flex-1 flex flex-col justify-between">
         <div>
-          {/* Brand Name */}
-          <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block mb-1">
-            {product.brand}
-          </span>
+          {/* Brand Name & Stock Count */}
+          <div className="flex items-center justify-between gap-1 mb-1">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+              {product.brand}
+            </span>
+            {product.stockCount !== undefined && (
+              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-1.5 py-0.2 rounded-full">
+                {product.stockCount} in stock
+              </span>
+            )}
+          </div>
 
           {/* Product Title */}
           <h3
@@ -112,17 +123,41 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
         </div>
 
         <div>
-          {/* Price Block matching video */}
-          <div className="flex items-baseline gap-2 mb-3">
-            <span className="text-sm sm:text-base font-extrabold text-neutral-950">
-              ৳ {product.price.toLocaleString()}
-            </span>
-            {product.originalPrice > product.price && (
-              <span className="text-xs text-neutral-400 line-through">
-                ৳ {product.originalPrice.toLocaleString()}
+          {/* Price Block matching video & pricing constraint */}
+          {product.price > 0 ? (
+            <div className="flex items-baseline gap-2 mb-3">
+              <span className="text-sm sm:text-base font-extrabold text-neutral-950">
+                ৳ {product.price.toLocaleString()}
               </span>
-            )}
-          </div>
+              {product.originalPrice > product.price && (
+                <span className="text-xs text-neutral-400 line-through">
+                  ৳ {product.originalPrice.toLocaleString()}
+                </span>
+              )}
+            </div>
+          ) : currentCustomer ? (
+            <div className="flex items-center gap-1 mb-3">
+              <span className="text-[10px] sm:text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                ✓ B2B Wholesale Rate
+              </span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1.5 mb-3">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (onOpenCustomerAccess) onOpenCustomerAccess();
+                  else openCustomerAccess();
+                }}
+                className="text-[10px] sm:text-[11px] font-bold text-amber-900 hover:text-amber-950 bg-amber-50 hover:bg-amber-100 px-2 py-1 rounded border border-amber-300 text-left transition-colors flex items-center gap-1"
+                title="Commercial & B2B Pricing - Sign in or Request Customer Approval"
+              >
+                <Building2 className="w-3 h-3 text-amber-600 shrink-0" />
+                <span>Sign in for pricing →</span>
+              </button>
+            </div>
+          )}
 
           {/* Two Buttons: VIEW and ADD TO CART matching video */}
           <div className="grid grid-cols-2 gap-1.5">
@@ -135,11 +170,11 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
             </button>
             <button
               type="button"
-              onClick={() => onAddToCart(product)}
+              onClick={() => product.price > 0 ? onAddToCart(product) : onViewDetails(product)}
               className="w-full py-2 px-1.5 rounded-lg bg-neutral-900 hover:bg-amber-500 text-white hover:text-neutral-950 text-[11px] sm:text-xs font-bold transition-colors flex items-center justify-center gap-1 shadow-xs"
             >
               <ShoppingBag className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-              <span>ADD TO CART</span>
+              <span>{product.price > 0 ? 'ADD TO CART' : 'ENQUIRE'}</span>
             </button>
           </div>
         </div>

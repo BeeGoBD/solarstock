@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { X, Heart, Share2, Shield, Zap, Truck, Check, Eye, ChevronRight, ChevronLeft, Award, Sparkles, Phone, CreditCard, RotateCcw } from 'lucide-react';
+import { X, Heart, Share2, Shield, Zap, Truck, Check, Eye, ChevronRight, ChevronLeft, Award, Sparkles, Phone, CreditCard, RotateCcw, Building2, ShieldCheck } from 'lucide-react';
 import { Product } from '../types';
 import { ProductCard } from './ProductCard';
+import { useStore } from '../context/StoreContext';
 
 interface ProductDetailModalProps {
   product: Product | null;
@@ -11,6 +12,7 @@ interface ProductDetailModalProps {
   allProducts: Product[];
   wishlist: string[];
   onToggleWishlist: (id: string) => void;
+  onOpenCustomerAccess?: () => void;
 }
 
 export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
@@ -20,8 +22,10 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   onBuyNow,
   allProducts,
   wishlist,
-  onToggleWishlist
+  onToggleWishlist,
+  onOpenCustomerAccess
 }) => {
+  const { currentCustomer, openCustomerAccess } = useStore();
   if (!product) return null;
 
   const [selectedImageIdx, setSelectedImageIdx] = useState(0);
@@ -162,22 +166,66 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 {product.name}
               </h1>
 
+              {product.stockCount !== undefined && (
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-full">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    {product.stockCount} units available in regional stock
+                  </span>
+                </div>
+              )}
+
               {/* Price Row */}
               <div className="bg-amber-50/70 border border-amber-200/80 rounded-xl p-3 sm:p-4">
-                <div className="flex items-baseline gap-3">
-                  <span className="text-xs uppercase font-bold text-neutral-500">Offer Price:</span>
-                  <span className="text-2xl sm:text-3xl font-black text-neutral-950">
-                    ৳ {calculatedPrice.toLocaleString()}
-                  </span>
-                  {product.originalPrice > product.price && (
-                    <span className="text-sm sm:text-base text-neutral-400 line-through">
-                      ৳ {product.originalPrice.toLocaleString()}
-                    </span>
-                  )}
-                </div>
-                <p className="text-[11px] text-neutral-600 mt-1 font-medium">
-                  Cash / Card / bKash / EMI Payment Available
-                </p>
+                {product.price > 0 ? (
+                  <>
+                    <div className="flex items-baseline gap-3">
+                      <span className="text-xs uppercase font-bold text-neutral-500">Offer Price:</span>
+                      <span className="text-2xl sm:text-3xl font-black text-neutral-950">
+                        ৳ {calculatedPrice.toLocaleString()}
+                      </span>
+                      {product.originalPrice > product.price && (
+                        <span className="text-sm sm:text-base text-neutral-400 line-through">
+                          ৳ {product.originalPrice.toLocaleString()}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[11px] text-neutral-600 mt-1 font-medium">
+                      Cash / Card / bKash / EMI Payment Available
+                    </p>
+                  </>
+                ) : currentCustomer ? (
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm sm:text-base font-black text-emerald-950 bg-emerald-100/90 px-3 py-1.5 rounded-lg border border-emerald-300 flex items-center gap-1.5 shadow-2xs">
+                        <ShieldCheck className="w-4 h-4 text-emerald-700" />
+                        <span>Factory Wholesale Project Rate: Contact Account Desk</span>
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-emerald-800 font-medium">
+                      Unlocked for <strong>{currentCustomer.companyName}</strong>. Official container & C&I wholesale quotation active.
+                    </p>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (onOpenCustomerAccess) onOpenCustomerAccess();
+                          else openCustomerAccess();
+                        }}
+                        className="text-xs sm:text-sm font-extrabold text-amber-950 bg-amber-400 hover:bg-amber-300 px-3.5 py-1.5 rounded-lg border border-amber-500 shadow-2xs flex items-center gap-1.5 transition-colors"
+                      >
+                        <Building2 className="w-4 h-4" />
+                        <span>Sign in or Request Customer Approval</span>
+                      </button>
+                    </div>
+                    <p className="text-[11px] text-neutral-600 mt-1.5 font-medium">
+                      Commercial & Industrial Tier-1 Project Pricing • Approved customers sign in immediately; new customers submit compliance docs for review.
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Live Viewers banner matching video (01:26) */}

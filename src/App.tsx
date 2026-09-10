@@ -27,6 +27,7 @@ import { LivePurchaseToast } from './components/LivePurchaseToast';
 import { SolarCalculatorModal } from './components/SolarCalculatorModal';
 import { ProductCard } from './components/ProductCard';
 import { AdminDashboardModal } from './components/AdminDashboardModal';
+import { CustomerAccessModal } from './components/CustomerAccessModal';
 
 import { Product, CartItem } from './types';
 import { ArrowLeft, Filter, Sparkles, Sun, ShieldCheck } from 'lucide-react';
@@ -40,7 +41,10 @@ function StoreMainApp() {
     openAdmin,
     closeAdmin,
     adminRole,
-    brandConfig
+    brandConfig,
+    isCustomerAccessOpen,
+    openCustomerAccess,
+    closeCustomerAccess
   } = useStore();
 
   // Navigation View State
@@ -203,6 +207,7 @@ function StoreMainApp() {
         cartCount={cartItems.reduce((acc, item) => acc + item.quantity, 0)}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenAuth={() => setIsAuthOpen(true)}
+        onOpenCustomerAccess={openCustomerAccess}
         activeView={activeView}
         setActiveView={(v) => {
           setActiveView(v);
@@ -307,6 +312,7 @@ function StoreMainApp() {
                         onAddToCart={(p) => handleAddToCart(p)}
                         isWishlisted={wishlist.includes(product.id)}
                         onToggleWishlist={toggleWishlist}
+                        onOpenCustomerAccess={openCustomerAccess}
                       />
                     ))}
                   </div>
@@ -436,6 +442,7 @@ function StoreMainApp() {
         allProducts={products}
         wishlist={wishlist}
         onToggleWishlist={toggleWishlist}
+        onOpenCustomerAccess={openCustomerAccess}
       />
 
       {/* Shopping Cart Drawer */}
@@ -456,6 +463,17 @@ function StoreMainApp() {
       <AuthModal
         isOpen={isAuthOpen}
         onClose={() => setIsAuthOpen(false)}
+        onOpenCustomerAccess={() => {
+          setIsAuthOpen(false);
+          openCustomerAccess();
+        }}
+      />
+
+      {/* Customer Access Portal Modal (B2B Login & Registration) */}
+      <CustomerAccessModal
+        isOpen={isCustomerAccessOpen}
+        onClose={closeCustomerAccess}
+        onOpenAdmin={() => openAdmin()}
       />
 
       {/* Solar & IPS Load Calculator Modal */}

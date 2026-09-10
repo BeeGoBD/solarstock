@@ -16,7 +16,9 @@ import {
   BrandItem,
   FaqItem,
   BlogPost,
-  SubCategoryItem
+  SubCategoryItem,
+  CustomerAccount,
+  CustomerSignupRequest
 } from '../types';
 import {
   PRODUCTS as INITIAL_PRODUCTS,
@@ -40,6 +42,47 @@ import {
 export const MASTER_ADMIN_KEY = 'SS@Admin@2026#SolarSS';
 export const DEFAULT_MANAGER_KEY = 'SolarStock@2026#SS';
 export const DEFAULT_ADMIN_ID = 'admin@workforsolarstock.com';
+
+export const DEFAULT_CUSTOMER_ACCOUNTS: CustomerAccount[] = [
+  {
+    id: 'cust-texstyle-01',
+    companyName: 'TexStyle Green Apparel Ltd.',
+    contactName: 'Engr. Mahbubul Alam',
+    email: 'client@texstyle-bd.com',
+    phone: '+880 1711-234567',
+    country: 'Bangladesh',
+    businessType: 'Textile Manufacturing & Industrial Plant',
+    isApproved: true,
+    role: 'approved_customer'
+  },
+  {
+    id: 'cust-apex-02',
+    companyName: 'Apex Green Energy EPC',
+    contactName: 'Shamsul Haque',
+    email: 'projects@apex-solar.com.bd',
+    phone: '+880 1819-987654',
+    country: 'Bangladesh',
+    businessType: 'Tier-1 EPC Contractor',
+    isApproved: true,
+    role: 'approved_customer'
+  }
+];
+
+export const DEFAULT_CUSTOMER_SIGNUP_REQUESTS: CustomerSignupRequest[] = [
+  {
+    id: 'req-b2b-101',
+    companyName: 'Dhaka Solar Solutions & Engineering Ltd.',
+    contactName: 'Kazi Farhan',
+    email: 'farhan@dhakasolar.com',
+    phone: '+880 1912-345678',
+    country: 'Bangladesh',
+    businessType: 'C&I Solar Project Installer',
+    taxOrRegNumber: 'BIN: 002938475-0101 / Trade Lic: TRAD/DSCC/019283/2024',
+    complianceDocNotes: 'Certified ISO 9001:2015 & SREDA accredited class-A installer license attached. Requesting B2B container pricing for Tongwei 620W & JA Solar 625W panels.',
+    submittedDate: 'May 12, 2026',
+    status: 'pending'
+  }
+];
 
 interface StoreState {
   products: Product[];
@@ -138,11 +181,37 @@ interface StoreState {
   // Policies Actions
   updatePolicy: (id: string, content: string) => void;
   
+  // Customer Access (B2B Accounts & Compliance Approval)
+  isCustomerAccessOpen: boolean;
+  openCustomerAccess: () => void;
+  closeCustomerAccess: () => void;
+  customerAccounts: CustomerAccount[];
+  customerSignupRequests: CustomerSignupRequest[];
+  currentCustomer: CustomerAccount | null;
+  loginCustomer: (
+    email: string,
+    password?: string
+  ) => {
+    success: boolean;
+    message: string;
+    customer?: CustomerAccount;
+  };
+  submitCustomerSignup: (
+    request: Omit<CustomerSignupRequest, 'id' | 'submittedDate' | 'status'>
+  ) => {
+    success: boolean;
+    message: string;
+  };
+  approveCustomerRequest: (requestId: string) => void;
+  rejectCustomerRequest: (requestId: string) => void;
+  deleteCustomerAccount: (customerId: string) => void;
+  logoutCustomer: () => void;
+
   // Reset
   resetToDefaults: () => void;
 }
 
-const STORAGE_KEY = 'solarstock_full_store_v1';
+const STORAGE_KEY = 'solarstock_platform_store_v2';
 const MANAGER_PW_KEY = 'solarstock_manager_password';
 
 const StoreContext = createContext<StoreState | undefined>(undefined);
@@ -262,6 +331,10 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Admin and Password States
   const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
+  const [isCustomerAccessOpen, setIsCustomerAccessOpen] = useState<boolean>(false);
+  const openCustomerAccess = () => setIsCustomerAccessOpen(true);
+  const closeCustomerAccess = () => setIsCustomerAccessOpen(false);
+
   const [adminRole, setAdminRoleState] = useState<'manager' | 'boss' | null>(() => {
     try {
       const saved = localStorage.getItem('solarstock_admin_role');
@@ -293,6 +366,157 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return savedPw;
   });
 
+  // Customer Access States (B2B approved accounts & compliance requests)
+  const [customerAccounts, setCustomerAccounts] = useState<CustomerAccount[]>(() => {
+    return (saved?.customerAccounts && saved.customerAccounts.length > 0)
+      ? saved.customerAccounts
+      : DEFAULT_CUSTOMER_ACCOUNTS;
+  });
+
+  const [customerSignupRequests, setCustomerSignupRequests] = useState<CustomerSignupRequest[]>(() => {
+    return (saved?.customerSignupRequests && saved.customerSignupRequests.length > 0)
+      ? saved.customerSignupRequests
+      : DEFAULT_CUSTOMER_SIGNUP_REQUESTS;
+  });
+
+  const [currentCustomer, setCurrentCustomerState] = useState<CustomerAccount | null>(() => {
+    try {
+      const savedCust = localStorage.getItem('solarstock_current_customer');
+      if (savedCust) return JSON.parse(savedCust);
+    } catch {
+      // Ignore
+    }
+    return null;
+  });
+
+  const setCurrentCustomer = (cust: CustomerAccount | null) => {
+    setCurrentCustomerState(cust);
+    try {
+      if (cust) {
+        localStorage.setItem('solarstock_current_customer', JSON.stringify(cust));
+      } else {
+        localStorage.removeItem('solarstock_current_customer');
+      }
+    } catch (e) {
+      console.warn('Could not persist current customer', e);
+    }
+  };
+
+  const loginCustomer = (email: string, _password?: string) => {
+    const cleanEmail = (email || '').trim().toLowerCase();
+    if (!cleanEmail) {
+      return { success: false, message: 'Please enter your registered business email address.' };
+    }
+
+    const found = customerAccounts.find(
+      (c) => c.email.toLowerCase() === cleanEmail
+    );
+
+    if (found) {
+      if (found.isApproved) {
+        setCurrentCustomer(found);
+        return {
+          success: true,
+          message: `Welcome back, ${found.companyName}! Customer access granted.`,
+          customer: found
+        };
+      } else {
+        return {
+          success: false,
+          message: 'Your customer account is pending administrative approval.'
+        };
+      }
+    }
+
+    // Check if request is currently pending
+    const pendingReq = customerSignupRequests.find(
+      (r) => r.email.toLowerCase() === cleanEmail
+    );
+
+    if (pendingReq) {
+      if (pendingReq.status === 'pending') {
+        return {
+          success: false,
+          message: 'Your application is currently under administrative compliance review by SolarStock.'
+        };
+      } else if (pendingReq.status === 'rejected') {
+        return {
+          success: false,
+          message: 'Your previous application was not approved. Please contact SolarStock compliance desk.'
+        };
+      }
+    }
+
+    return {
+      success: false,
+      message: 'No registered customer account found for this email. Please submit a request for customer approval.'
+    };
+  };
+
+  const submitCustomerSignup = (
+    request: Omit<CustomerSignupRequest, 'id' | 'submittedDate' | 'status'>
+  ) => {
+    const newReq: CustomerSignupRequest = {
+      ...request,
+      id: `req-${Date.now()}`,
+      submittedDate: new Date().toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      }),
+      status: 'pending'
+    };
+
+    setCustomerSignupRequests((prev) => [newReq, ...prev]);
+    return {
+      success: true,
+      message: 'Customer approval request submitted successfully! SolarStock enterprise team will review your credentials.'
+    };
+  };
+
+  const approveCustomerRequest = (requestId: string) => {
+    const req = customerSignupRequests.find((r) => r.id === requestId);
+    if (!req) return;
+
+    setCustomerSignupRequests((prev) =>
+      prev.map((r) => (r.id === requestId ? { ...r, status: 'approved' } : r))
+    );
+
+    const newCust: CustomerAccount = {
+      id: `cust-${Date.now()}`,
+      companyName: req.companyName,
+      contactName: req.contactName,
+      email: req.email,
+      phone: req.phone,
+      country: req.country,
+      businessType: req.businessType,
+      isApproved: true,
+      role: 'approved_customer'
+    };
+
+    setCustomerAccounts((prev) => {
+      const filtered = prev.filter((c) => c.email.toLowerCase() !== req.email.toLowerCase());
+      return [newCust, ...filtered];
+    });
+  };
+
+  const rejectCustomerRequest = (requestId: string) => {
+    setCustomerSignupRequests((prev) =>
+      prev.map((r) => (r.id === requestId ? { ...r, status: 'rejected' } : r))
+    );
+  };
+
+  const deleteCustomerAccount = (customerId: string) => {
+    setCustomerAccounts((prev) => prev.filter((c) => c.id !== customerId));
+    if (currentCustomer?.id === customerId) {
+      setCurrentCustomer(null);
+    }
+  };
+
+  const logoutCustomer = () => {
+    setCurrentCustomer(null);
+  };
+
   // Save changes to localStorage on any state change
   useEffect(() => {
     try {
@@ -312,7 +536,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         solarCare,
         brandsList,
         faqs,
-        blogs
+        blogs,
+        customerAccounts,
+        customerSignupRequests
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
     } catch (e) {
@@ -334,7 +560,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     solarCare,
     brandsList,
     faqs,
-    blogs
+    blogs,
+    customerAccounts,
+    customerSignupRequests
   ]);
 
   const authenticateAdmin = (inputPw: string, inputId?: string) => {
@@ -774,6 +1002,18 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         updateFooterConfig,
         updateBrandConfig,
         updatePolicy,
+        isCustomerAccessOpen,
+        openCustomerAccess,
+        closeCustomerAccess,
+        customerAccounts,
+        customerSignupRequests,
+        currentCustomer,
+        loginCustomer,
+        submitCustomerSignup,
+        approveCustomerRequest,
+        rejectCustomerRequest,
+        deleteCustomerAccount,
+        logoutCustomer,
         resetToDefaults
       }}
     >

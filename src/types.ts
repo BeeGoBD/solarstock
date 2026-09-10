@@ -11,6 +11,9 @@ export interface Product {
   tag?: 'Hot Product' | 'Top Selling' | 'Limited Time Offer' | 'Most Popular' | 'New Arrival' | 'Beat The Clock' | 'Best Deal' | 'Out of Stock' | string;
   isHot?: boolean;
   isOutOfStock?: boolean;
+  isCustomerOnly?: boolean;
+  requiresSignInForPricing?: boolean;
+  stockCount?: number;
   warranty: string;
   capacityVariants?: string[];
   voltageVariants?: string[];
@@ -81,6 +84,18 @@ export interface BlogPost {
   excerpt: string;
   author: string;
   content?: string;
+  tags?: string[];
+  eventDetails?: {
+    venue?: string;
+    dateRange?: string;
+    stall?: string;
+    hours?: string;
+  };
+  quote?: {
+    text: string;
+    author: string;
+    role: string;
+  };
 }
 
 export interface HeroSlideItem {
@@ -257,5 +272,42 @@ export interface SitePolicy {
   id: string;
   title: string;
   content: string;
+}
+
+export interface ArchiveNewsItem {
+  id: string;
+  title: string;
+  date: string;
+  summary?: string;
+  location?: string;
+  details?: string;
+  booth?: string;
+  category?: string;
+}
+
+export interface CustomerAccount {
+  id: string;
+  companyName: string;
+  contactName: string;
+  email: string;
+  phone: string;
+  country: string;
+  businessType: string;
+  isApproved: boolean;
+  role: 'approved_customer' | 'pending';
+}
+
+export interface CustomerSignupRequest {
+  id: string;
+  companyName: string;
+  contactName: string;
+  email: string;
+  phone: string;
+  country: string;
+  businessType: string;
+  taxOrRegNumber: string;
+  complianceDocNotes: string;
+  submittedDate: string;
+  status: 'pending' | 'approved' | 'rejected';
 }
 

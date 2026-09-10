@@ -1,15 +1,66 @@
 import React, { useState } from 'react';
-import { MessageSquare, X, Send, CheckCircle2, Headphones } from 'lucide-react';
+import { MessageSquare, X, Send, CheckCircle2, Headphones, Mail, Building2, MapPin, ExternalLink } from 'lucide-react';
+
+type DeskOption = 'Bangladesh Desk (Dhaka)' | 'Thailand Desk (Bangkok)' | 'Headquarter (Global HQ)';
 
 export const MessageDrawer: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [desk, setDesk] = useState<DeskOption>('Bangladesh Desk (Dhaka)');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
+  const getDeskInfo = (selectedDesk: DeskOption) => {
+    switch (selectedDesk) {
+      case 'Bangladesh Desk (Dhaka)':
+        return {
+          email: 'info@solarstock.com',
+          location: 'Baridhara, Dhaka, Bangladesh',
+          entity: 'SolarStock BD Limited'
+        };
+      case 'Thailand Desk (Bangkok)':
+        return {
+          email: 'info@solarstock.com',
+          location: 'KX Building, Klongsan, Bangkok, Thailand',
+          entity: 'SolarStock Regional HQ'
+        };
+      case 'Headquarter (Global HQ)':
+      default:
+        return {
+          email: 'info@solarstock.com',
+          location: 'China Global Sourcing & Supply Platform',
+          entity: 'SolarStock Global Headquarters'
+        };
+    }
+  };
+
+  const currentDesk = getDeskInfo(desk);
+
+  const triggerMailto = (overrideMsg?: string) => {
+    const inquiryMsg = overrideMsg || message;
+    const subject = encodeURIComponent(`[SolarStock ${desk} Inquiry] from ${name || 'Customer'}`);
+    const bodyContent = `Dear SolarStock ${desk} Team,
+
+Contact Name: ${name || 'Prospective Client'}
+Contact Email: ${email || 'Not specified'}
+Target Regional Desk: ${desk} (${currentDesk.entity} - ${currentDesk.location})
+
+Inquiry Details:
+${inquiryMsg || 'Please provide details on product specifications, availability, and container pricing.'}
+
+---
+Inquiry generated via SolarStock Regional Energy Platform
+Website: https://www.solarstock.com/
+Company: SolarStock (1100MW+ projects commissioned)`;
+
+    const mailtoUrl = `mailto:${currentDesk.email}?subject=${subject}&body=${encodeURIComponent(bodyContent)}`;
+    window.location.href = mailtoUrl;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    triggerMailto();
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);
@@ -17,7 +68,7 @@ export const MessageDrawer: React.FC = () => {
       setEmail('');
       setMessage('');
       setIsOpen(false);
-    }, 2500);
+    }, 3000);
   };
 
   return (
@@ -55,11 +106,14 @@ export const MessageDrawer: React.FC = () => {
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
                 <h3 className="text-lg font-bold text-neutral-900">
-                  Message Sent to Solar Engineering Desk!
+                  Email Draft Opened for {desk}!
                 </h3>
-                <p className="text-xs text-neutral-500">
-                  Our solar engineer will respond to {email} shortly.
+                <p className="text-xs text-neutral-600 max-w-xs mx-auto">
+                  Your default email client has been launched with a pre-filled message to <strong>{currentDesk.email}</strong>.
                 </p>
+                <div className="p-2.5 bg-neutral-50 rounded-xl text-[11px] text-neutral-500 border border-neutral-200">
+                  Direct contact: info@solarstock.com
+                </div>
               </div>
             ) : (
               <div className="space-y-4">
@@ -68,21 +122,41 @@ export const MessageDrawer: React.FC = () => {
                   <div className="flex items-center gap-2 mb-1">
                     <Headphones className="w-5 h-5 text-amber-500" />
                     <h3 className="text-base font-extrabold text-neutral-950 font-['Outfit',sans-serif]">
-                      Solarstock Live Support
+                      SolarStock Regional Desk
                     </h3>
                   </div>
                   <p className="text-xs text-neutral-600">
-                    Please fill out the form below and we will get back to you as soon as possible.
+                    Connect directly with our regional offices. Submitting prepares a pre-filled draft in your default email client.
                   </p>
                 </div>
 
-                {/* Form matching video (02:26) */}
+                {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-3">
+                  {/* Desk Selection */}
+                  <div>
+                    <label className="block text-[11px] font-bold text-neutral-700 uppercase tracking-wider mb-1">
+                      Select Regional Desk:
+                    </label>
+                    <select
+                      value={desk}
+                      onChange={(e) => setDesk(e.target.value as DeskOption)}
+                      className="w-full text-xs p-2.5 rounded-xl border border-neutral-300 bg-neutral-50/50 font-semibold text-neutral-900 focus:border-amber-500 focus:ring-2 focus:ring-amber-400/20 outline-none"
+                    >
+                      <option value="Bangladesh Desk (Dhaka)">Bangladesh Desk (Baridhara, Dhaka)</option>
+                      <option value="Thailand Desk (Bangkok)">Thailand Desk (KX Building, Bangkok)</option>
+                      <option value="Headquarter (Global HQ)">Headquarter (China Sourcing Platform)</option>
+                    </select>
+                    <div className="mt-1 flex items-center gap-1.5 text-[10px] text-neutral-500 font-medium">
+                      <Building2 className="w-3 h-3 text-amber-600 shrink-0" />
+                      <span>{currentDesk.entity} • {currentDesk.location}</span>
+                    </div>
+                  </div>
+
                   <div>
                     <input
                       type="text"
                       required
-                      placeholder="* Name"
+                      placeholder="* Your Name / Company"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       className="w-full text-xs p-3 rounded-xl border border-neutral-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-400/20 outline-none"
@@ -93,7 +167,7 @@ export const MessageDrawer: React.FC = () => {
                     <input
                       type="email"
                       required
-                      placeholder="* Email"
+                      placeholder="* Your Business Email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="w-full text-xs p-3 rounded-xl border border-neutral-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-400/20 outline-none"
@@ -103,8 +177,8 @@ export const MessageDrawer: React.FC = () => {
                   <div>
                     <textarea
                       required
-                      rows={4}
-                      placeholder="* Message (e.g. Inverter capacity required for 3 ACs, tubular battery price...)"
+                      rows={3}
+                      placeholder="* Your Inquiry (e.g. Inverter specifications, container volume pricing, rooftop EPC consultation...)"
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       className="w-full text-xs p-3 rounded-xl border border-neutral-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-400/20 outline-none"
@@ -115,15 +189,14 @@ export const MessageDrawer: React.FC = () => {
                     type="submit"
                     className="w-full bg-amber-700 hover:bg-amber-800 text-white font-extrabold py-3 rounded-xl text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-colors"
                   >
-                    <Send className="w-4 h-4" />
-                    <span>Submit</span>
+                    <Mail className="w-4 h-4" />
+                    <span>Open Pre-filled Email Draft</span>
                   </button>
                 </form>
 
-                <div className="text-center pt-2 border-t border-neutral-100">
-                  <span className="text-[11px] text-neutral-400">
-                    Powered by Solarstock Live Desk
-                  </span>
+                <div className="flex items-center justify-between pt-2 border-t border-neutral-100 text-[11px] text-neutral-400">
+                  <span>Routing to {currentDesk.email}</span>
+                  <span className="font-semibold text-neutral-600">SolarStock Platform</span>
                 </div>
               </div>
             )}
@@ -133,3 +206,4 @@ export const MessageDrawer: React.FC = () => {
     </>
   );
 };
+

@@ -30,7 +30,8 @@ import {
   Check,
   ChevronDown,
   Crown,
-  LogOut
+  LogOut,
+  Building2
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { Product, Category, BranchLocation } from '../types';
@@ -39,6 +40,7 @@ import { AdminSubCategoriesTab } from './admin/AdminSubCategoriesTab';
 import { AdminBrandsTab } from './admin/AdminBrandsTab';
 import { AdminContentSectionsTab } from './admin/AdminContentSectionsTab';
 import { AdminSecurityTab } from './admin/AdminSecurityTab';
+import { AdminCustomersTab } from './admin/AdminCustomersTab';
 
 interface AdminDashboardModalProps {
   isOpen: boolean;
@@ -80,6 +82,8 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
     updateFooterConfig,
     updateBrandConfig,
     updatePolicy,
+    customerAccounts,
+    customerSignupRequests,
     resetToDefaults
   } = useStore();
 
@@ -91,6 +95,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
     | 'content_sections'
     | 'products'
     | 'categories'
+    | 'customers'
     | 'flashsale'
     | 'billboard'
     | 'branches'
@@ -230,6 +235,15 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
             { id: 'content_sections', label: 'Guarantees & FAQs', icon: ShieldCheck },
             { id: 'products', label: `Products (${products.length})`, icon: Package },
             { id: 'categories', label: `Categories (${categories.length})`, icon: Layers },
+            {
+              id: 'customers',
+              label: `Customer Approvals ${
+                customerSignupRequests.filter((r) => r.status === 'pending').length > 0
+                  ? `(${customerSignupRequests.filter((r) => r.status === 'pending').length} New)`
+                  : `(${customerAccounts.length})`
+              }`,
+              icon: Building2
+            },
             { id: 'flashsale', label: 'Flash Sale', icon: Flame },
             { id: 'branches', label: `Store Branches (${branches.length})`, icon: MapPin },
             { id: 'footer', label: 'Footer & Policies', icon: FileText },
@@ -262,6 +276,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
           {activeTab === 'brands' && <AdminBrandsTab />}
           {activeTab === 'content_sections' && <AdminContentSectionsTab />}
           {activeTab === 'security' && <AdminSecurityTab />}
+          {activeTab === 'customers' && <AdminCustomersTab showToast={showToast} />}
           
           {/* TAB 1: OVERVIEW */}
           {activeTab === 'overview' && (

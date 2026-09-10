@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { X, Eye, EyeOff, User, Lock, Phone, ArrowRight, ShieldCheck, KeyRound, AlertTriangle, ShieldAlert } from 'lucide-react';
+import { X, Eye, EyeOff, User, Lock, Phone, ArrowRight, ShieldCheck, KeyRound, AlertTriangle, ShieldAlert, Building2 } from 'lucide-react';
 import { useStore, DEFAULT_ADMIN_ID } from '../context/StoreContext';
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenCustomerAccess?: () => void;
 }
 
-export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
+export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onOpenCustomerAccess }) => {
   const { authenticateAdmin, openAdmin, adminRole, logoutAdmin } = useStore();
   const [authMode, setAuthMode] = useState<'login' | 'phone'>('login');
   const [showPassword, setShowPassword] = useState(false);
@@ -348,6 +349,28 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               </svg>
               <span>Login with Google</span>
             </button>
+
+            {/* B2B Customer Access Callout */}
+            {onOpenCustomerAccess && (
+              <div className="pt-2 border-t border-neutral-100">
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    onOpenCustomerAccess();
+                  }}
+                  className="w-full p-2.5 rounded-xl bg-amber-50 hover:bg-amber-100/80 border border-amber-200/80 text-amber-950 flex items-center justify-between text-xs font-bold transition-colors group"
+                >
+                  <div className="flex items-center gap-2">
+                    <Building2 className="w-4 h-4 text-amber-600 group-hover:scale-110 transition-transform" />
+                    <span>Commercial & B2B Customer Portal</span>
+                  </div>
+                  <span className="text-[11px] text-amber-700 underline flex items-center gap-1">
+                    Sign in or Request Approval →
+                  </span>
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>

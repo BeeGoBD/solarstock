@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, Menu, X, ShoppingBag, Sun, Zap, Phone, ShieldCheck, Heart, SlidersHorizontal, Calculator, LayoutGrid, Layers, ChevronDown, User, ShieldAlert } from 'lucide-react';
+import { Search, Menu, X, ShoppingBag, Sun, Zap, Phone, ShieldCheck, Heart, SlidersHorizontal, Calculator, LayoutGrid, Layers, ChevronDown, User, ShieldAlert, Building2 } from 'lucide-react';
 import { Product } from '../types';
 import { SEARCH_SUGGESTIONS } from '../data/mockData';
 import { useStore } from '../context/StoreContext';
@@ -11,6 +11,7 @@ interface HeaderProps {
   onOpenCategoryDrawer: () => void;
   onOpenAuth: () => void;
   onOpenCalculator: () => void;
+  onOpenCustomerAccess: () => void;
   onSelectProduct?: (product: Product) => void;
   onSearch: (query: string) => void;
   activeView: string;
@@ -26,6 +27,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenCategoryDrawer,
   onOpenAuth,
   onOpenCalculator,
+  onOpenCustomerAccess,
   onSelectProduct,
   onSearch,
   activeView,
@@ -34,7 +36,7 @@ export const Header: React.FC<HeaderProps> = ({
   searchQuery = '',
   setSearchQuery
 }) => {
-  const { adminRole, openAdmin } = useStore();
+  const { adminRole, openAdmin, currentCustomer } = useStore();
   const [internalQuery, setInternalQuery] = useState(searchQuery);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>([
@@ -360,6 +362,19 @@ export const Header: React.FC<HeaderProps> = ({
               }`}
             >
               📍 Outlets
+            </button>
+            <button
+              onClick={onOpenCustomerAccess}
+              className={`px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
+                currentCustomer
+                  ? 'bg-emerald-50 text-emerald-950 border border-emerald-300 font-extrabold hover:bg-emerald-100'
+                  : 'bg-amber-50 hover:bg-amber-100 text-amber-950 border border-amber-200/80 font-bold'
+              }`}
+              title="Customer Access – Sign In or Request Customer Approval"
+            >
+              <Building2 className={`w-3.5 h-3.5 ${currentCustomer ? 'text-emerald-600' : 'text-amber-600'}`} />
+              <span>{currentCustomer ? `${currentCustomer.companyName.slice(0, 14)}...` : 'Customer Access'}</span>
+              {currentCustomer && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />}
             </button>
           </nav>
 
