@@ -1,5 +1,5 @@
 import React from 'react';
-import { Gift, ShoppingCart, User, Clock, MapPin, ShieldAlert } from 'lucide-react';
+import { Gift, ShoppingCart, User, Clock, MapPin, ShieldAlert, UserCheck } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 
 interface BottomNavProps {
@@ -17,7 +17,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   onOpenCart,
   onOpenAuth
 }) => {
-  const { adminRole, openAdmin } = useStore();
+  const { adminRole, openAdmin, isGuest } = useStore();
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-neutral-200/90 shadow-lg px-2 py-1.5 flex items-center justify-around md:hidden">
@@ -59,7 +59,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         </span>
       </button>
 
-      {/* PROFILE / ADMIN */}
+      {/* PROFILE / ADMIN / GUEST */}
       <button
         onClick={() => {
           if (adminRole) {
@@ -69,12 +69,20 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           }
         }}
         className={`flex flex-col items-center justify-center p-1 rounded-lg transition-colors flex-1 ${
-          adminRole ? 'text-amber-600 font-black' : activeView === 'profile' ? 'text-amber-700 font-black' : 'text-neutral-600 hover:text-neutral-900'
+          adminRole
+            ? 'text-amber-600 font-black'
+            : isGuest
+            ? 'text-amber-600 font-black'
+            : activeView === 'profile'
+            ? 'text-amber-700 font-black'
+            : 'text-neutral-600 hover:text-neutral-900'
         }`}
       >
         <div className="relative">
           {adminRole ? (
             <ShieldAlert className="w-5 h-5 stroke-[2.2] text-amber-600" />
+          ) : isGuest ? (
+            <UserCheck className="w-5 h-5 stroke-[2] text-amber-600" />
           ) : (
             <User className="w-5 h-5 stroke-[2]" />
           )}
@@ -83,7 +91,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           )}
         </div>
         <span className="text-[10px] uppercase font-bold tracking-wider mt-0.5">
-          {adminRole ? 'ADMIN' : 'PROFILE'}
+          {adminRole ? 'ADMIN' : isGuest ? 'GUEST' : 'PROFILE'}
         </span>
       </button>
 

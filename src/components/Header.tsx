@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, Menu, X, ShoppingBag, Sun, Zap, Phone, ShieldCheck, Heart, SlidersHorizontal, Calculator, LayoutGrid, Layers, ChevronDown, User, ShieldAlert, Building2 } from 'lucide-react';
+import { Search, Menu, X, ShoppingBag, Sun, Zap, Phone, ShieldCheck, Heart, SlidersHorizontal, Calculator, LayoutGrid, Layers, ChevronDown, User, ShieldAlert, Building2, LogOut, UserCheck } from 'lucide-react';
 import { Product } from '../types';
 import { SEARCH_SUGGESTIONS } from '../data/mockData';
 import { useStore } from '../context/StoreContext';
@@ -36,9 +36,10 @@ export const Header: React.FC<HeaderProps> = ({
   searchQuery = '',
   setSearchQuery
 }) => {
-  const { adminRole, openAdmin, currentCustomer } = useStore();
+  const { adminRole, openAdmin, currentCustomer, isGuest, guestId, logoutGuest } = useStore();
   const [internalQuery, setInternalQuery] = useState(searchQuery);
   const [showSearchModal, setShowSearchModal] = useState(false);
+  const [showGuestMenu, setShowGuestMenu] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>([
     'Growatt 5kW Hybrid Inverter',
     'LONGi 585W Bifacial Solar Panel',
@@ -47,6 +48,7 @@ export const Header: React.FC<HeaderProps> = ({
   ]);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchDropdownRef = useRef<HTMLDivElement>(null);
+  const guestDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setInternalQuery(searchQuery);
@@ -62,6 +64,16 @@ export const Header: React.FC<HeaderProps> = ({
         !searchInputRef.current.contains(event.target as Node)
       ) {
         setShowSearchModal(false);
+      }
+      if (
+        guestDropdownRef.current &&
+        !guestDropdownRef.current.contains(event.target as Node) &&
+        !(
+          (event.target as HTMLElement).closest &&
+          (event.target as HTMLElement).closest('#header-profile-admin-btn')
+        )
+      ) {
+        setShowGuestMenu(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -388,35 +400,102 @@ export const Header: React.FC<HeaderProps> = ({
             <span>Calculator</span>
           </button>
 
-          {/* Profile / Admin Panel Access Button */}
-          <button
-            id="header-profile-admin-btn"
-            onClick={() => {
-              if (adminRole) {
-                openAdmin();
-              } else {
-                onOpenAuth();
-              }
-            }}
-            className={`flex items-center gap-1.5 p-2 sm:px-3 sm:py-2 rounded-xl border text-xs font-bold transition-all shadow-2xs ${
-              adminRole
-                ? 'bg-amber-400 text-neutral-950 border-amber-500 hover:bg-amber-300'
-                : 'bg-neutral-100 hover:bg-neutral-200 text-neutral-800 border-neutral-200'
-            }`}
-            title={adminRole ? 'Open Admin Control Panel' : 'Account & Admin Login'}
-          >
-            {adminRole ? (
-              <ShieldAlert className="w-4 h-4 text-neutral-950" />
-            ) : (
-              <User className="w-4 h-4 text-neutral-700" />
+          {/* Profile / Admin / Guest Access Button */}
+          <div className="relative">
+            <button
+              id="header-profile-admin-btn"
+              onClick={() => {
+                if (adminRole) {
+                  openAdmin();
+                } else if (isGuest) {
+                  setShowGuestMenu((prev) => !prev);
+                } else {
+                  onOpenAuth();
+                }
+              }}
+              className={`flex items-center gap-1.5 p-2 sm:px-3 sm:py-2 rounded-xl border text-xs font-bold transition-all shadow-2xs cursor-pointer ${
+                adminRole
+                  ? 'bg-amber-400 text-neutral-950 border-amber-500 hover:bg-amber-300'
+                  : isGuest
+                  ? 'bg-amber-100 hover:bg-amber-200 text-neutral-900 border-amber-300'
+                  : 'bg-neutral-100 hover:bg-neutral-200 text-neutral-800 border-neutral-200'
+              }`}
+              title={adminRole ? 'Open Admin Control Panel' : isGuest ? 'Guest Account - Click to view options' : 'Account & Admin Login'}
+            >
+              {adminRole ? (
+                <ShieldAlert className="w-4 h-4 text-neutral-950" />
+              ) : isGuest ? (
+                <UserCheck className="w-4 h-4 text-amber-700" />
+              ) : (
+                <User className="w-4 h-4 text-neutral-700" />
+              )}
+              <span className="hidden md:inline font-semibold">
+                {adminRole
+                  ? adminRole === 'boss'
+                    ? 'Master Admin'
+                    : 'Admin Panel'
+                  : currentCustomer
+                  ? currentCustomer.companyName
+                  : isGuest
+                  ? 'Guest'
+                  : 'Account'}
+              </span>
+              {isGuest && (
+                <ChevronDown className="w-3.5 h-3.5 text-neutral-700 hidden md:inline ml-0.5" />
+              )}
+              {adminRole && (
+                <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
+              )}
+            </button>
+
+            {/* Guest Dropdown Menu */}
+            {showGuestMenu && isGuest && (
+              <div
+                ref={guestDropdownRef}
+                className="absolute right-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-neutral-200 p-3.5 z-50 animate-in fade-in zoom-in-95"
+              >
+                <div className="flex items-center gap-3 pb-3 border-b border-neutral-100">
+                  <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                    <UserCheck className="w-5 h-5" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">
+                      Active Guest
+                    </span>
+                    <span className="text-xs font-black text-neutral-900 truncate font-mono block">
+                      {guestId || 'Guest User'}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="pt-2.5 space-y-1.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowGuestMenu(false);
+                      logoutGuest();
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-xs font-bold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xl transition-colors text-left cursor-pointer border border-transparent hover:border-rose-200"
+                  >
+                    <LogOut className="w-4 h-4 text-rose-600 shrink-0" />
+                    <span>Logout</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowGuestMenu(false);
+                      onOpenAuth();
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition-colors text-left cursor-pointer"
+                  >
+                    <User className="w-4 h-4 text-neutral-500 shrink-0" />
+                    <span>Switch / Sign In</span>
+                  </button>
+                </div>
+              </div>
             )}
-            <span className="hidden md:inline font-semibold">
-              {adminRole ? (adminRole === 'boss' ? 'Master Admin' : 'Admin Panel') : 'Account'}
-            </span>
-            {adminRole && (
-              <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-            )}
-          </button>
+          </div>
 
           {/* Cart Trigger */}
           <button

@@ -19,6 +19,7 @@ export const AdminSecurityTab: React.FC = () => {
   const [newManagerPass, setNewManagerPass] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
   const [showPass, setShowPass] = useState(false);
+  const [showCurrentPass, setShowCurrentPass] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const isBoss = adminRole === 'boss';
@@ -28,7 +29,7 @@ export const AdminSecurityTab: React.FC = () => {
     if (!isBoss) {
       setMessage({
         type: 'error',
-        text: 'Access Denied: Only Master Admin (using Main Key SS@Admin@2026#SolarSS) can reset the Manager password.'
+        text: 'Access Denied: Only Master Admin credentials can reset the Manager password.'
       });
       return;
     }
@@ -90,8 +91,8 @@ export const AdminSecurityTab: React.FC = () => {
               </div>
               <p className="text-xs text-neutral-500 mt-0.5">
                 {isBoss
-                  ? 'Authorized with Main Key (SS@Admin@2026#SolarSS). Unlimited system privilege.'
-                  : 'Authorized with Manager Key (ID: admin@workforsolarstock.com). Content, product & catalog privileges.'}
+                  ? 'Authorized with Master Admin Key. Unlimited system privilege.'
+                  : 'Authorized with Manager Key. Content, product & catalog privileges.'}
               </p>
             </div>
           </div>
@@ -116,8 +117,7 @@ export const AdminSecurityTab: React.FC = () => {
             Manager Password Management
           </h4>
           <p className="text-xs text-neutral-500 mt-1 leading-relaxed">
-            Per company policy, the Main Key (<code className="text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded font-mono font-bold">SS@Admin@2026#SolarSS</code>)
-            is permanent and cannot be changed. It exists specifically to reset and recover the Store Manager key.
+            Per company security policy, the Master Key is permanently secret and encrypted. It exists specifically to reset and recover the Store Manager key.
           </p>
         </div>
 
@@ -145,13 +145,23 @@ export const AdminSecurityTab: React.FC = () => {
                 Current Manager Password Active
               </label>
               <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                <input
-                  type="text"
-                  readOnly
-                  value={managerPassword}
-                  className="bg-neutral-100 border border-neutral-300 text-xs font-mono text-neutral-800 px-3 py-2 rounded-lg w-full sm:max-w-xs outline-none"
-                />
-                <span className="text-[11px] text-neutral-500 font-mono">(ID: admin@workforsolarstock.com, Default Pass: SolarStock@2026#SS)</span>
+                <div className="relative w-full sm:max-w-xs">
+                  <input
+                    type={showCurrentPass ? 'text' : 'password'}
+                    readOnly
+                    value={managerPassword}
+                    className="bg-neutral-100 border border-neutral-300 text-xs font-mono text-neutral-800 px-3 py-2 pr-9 rounded-lg w-full outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowCurrentPass(!showCurrentPass)}
+                    className="absolute right-2 top-2 text-neutral-500 hover:text-neutral-800"
+                    title={showCurrentPass ? 'Hide secret' : 'Reveal secret'}
+                  >
+                    {showCurrentPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+                <span className="text-[11px] text-neutral-500 font-mono">Protected confidential credential</span>
               </div>
             </div>
 
@@ -208,7 +218,7 @@ export const AdminSecurityTab: React.FC = () => {
             </p>
             <p>
               You are currently signed in with the Manager role. To reset the Manager credentials,
-              please log in using the administrative Main Key (<span className="font-mono text-neutral-900 font-bold">SS@Admin@2026#SolarSS</span>).
+              please log in using the administrative Master Key.
             </p>
           </div>
         )}

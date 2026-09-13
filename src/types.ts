@@ -108,6 +108,8 @@ export interface HeroSlideItem {
   subtitle: string;
   category: string;
   buttonText: string;
+  productId?: string; // Direct product link or ID
+  redirectLink?: string; // Custom redirect URL or product path
 }
 
 export interface Slide3ShowcaseProduct {

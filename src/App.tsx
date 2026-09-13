@@ -199,6 +199,20 @@ function StoreMainApp() {
   const recentProducts = useMemo(() => products.filter((p) => p.isNewArrival || p.isHot).slice(0, 8), [products]);
   const trendingProducts = useMemo(() => products.filter((p) => (p.rating || 0) >= 4.7).slice(0, 8), [products]);
 
+  // Dedicated Full-Page Admin Dashboard view (replaces entire background store)
+  if (isAdminOpen) {
+    return (
+      <AdminDashboardModal
+        isOpen={true}
+        onClose={closeAdmin}
+        onSelectCategory={(catId) => {
+          closeAdmin();
+          handleSelectCategory(catId);
+        }}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white text-neutral-900 flex flex-col font-['Plus_Jakarta_Sans',sans-serif] selection:bg-amber-400 selection:text-neutral-950">
       {/* 1. Global Header */}
@@ -503,12 +517,6 @@ function StoreMainApp() {
           <span className="text-neutral-300">Open Dashboard →</span>
         </button>
       )}
-
-      {/* Admin Dashboard Modal (Opens on 5 clicks of footer logo) */}
-      <AdminDashboardModal
-        isOpen={isAdminOpen}
-        onClose={closeAdmin}
-      />
 
       {/* Floating Right "Message" Tab & Contact Drawer */}
       <MessageDrawer />

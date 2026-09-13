@@ -138,7 +138,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
           ) : currentCustomer ? (
             <div className="flex items-center gap-1 mb-3">
               <span className="text-[10px] sm:text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                ✓ B2B Wholesale Rate
+                ✓ Approved Partner Rate
               </span>
             </div>
           ) : (
@@ -151,7 +151,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
                   else openCustomerAccess();
                 }}
                 className="text-[10px] sm:text-[11px] font-bold text-amber-900 hover:text-amber-950 bg-amber-50 hover:bg-amber-100 px-2 py-1 rounded border border-amber-300 text-left transition-colors flex items-center gap-1"
-                title="Commercial & B2B Pricing - Sign in or Request Customer Approval"
+                title="Customer Pricing - Sign in or Request Customer Approval"
               >
                 <Building2 className="w-3 h-3 text-amber-600 shrink-0" />
                 <span>Sign in for pricing →</span>

@@ -207,6 +207,14 @@ interface StoreState {
   deleteCustomerAccount: (customerId: string) => void;
   logoutCustomer: () => void;
 
+  // Guest Checkout & Session
+  isGuest: boolean;
+  guestId: string | null;
+  loginAsGuest: () => string;
+  logoutGuest: () => void;
+  continueAsGuest: () => void;
+  resetGuest: () => void;
+
   // Reset
   resetToDefaults: () => void;
 }
@@ -232,12 +240,25 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const saved = loadSavedState();
 
-  // Merge any new products from INITIAL_PRODUCTS into saved products if not present
+  // Merge any new products from INITIAL_PRODUCTS into saved products if not present,
+  // and sync up-to-date realistic product images from INITIAL_PRODUCTS
   const initialProducts = (() => {
     if (!saved?.products || !Array.isArray(saved.products)) return INITIAL_PRODUCTS;
+    const initialMap = new Map(INITIAL_PRODUCTS.map((p) => [p.id, p]));
+    const merged = saved.products.map((p: Product) => {
+      const match = initialMap.get(p.id);
+      if (match) {
+        return {
+          ...match,
+          ...p,
+          images: match.images
+        };
+      }
+      return p;
+    });
     const existingIds = new Set(saved.products.map((p: Product) => p.id));
     const missing = INITIAL_PRODUCTS.filter((p) => !existingIds.has(p.id));
-    return [...saved.products, ...missing];
+    return [...merged, ...missing];
   })();
 
   // Ensure branches have googleMapUrl
@@ -283,7 +304,17 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   
   // New Customizable Content Sections
   const [heroSlides, setHeroSlides] = useState<HeroSlideItem[]>(() => {
-    return (saved?.heroSlides && saved.heroSlides.length > 0) ? saved.heroSlides : DEFAULT_HERO_SLIDES;
+    if (saved?.heroSlides && saved.heroSlides.length > 0) {
+      return saved.heroSlides.map((s: HeroSlideItem, idx: number) => {
+        const defaultMatch = DEFAULT_HERO_SLIDES[idx];
+        return {
+          ...s,
+          productId: s.productId || defaultMatch?.productId,
+          redirectLink: s.redirectLink || defaultMatch?.redirectLink
+        };
+      });
+    }
+    return DEFAULT_HERO_SLIDES;
   });
   const [slide3Products, setSlide3Products] = useState<Slide3ShowcaseProduct[]>(() => {
     return (saved?.slide3Products && saved.slide3Products.length > 0) ? saved.slide3Products : DEFAULT_SLIDE3_PRODUCTS;
@@ -517,6 +548,58 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setCurrentCustomer(null);
   };
 
+  // Guest State
+  const [guestId, setGuestId] = useState<string | null>(() => {
+    try {
+      return localStorage.getItem('solarstock_guest_id') || null;
+    } catch {
+      return null;
+    }
+  });
+
+  const [isGuest, setIsGuest] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('solarstock_is_guest') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  const loginAsGuest = () => {
+    let id = guestId;
+    if (!id) {
+      id = `GUEST-${Math.floor(10000 + Math.random() * 90000)}`;
+    }
+    setGuestId(id);
+    setIsGuest(true);
+    try {
+      localStorage.setItem('solarstock_is_guest', 'true');
+      localStorage.setItem('solarstock_guest_id', id);
+    } catch (e) {
+      console.warn(e);
+    }
+    return id;
+  };
+
+  const logoutGuest = () => {
+    setIsGuest(false);
+    setGuestId(null);
+    try {
+      localStorage.removeItem('solarstock_is_guest');
+      localStorage.removeItem('solarstock_guest_id');
+    } catch (e) {
+      console.warn(e);
+    }
+  };
+
+  const continueAsGuest = () => {
+    loginAsGuest();
+  };
+
+  const resetGuest = () => {
+    logoutGuest();
+  };
+
   // Save changes to localStorage on any state change
   useEffect(() => {
     try {
@@ -618,17 +701,17 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
 
     if (isTargetAdminId && !isPassValid) {
-      // Wrong password entered for administrator ID
+      // Wrong password entered
       return {
         success: false,
         role: null,
         isMasterKey: false,
         isWrongAdminPassword: true,
-        message: `Access Denied: Incorrect password for administrator ID "${rawId}". Please verify your credentials and try again.`
+        message: 'Invalid phone/email or password. Please verify your credentials and try again.'
       };
     }
 
-    // Attempted admin keyword or wrong legacy keys
+    // Attempted wrong legacy keys
     if (
       trimmedPw === '123456' ||
       trimmedPw === '654321' ||
@@ -639,7 +722,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         role: null,
         isMasterKey: false,
         isWrongAdminPassword: true,
-        message: 'Access Denied: The old administrative credentials have expired. Please use the current credentials.'
+        message: 'Invalid password. Please verify and try again.'
       };
     }
 
@@ -1014,6 +1097,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         rejectCustomerRequest,
         deleteCustomerAccount,
         logoutCustomer,
+        isGuest,
+        guestId,
+        loginAsGuest,
+        logoutGuest,
+        continueAsGuest,
+        resetGuest,
         resetToDefaults
       }}
     >

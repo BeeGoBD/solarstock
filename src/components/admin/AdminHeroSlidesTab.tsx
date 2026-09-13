@@ -20,6 +20,7 @@ export const AdminHeroSlidesTab: React.FC = () => {
   const {
     heroSlides,
     slide3Products,
+    products,
     updateHeroSlide,
     addHeroSlide,
     deleteHeroSlide,
@@ -93,7 +94,9 @@ export const AdminHeroSlidesTab: React.FC = () => {
                 subtitle: 'Save up to 90% on electricity bills with smart inverters and batteries.',
                 badge: '100% Reliable Solar Power',
                 category: 'hybrid-inverters',
-                buttonText: 'Discover System'
+                buttonText: 'Discover System',
+                productId: 'prod-deye-sun-12k',
+                redirectLink: '#prod-deye-sun-12k'
               };
               addHeroSlide(newSlide);
               showToast('Added new hero slide!');
@@ -142,10 +145,18 @@ export const AdminHeroSlidesTab: React.FC = () => {
               </div>
 
               <div className="flex items-center justify-between pt-2 border-t border-neutral-200">
-                <span className="text-[11px] text-neutral-500 font-mono">
-                  Category: {slide.category || 'All'}
-                </span>
-                <div className="flex items-center gap-1.5">
+                <div className="flex flex-col gap-0.5 overflow-hidden pr-2">
+                  <span className="text-[11px] text-neutral-500 font-mono">
+                    Category: {slide.category || 'All'}
+                  </span>
+                  {(slide.productId || slide.redirectLink) && (
+                    <span className="text-[10px] text-amber-700 font-semibold flex items-center gap-1 truncate" title={slide.redirectLink}>
+                      <ArrowRight className="w-2.5 h-2.5 shrink-0" />
+                      Direct: {slide.productId ? (products.find((p) => p.id === slide.productId)?.name || slide.productId) : slide.redirectLink}
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0">
                   <button
                     type="button"
                     onClick={() => setEditingSlide(slide)}
@@ -406,6 +417,76 @@ export const AdminHeroSlidesTab: React.FC = () => {
                     }
                     className="w-full bg-neutral-50 border border-neutral-300 text-xs text-neutral-900 p-2 rounded-lg outline-none focus:border-amber-400 focus:bg-white"
                   />
+                </div>
+              </div>
+
+              {/* Highlight Product & Redirect Link */}
+              <div className="p-3.5 bg-amber-50/70 rounded-xl border border-amber-200/80 space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-amber-950 flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                    Product Highlight & Direct Redirect Link
+                  </label>
+                  {(editingSlide.productId || editingSlide.redirectLink) && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setEditingSlide({
+                          ...editingSlide,
+                          productId: undefined,
+                          redirectLink: ''
+                        })
+                      }
+                      className="text-[10px] font-bold text-neutral-500 hover:text-rose-600 underline"
+                    >
+                      Clear link
+                    </button>
+                  )}
+                </div>
+
+                <div>
+                  <label className="text-[11px] font-semibold text-neutral-700 block mb-1">
+                    Highlight Product from Store (Auto-links)
+                  </label>
+                  <select
+                    value={editingSlide.productId || ''}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      const selectedProd = products.find((p) => p.id === val);
+                      setEditingSlide({
+                        ...editingSlide,
+                        productId: val || undefined,
+                        redirectLink: val ? `#${val}` : '',
+                        buttonText: selectedProd ? `View ${selectedProd.brand}` : editingSlide.buttonText
+                      });
+                    }}
+                    className="w-full bg-white border border-neutral-300 text-xs text-neutral-900 p-2 rounded-lg outline-none focus:border-amber-400"
+                  >
+                    <option value="">-- None (Generic category slide) --</option>
+                    {products.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.brand} - {p.name} (৳ {p.price.toLocaleString()})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[11px] font-semibold text-neutral-700 block mb-1">
+                    Redirect Link / Product Destination URL
+                  </label>
+                  <input
+                    type="text"
+                    value={editingSlide.redirectLink || ''}
+                    onChange={(e) =>
+                      setEditingSlide({ ...editingSlide, redirectLink: e.target.value })
+                    }
+                    placeholder="e.g. #prod-deye-sun-12k or https://example.com/product"
+                    className="w-full bg-white border border-neutral-300 text-xs text-neutral-900 p-2 rounded-lg outline-none focus:border-amber-400 font-mono"
+                  />
+                  <p className="text-[10px] text-neutral-500 mt-1 leading-normal">
+                    When visitors click this hero slide or its button, it will directly open this product or destination URL.
+                  </p>
                 </div>
               </div>
             </div>

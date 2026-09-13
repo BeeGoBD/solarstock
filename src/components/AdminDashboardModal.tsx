@@ -143,34 +143,36 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
   });
 
   return (
-    <div className="fixed inset-0 z-[100] bg-neutral-900/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 overflow-y-auto animate-in fade-in duration-200">
-      <div className="bg-white border border-neutral-200 text-neutral-900 rounded-2xl w-full max-w-6xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+    <div className="min-h-screen w-full bg-neutral-100 flex flex-col text-neutral-900 antialiased selection:bg-amber-400 selection:text-neutral-950">
+      <div className="w-full min-h-screen flex flex-col bg-white">
         
         {/* Top Header Bar */}
-        <div className="bg-neutral-50 px-4 sm:px-6 py-3.5 border-b border-neutral-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-amber-400 text-neutral-950 flex items-center justify-center font-black shadow-sm">
-              <Zap className="w-5 h-5 fill-neutral-950" />
+        <header className="bg-neutral-950 text-white px-4 sm:px-8 py-3.5 border-b border-neutral-800 flex flex-wrap items-center justify-between gap-4 shrink-0 shadow-md sticky top-0 z-40">
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-amber-400 text-neutral-950 flex items-center justify-center font-black shadow-md shadow-amber-400/20">
+              <Zap className="w-6 h-6 fill-neutral-950 stroke-[2.5]" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-base sm:text-lg font-black text-neutral-900 font-['Outfit',sans-serif] tracking-tight">
-                  Solarstock Admin Master Panel
-                </h2>
-                <span className="bg-emerald-50 text-emerald-700 border border-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <h1 className="text-lg sm:text-xl font-black text-white font-['Outfit',sans-serif] tracking-tight">
+                  Solarstock Master Operations & Admin
+                </h1>
+                <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   Live Sync Active
                 </span>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${
-                  adminRole === 'boss'
-                    ? 'bg-amber-100 text-amber-900 border border-amber-300'
-                    : 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                }`}>
+                <span
+                  className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1 border ${
+                    adminRole === 'boss'
+                      ? 'bg-amber-400/20 text-amber-300 border-amber-400/40'
+                      : 'bg-emerald-400/20 text-emerald-300 border-emerald-400/40'
+                  }`}
+                >
                   {adminRole === 'boss' ? '👑 Master Admin (Boss)' : '⚡ Store Manager'}
                 </span>
               </div>
-              <p className="text-xs text-neutral-500">
-                Manage hero carousel, slide 3 showcase, sub-categories, brands, guarantees, products & store security
+              <p className="text-xs text-neutral-400">
+                Dedicated administrative console for products, hero carousels, slide 3 showcase, customer approvals, branches & system settings
               </p>
             </div>
           </div>
@@ -179,7 +181,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
             {/* Factory Reset */}
             <button
               onClick={() => setShowResetConfirm(true)}
-              className="bg-white hover:bg-rose-50 text-neutral-600 hover:text-rose-700 hover:border-rose-300 border border-neutral-300 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs"
+              className="bg-neutral-900 hover:bg-rose-950/40 text-neutral-300 hover:text-rose-300 hover:border-rose-500/50 border border-neutral-800 px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs"
               title="Reset all store data to factory defaults"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -193,8 +195,8 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                 logoutAdmin();
                 onClose();
               }}
-              className="bg-white hover:bg-rose-50 text-rose-600 hover:text-rose-700 border border-neutral-300 hover:border-rose-300 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors shadow-2xs"
-              title="Log out of Admin Panel and return to store profile"
+              className="bg-neutral-900 hover:bg-rose-900/60 text-rose-300 hover:text-white border border-neutral-800 hover:border-rose-600 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors shadow-2xs"
+              title="Log out of Admin Panel and return to store"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span>Logout</span>
@@ -203,18 +205,18 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
             {/* Exit & Return to Store */}
             <button
               onClick={onClose}
-              className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm hover:scale-102"
+              className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 sm:px-5 py-2 rounded-xl text-xs flex items-center gap-2 transition-all shadow-md hover:scale-102 cursor-pointer"
             >
               <Eye className="w-4 h-4" />
-              <span>Exit & View Live Store</span>
-              <X className="w-4 h-4 ml-1" />
+              <span>Exit to Live Store</span>
+              <X className="w-4 h-4 ml-0.5" />
             </button>
           </div>
-        </div>
+        </header>
 
         {/* Global Toast Notification */}
         {notification && (
-          <div className="bg-amber-400 text-neutral-950 px-4 py-2 text-xs font-bold flex items-center justify-between shadow-sm animate-in slide-in-from-top-2">
+          <div className="bg-amber-400 text-neutral-950 px-6 py-2.5 text-xs font-bold flex items-center justify-between shadow-sm sticky top-[69px] z-35">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 fill-neutral-950 text-amber-400" />
               <span>{notification}</span>
@@ -226,7 +228,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
         )}
 
         {/* Navigation Tabs Header */}
-        <div className="bg-neutral-100/90 border-b border-neutral-200 px-4 flex items-center gap-1 overflow-x-auto scrollbar-none shrink-0 text-xs">
+        <div className="bg-neutral-900 border-b border-neutral-800 px-4 sm:px-8 flex items-center gap-1 overflow-x-auto scrollbar-none shrink-0 text-xs sticky top-[69px] z-30 shadow-xs">
           {[
             { id: 'overview', label: 'Dashboard', icon: Layout },
             { id: 'hero_slides', label: 'Hero & Slide 3', icon: Zap },
@@ -255,10 +257,10 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-1.5 px-3.5 py-3 font-bold border-b-2 whitespace-nowrap transition-colors ${
+                className={`flex items-center gap-2 px-4 py-3 font-bold border-b-2 whitespace-nowrap transition-colors ${
                   isActive
-                    ? 'border-amber-500 text-neutral-950 bg-white shadow-2xs'
-                    : 'border-transparent text-neutral-600 hover:text-neutral-950 hover:bg-neutral-200/50'
+                    ? 'border-amber-400 text-amber-400 bg-neutral-800/80 shadow-xs'
+                    : 'border-transparent text-neutral-400 hover:text-white hover:bg-neutral-800/40'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -269,7 +271,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
         </div>
 
         {/* Tab Content Body */}
-        <div className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-6 bg-neutral-50/60">
+        <div className="flex-1 p-4 sm:p-8 space-y-6 bg-neutral-50/80 max-w-7xl w-full mx-auto">
           {/* Custom Editable Modules */}
           {activeTab === 'hero_slides' && <AdminHeroSlidesTab />}
           {activeTab === 'subcategories' && <AdminSubCategoriesTab />}

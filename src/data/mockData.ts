@@ -26,6 +26,19 @@ import familySolarLiving from '../assets/images/family_solar_living_178824677037
 import travelPortableSolar from '../assets/images/travel_portable_solar_1788246785319.jpg';
 import brightSolarShowcase from '../assets/images/bright_solar_products_showcase_1788316402828.jpg';
 import brightSolarBattery from '../assets/images/bright_solar_inverter_battery_1788316424489.jpg';
+import deyeHybridInverter from '../assets/images/deye_hybrid_inverter_1789293075226.jpg';
+import sajHybridInverter from '../assets/images/saj_hybrid_inverter_1789293091334.jpg';
+import sajBatteryTower from '../assets/images/saj_battery_tower_1789293104294.jpg';
+import deyeRackBattery from '../assets/images/deye_rack_battery_1789293122831.jpg';
+import twBifacialSolar from '../assets/images/tw_bifacial_solar_1789293137344.jpg';
+import jaAllblackSolar from '../assets/images/ja_allblack_solar_1789293151276.jpg';
+import diffulSubmersible from '../assets/images/difful_submersible_1789293166826.jpg';
+import diffulBoosterPump from '../assets/images/difful_booster_pump_1789293182144.jpg';
+import projoyPefsSwitch from '../assets/images/projoy_pefs_switch_1789293197774.jpg';
+import projoyPedsIsolator from '../assets/images/projoy_peds_isolator_1789293211465.jpg';
+import projoyCombinerBox from '../assets/images/projoy_combiner_box_1789293232885.jpg';
+import epF4PalletTruck from '../assets/images/ep_f4_pallet_truck_1789293252232.jpg';
+import solarstockBalcony from '../assets/images/solarstock_balcony_1789293267565.jpg';
 
 export const CATEGORIES: Category[] = [
   {
@@ -152,9 +165,9 @@ export const PRODUCTS: Product[] = [
     subCategory: 'Deye Low Voltage Hybrid (3-12kW)',
     brand: 'Deye',
     images: [
-      'https://images.unsplash.com/photo-1558441719-8b489c652790?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80',
-      brightSolarShowcase
+      deyeHybridInverter,
+      brightSolarShowcase,
+      brightSolarBattery
     ],
     price: 115000,
     originalPrice: 130000,
@@ -194,9 +207,9 @@ export const PRODUCTS: Product[] = [
     subCategory: 'Deye Low Voltage Hybrid (3-12kW)',
     brand: 'Deye',
     images: [
-      'https://images.unsplash.com/photo-1558441719-8b489c652790?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80',
-      brightSolarShowcase
+      deyeHybridInverter,
+      brightSolarShowcase,
+      brightSolarBattery
     ],
     price: 168000,
     originalPrice: 188000,
@@ -245,8 +258,7 @@ export const PRODUCTS: Product[] = [
     subCategory: 'Deye Single-Phase On-Grid (SUN-8K-G02P1)',
     brand: 'Deye',
     images: [
-      'https://images.unsplash.com/photo-1558441719-8b489c652790?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80',
+      deyeHybridInverter,
       brightSolarShowcase
     ],
     price: 135000,
@@ -289,9 +301,9 @@ export const PRODUCTS: Product[] = [
     subCategory: 'Deye Low Voltage Hybrid (3-12kW)',
     brand: 'Deye',
     images: [
-      'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1558441719-8b489c652790?auto=format&fit=crop&w=800&q=80',
-      brightSolarShowcase
+      deyeHybridInverter,
+      brightSolarShowcase,
+      brightSolarBattery
     ],
     price: 265000,
     originalPrice: 295000,
@@ -331,8 +343,8 @@ export const PRODUCTS: Product[] = [
     subCategory: 'Deye BOS-G High-Voltage Rack',
     brand: 'Deye',
     images: [
+      deyeRackBattery,
       brightSolarBattery,
-      'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80',
       brightSolarShowcase
     ],
     price: 185000,
@@ -372,9 +384,9 @@ export const PRODUCTS: Product[] = [
     subCategory: 'SAJ Three-Phase Hybrid (H2 Series)',
     brand: 'SAJ',
     images: [
-      'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1558441719-8b489c652790?auto=format&fit=crop&w=800&q=80',
-      brightSolarShowcase
+      sajHybridInverter,
+      brightSolarShowcase,
+      brightSolarBattery
     ],
     price: 225000,
     originalPrice: 250000,
@@ -412,8 +424,9 @@ export const PRODUCTS: Product[] = [
     subCategory: 'SAJ B2 Smart LiFePO4 Wall',
     brand: 'SAJ',
     images: [
+      sajBatteryTower,
       brightSolarBattery,
-      'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80'
+      brightSolarShowcase
     ],
     price: 310000,
     originalPrice: 345000,
@@ -450,8 +463,8 @@ export const PRODUCTS: Product[] = [
     subCategory: 'SAJ Single-Phase On-Grid (R5 Series)',
     brand: 'SAJ',
     images: [
-      'https://images.unsplash.com/photo-1558441719-8b489c652790?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80'
+      sajHybridInverter,
+      brightSolarShowcase
     ],
     price: 72000,
     originalPrice: 82000,
@@ -489,9 +502,9 @@ export const PRODUCTS: Product[] = [
     subCategory: 'TW Solar N-Type TNC Bifacial (585W)',
     brand: 'TW Solar (Tongwei)',
     images: [
-      flagshipSolarArray,
+      twBifacialSolar,
       brightSolarShowcase,
-      'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80'
+      flagshipSolarArray
     ],
     price: 15800,
     originalPrice: 18500,
@@ -531,9 +544,9 @@ export const PRODUCTS: Product[] = [
     subCategory: 'TW Solar N-Type TNC Bifacial (585W)',
     brand: 'TW Solar (Tongwei)',
     images: [
-      flagshipSolarArray,
+      twBifacialSolar,
       brightSolarShowcase,
-      'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80'
+      flagshipSolarArray
     ],
     price: 16800,
     originalPrice: 19500,
@@ -579,8 +592,8 @@ export const PRODUCTS: Product[] = [
     subCategory: 'TW Solar G12 High-Power (690W)',
     brand: 'TW Solar (Tongwei)',
     images: [
+      twBifacialSolar,
       flagshipSolarArray,
-      'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80',
       brightSolarShowcase
     ],
     price: 0,
@@ -619,9 +632,9 @@ export const PRODUCTS: Product[] = [
     subCategory: 'JA Solar N-Type Bifacial Double Glass (625W)',
     brand: 'JA Solar',
     images: [
-      flagshipSolarArray,
+      twBifacialSolar,
       brightSolarShowcase,
-      'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80'
+      flagshipSolarArray
     ],
     price: 17200,
     originalPrice: 19800,
@@ -670,9 +683,9 @@ export const PRODUCTS: Product[] = [
     subCategory: 'JA Solar DeepBlue 4.0 Pro (580W)',
     brand: 'JA Solar',
     images: [
+      twBifacialSolar,
       brightSolarShowcase,
-      flagshipSolarArray,
-      'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80'
+      flagshipSolarArray
     ],
     price: 15500,
     originalPrice: 17800,
@@ -711,9 +724,9 @@ export const PRODUCTS: Product[] = [
     subCategory: 'JA Solar DeepBlue 3.0 All-Black (415W)',
     brand: 'JA Solar',
     images: [
+      jaAllblackSolar,
       rooftopSolarHome,
-      brightSolarShowcase,
-      'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80'
+      brightSolarShowcase
     ],
     price: 11200,
     originalPrice: 13000,
@@ -750,9 +763,8 @@ export const PRODUCTS: Product[] = [
     subCategory: 'Difful DC Brushless Submersible (48V/72V/110V)',
     brand: 'Difful',
     images: [
-      brightSolarShowcase,
-      'https://images.unsplash.com/photo-1508873696983-2df5293cb32f?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=800&q=80'
+      diffulSubmersible,
+      brightSolarShowcase
     ],
     price: 42000,
     originalPrice: 48000,
@@ -791,9 +803,8 @@ export const PRODUCTS: Product[] = [
     subCategory: 'Difful AC/DC Hybrid Deep Well Pump',
     brand: 'Difful',
     images: [
-      brightSolarShowcase,
-      'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1508873696983-2df5293cb32f?auto=format&fit=crop&w=800&q=80'
+      diffulSubmersible,
+      brightSolarShowcase
     ],
     price: 68000,
     originalPrice: 78000,
@@ -831,8 +842,8 @@ export const PRODUCTS: Product[] = [
     subCategory: 'Difful Solar Surface Booster Pump',
     brand: 'Difful',
     images: [
-      brightSolarShowcase,
-      'https://images.unsplash.com/photo-1558441719-8b489c652790?auto=format&fit=crop&w=800&q=80'
+      diffulBoosterPump,
+      brightSolarShowcase
     ],
     price: 34000,
     originalPrice: 39000,
@@ -869,9 +880,8 @@ export const PRODUCTS: Product[] = [
     subCategory: 'Difful AC/DC Hybrid Deep Well Pump (4DSC 2200W)',
     brand: 'Difful',
     images: [
-      brightSolarShowcase,
-      'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1508873696983-2df5293cb32f?auto=format&fit=crop&w=800&q=80'
+      diffulSubmersible,
+      brightSolarShowcase
     ],
     price: 89000,
     originalPrice: 102000,
@@ -914,8 +924,8 @@ export const PRODUCTS: Product[] = [
     subCategory: 'Projoy PEFS Firefighter Rapid Shutdown',
     brand: 'Projoy Electric',
     images: [
-      brightSolarShowcase,
-      'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80'
+      projoyPefsSwitch,
+      brightSolarShowcase
     ],
     price: 18500,
     originalPrice: 22000,
@@ -951,8 +961,8 @@ export const PRODUCTS: Product[] = [
     subCategory: 'Projoy PEDS 1000V DC Isolator Switches',
     brand: 'Projoy Electric',
     images: [
-      brightSolarShowcase,
-      'https://images.unsplash.com/photo-1558441719-8b489c652790?auto=format&fit=crop&w=800&q=80'
+      projoyPedsIsolator,
+      brightSolarShowcase
     ],
     price: 4200,
     originalPrice: 5000,
@@ -988,8 +998,8 @@ export const PRODUCTS: Product[] = [
     subCategory: 'PROJOY Protection & Combiner Boxes (EPS / MI / AC / DC)',
     brand: 'Projoy Electric',
     images: [
-      brightSolarShowcase,
-      'https://images.unsplash.com/photo-1558441719-8b489c652790?auto=format&fit=crop&w=800&q=80'
+      projoyCombinerBox,
+      brightSolarShowcase
     ],
     price: 0,
     originalPrice: 0,
@@ -1022,8 +1032,8 @@ export const PRODUCTS: Product[] = [
     subCategory: 'PROJOY Protection & Combiner Boxes (EPS / MI / AC / DC)',
     brand: 'Projoy Electric',
     images: [
-      brightSolarShowcase,
-      'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80'
+      projoyCombinerBox,
+      brightSolarShowcase
     ],
     price: 0,
     originalPrice: 0,
@@ -1056,8 +1066,8 @@ export const PRODUCTS: Product[] = [
     subCategory: 'PROJOY Protection & Combiner Boxes (EPS / MI / AC / DC)',
     brand: 'Projoy Electric',
     images: [
-      brightSolarShowcase,
-      'https://images.unsplash.com/photo-1558441719-8b489c652790?auto=format&fit=crop&w=800&q=80'
+      projoyCombinerBox,
+      brightSolarShowcase
     ],
     price: 0,
     originalPrice: 0,
@@ -1090,8 +1100,8 @@ export const PRODUCTS: Product[] = [
     subCategory: 'PROJOY Protection & Combiner Boxes (EPS / MI / AC / DC)',
     brand: 'Projoy Electric',
     images: [
-      brightSolarShowcase,
-      'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80'
+      projoyCombinerBox,
+      brightSolarShowcase
     ],
     price: 0,
     originalPrice: 0,
@@ -1124,8 +1134,8 @@ export const PRODUCTS: Product[] = [
     subCategory: 'PROJOY Protection & Combiner Boxes (EPS / MI / AC / DC)',
     brand: 'Projoy Electric',
     images: [
-      brightSolarShowcase,
-      'https://images.unsplash.com/photo-1558441719-8b489c652790?auto=format&fit=crop&w=800&q=80'
+      projoyCombinerBox,
+      brightSolarShowcase
     ],
     price: 0,
     originalPrice: 0,
@@ -1158,8 +1168,8 @@ export const PRODUCTS: Product[] = [
     subCategory: 'PROJOY Protection & Combiner Boxes (EPS / MI / AC / DC)',
     brand: 'Projoy Electric',
     images: [
-      brightSolarShowcase,
-      'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80'
+      projoyCombinerBox,
+      brightSolarShowcase
     ],
     price: 0,
     originalPrice: 0,
@@ -1192,8 +1202,8 @@ export const PRODUCTS: Product[] = [
     subCategory: 'PROJOY Protection & Combiner Boxes (EPS / MI / AC / DC)',
     brand: 'Projoy Electric',
     images: [
-      brightSolarShowcase,
-      'https://images.unsplash.com/photo-1558441719-8b489c652790?auto=format&fit=crop&w=800&q=80'
+      projoyCombinerBox,
+      brightSolarShowcase
     ],
     price: 0,
     originalPrice: 0,
@@ -1226,8 +1236,8 @@ export const PRODUCTS: Product[] = [
     subCategory: 'EP Equipment Lithium Pallet Trucks (EPL154)',
     brand: 'EP Equipment',
     images: [
+      epF4PalletTruck,
       brightSolarBattery,
-      'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
       brightSolarShowcase
     ],
     price: 0,
@@ -1274,8 +1284,8 @@ export const PRODUCTS: Product[] = [
     subCategory: 'Balcony Solar Storage Systems',
     brand: 'Solarstock',
     images: [
+      solarstockBalcony,
       solarYellowBlackPoster1,
-      brightSolarShowcase,
       rooftopSolarHome
     ],
     price: 89000,
@@ -1485,9 +1495,8 @@ export const PRODUCTS: Product[] = [
     subCategory: 'YOUYO Portable Power Stations (R100 / R200)',
     brand: 'YOUYO',
     images: [
+      youyoR100Poster,
       travelPortableSolar,
-      neozl300wPoster,
-      familySolarLiving,
       solarYellowBlackPoster1
     ],
     price: 18500,
@@ -1529,10 +1538,9 @@ export const PRODUCTS: Product[] = [
     subCategory: 'YOUYO Portable Power Stations (R100 / R200)',
     brand: 'YOUYO',
     images: [
+      youyoR100Poster,
       familySolarLiving,
-      travelPortableSolar,
-      neozl300wPoster,
-      brightSolarShowcase
+      travelPortableSolar
     ],
     price: 11900,
     originalPrice: 14500,
@@ -2014,7 +2022,9 @@ export const DEFAULT_HERO_SLIDES: HeroSlideItem[] = [
     title: 'Regional Solar Solutions | Infrastructure & Energy Platform',
     subtitle: 'Connecting sourcing, storage, and execution into a single coordinated system across Bangladesh, Thailand, and China.',
     category: 'hybrid-inverters',
-    buttonText: 'Explore Solutions'
+    buttonText: 'Explore Solutions',
+    productId: 'prod-deye-sun-12k',
+    redirectLink: '#prod-deye-sun-12k'
   },
   {
     id: 1,
@@ -2025,7 +2035,9 @@ export const DEFAULT_HERO_SLIDES: HeroSlideItem[] = [
     title: 'High-Efficiency C&I Hybrid Inverters & High-Voltage ESS',
     subtitle: 'Scalable energy storage and solar generation engineered to power manufacturing facilities and commercial parks.',
     category: 'lithium-batteries',
-    buttonText: 'View C&I Solutions'
+    buttonText: 'View C&I Solutions',
+    productId: 'prod-saj-h2-10k',
+    redirectLink: '#prod-saj-h2-10k'
   },
   {
     id: 2,
@@ -2036,7 +2048,9 @@ export const DEFAULT_HERO_SLIDES: HeroSlideItem[] = [
     title: 'TW Solar & JA Solar High-Efficiency TOPCon Bifacial Arrays',
     subtitle: '580W to 690W N-Type dual-glass modules delivering industry-leading energy density and lowest levelized cost of energy.',
     category: 'solar-panels',
-    buttonText: 'View Solar Modules'
+    buttonText: 'View Solar Modules',
+    productId: 'prod-tw-solar-620w-bifacial',
+    redirectLink: '#prod-tw-solar-620w-bifacial'
   },
   {
     id: 3,
@@ -2047,7 +2061,9 @@ export const DEFAULT_HERO_SLIDES: HeroSlideItem[] = [
     title: 'Difful Solar Pumps & SolarStock LiFePO4 Power Stations',
     subtitle: 'Brushless DC submersible irrigation pumps and ultra-durable LiFePO4 generators for off-grid energy security.',
     category: 'solar-pumps',
-    buttonText: 'Explore Solar Pumping'
+    buttonText: 'Explore Solar Pumping',
+    productId: 'prod-difful-4dsc-2200w',
+    redirectLink: '#prod-difful-4dsc-2200w'
   }
 ];
 

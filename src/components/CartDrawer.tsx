@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight, ShieldCheck, CheckCircle2, CreditCard, Sparkles } from 'lucide-react';
+import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight, ShieldCheck, CheckCircle2, CreditCard, Sparkles, UserX, UserCheck } from 'lucide-react';
 import { CartItem } from '../types';
+import { useStore } from '../context/StoreContext';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -21,6 +22,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   onClearCart,
   onContinueShopping
 }) => {
+  const { isGuest, continueAsGuest, logoutCustomer, logoutAdmin } = useStore();
   const [couponCode, setCouponCode] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
   const [couponMessage, setCouponMessage] = useState<string | null>(null);
@@ -32,6 +34,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const [customerPhone, setCustomerPhone] = useState('');
   const [customerAddress, setCustomerAddress] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'cod' | 'bkash' | 'nagad' | 'emi'>('cod');
+  const [checkoutAsGuest, setCheckoutAsGuest] = useState(false);
 
   if (!isOpen) return null;
 
@@ -70,6 +73,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     if (!customerName || !customerPhone || !customerAddress) {
       alert('Please fill out your delivery name, phone, and full address.');
       return;
+    }
+    if (checkoutAsGuest) {
+      logoutCustomer();
+      logoutAdmin();
+      continueAsGuest();
     }
     setCheckoutStep('success');
   };
@@ -410,6 +418,36 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     </label>
                   </div>
                 </div>
+
+                {/* Guest Checkout Option */}
+                {!isGuest ? (
+                  <div className="p-3 bg-neutral-50 rounded-xl border border-neutral-200">
+                    <label className="flex items-start gap-2.5 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        id="checkout-as-guest-toggle"
+                        checked={checkoutAsGuest}
+                        onChange={(e) => setCheckoutAsGuest(e.target.checked)}
+                        className="mt-0.5 accent-amber-500 w-4 h-4 rounded cursor-pointer"
+                      />
+                      <div className="text-xs">
+                        <span className="font-bold text-neutral-900 block">
+                          Sign out & take product as guest
+                        </span>
+                        <span className="text-[11px] text-neutral-500 block leading-tight mt-0.5">
+                          Tick here to check out without linking to your registered account. Your session will be signed out and treated as guest buyer.
+                        </span>
+                      </div>
+                    </label>
+                  </div>
+                ) : (
+                  <div className="p-2.5 bg-amber-50 rounded-xl border border-amber-200 flex items-center gap-2">
+                    <UserCheck className="w-4 h-4 text-amber-600 shrink-0" />
+                    <span className="text-xs text-amber-950 font-medium">
+                      Order will be placed as <strong>Guest Buyer</strong>.
+                    </span>
+                  </div>
+                )}
 
                 <button
                   type="submit"

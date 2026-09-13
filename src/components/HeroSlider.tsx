@@ -25,7 +25,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
   onSelectProduct,
   onExploreCategory
 }) => {
-  const { heroSlides } = useStore();
+  const { heroSlides, products } = useStore();
   // 1. Top Main Hero Slider State
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -69,10 +69,49 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
     setActiveSlide((prev) => (prev + 1) % totalSlides);
   };
 
-  const handleClick = (category: string, productId?: string) => {
+  const handleClick = (category: string, productId?: string, redirectLink?: string) => {
+    // 1. Direct Product ID redirection (Highest priority)
     if (productId && onSelectProduct) {
       onSelectProduct(productId);
-    } else if (onExploreCategory) {
+      return;
+    }
+
+    // 2. Custom Redirect Link handling
+    if (redirectLink && redirectLink.trim().length > 0) {
+      const link = redirectLink.trim();
+      const cleanId = link.startsWith('#') ? link.slice(1) : link;
+      
+      // If it matches a product ID directly (e.g. prod-deye-sun-12k or with #)
+      if (onSelectProduct) {
+        const matchingProduct = products.find(
+          (p) =>
+            p.id.toLowerCase() === cleanId.toLowerCase() ||
+            p.name.toLowerCase() === cleanId.toLowerCase()
+        );
+        if (matchingProduct) {
+          onSelectProduct(matchingProduct.id);
+          return;
+        }
+      }
+
+      // If it's an external web URL
+      if (link.startsWith('http://') || link.startsWith('https://')) {
+        window.open(link, '_blank', 'noopener,noreferrer');
+        return;
+      }
+
+      // If it's an on-page anchor
+      if (link.startsWith('#')) {
+        const el = document.querySelector(link);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+          return;
+        }
+      }
+    }
+
+    // 3. Fallback to category exploration
+    if (onExploreCategory) {
       onExploreCategory(category);
     } else if (onBannerClick) {
       onBannerClick(category);
@@ -94,7 +133,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
           return (
             <div
               key={slide.id}
-              onClick={() => handleClick(slide.category)}
+              onClick={() => handleClick(slide.category, slide.productId, slide.redirectLink)}
               className={`absolute inset-0 w-full h-full cursor-pointer transition-opacity duration-700 ease-in-out ${
                 isActive ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'
               }`}
