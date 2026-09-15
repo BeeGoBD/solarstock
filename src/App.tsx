@@ -92,6 +92,19 @@ function StoreMainApp() {
     }
   }, [wishlist]);
 
+  // Ensure browser top bar / status bar matches search button color (#fbbf24)
+  useEffect(() => {
+    const metaTags = document.querySelectorAll('meta[name="theme-color"]');
+    if (metaTags.length > 0) {
+      metaTags.forEach(tag => tag.setAttribute('content', '#fbbf24'));
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'theme-color';
+      meta.content = '#fbbf24';
+      document.head.appendChild(meta);
+    }
+  }, []);
+
   const toggleWishlist = (productId: string) => {
     setWishlist((prev) =>
       prev.includes(productId) ? prev.filter((id) => id !== productId) : [...prev, productId]
