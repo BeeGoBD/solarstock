@@ -3,7 +3,6 @@ import { Search, Menu, X, ShoppingBag, Sun, Zap, Phone, ShieldCheck, Heart, Slid
 import { Product } from '../types';
 import { SEARCH_SUGGESTIONS } from '../data/mockData';
 import { useStore } from '../context/StoreContext';
-import { SolarStockLogo } from './SolarStockLogo';
 
 interface HeaderProps {
   cartCount: number;
@@ -164,15 +163,22 @@ export const Header: React.FC<HeaderProps> = ({
               onSearch('');
               setInternalQuery('');
             }}
-            className="flex items-center group text-left focus:outline-none shrink-0 transition-opacity hover:opacity-95"
-            aria-label="SolarStock - Home"
+            className="flex items-center gap-2 group text-left focus:outline-none shrink-0"
           >
-            <SolarStockLogo
-              variant="horizontal"
-              size="md"
-              showTagline={true}
-              className="group-hover:scale-[1.02] transition-transform duration-200"
-            />
+            <div className="relative flex items-center">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 bg-amber-400 rounded-lg flex items-center justify-center shadow-md shadow-amber-400/30 group-hover:scale-105 transition-transform">
+                <Sun className="w-5 h-5 text-neutral-950 stroke-[2.5]" />
+              </div>
+              <div className="ml-2">
+                <span className="text-xl sm:text-2xl font-extrabold tracking-tight text-neutral-950 font-['Outfit',sans-serif]">
+                  solar<span className="text-amber-500">stock</span>
+                  <span className="text-xs font-semibold align-super ml-0.5 text-neutral-500">™</span>
+                </span>
+                <span className="block text-[9px] uppercase tracking-widest text-neutral-500 -mt-1 font-semibold">
+                  Solar • IPS • Inverter
+                </span>
+              </div>
+            </div>
           </button>
 
           {/* Prominent Category Button in Desktop Header */}

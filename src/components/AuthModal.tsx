@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { X, Eye, EyeOff, User, Lock, Phone, ArrowRight, ShieldCheck, KeyRound, AlertTriangle, UserCheck, LogOut } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
-import { SolarStockLogo } from './SolarStockLogo';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -185,14 +184,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
             {/* Header Graphic */}
             <div className="flex flex-col items-center text-center">
-              <div className="mb-2">
-                <SolarStockLogo
-                  variant="stacked"
-                  size="sm"
-                  showTagline={true}
-                />
+              <div className="w-14 h-14 bg-amber-400 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-400/30 mb-2">
+                <User className="w-7 h-7 text-neutral-950 stroke-[2.5]" />
               </div>
-              <h2 className="text-lg font-extrabold text-neutral-950 font-['Outfit',sans-serif] mt-1">
+              <h2 className="text-xl font-extrabold text-neutral-950 font-['Outfit',sans-serif]">
                 Account Login
               </h2>
               <p className="text-xs text-neutral-500">

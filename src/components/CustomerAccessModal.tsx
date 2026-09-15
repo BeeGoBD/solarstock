@@ -19,7 +19,6 @@ import {
   Sparkles
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
-import { SolarStockEmblem } from './SolarStockLogo';
 
 interface CustomerAccessModalProps {
   isOpen: boolean;
@@ -140,8 +139,8 @@ export const CustomerAccessModal: React.FC<CustomerAccessModalProps> = ({
         {/* Header Ribbon */}
         <div className="bg-neutral-950 text-white px-6 py-4 flex items-center justify-between border-b border-neutral-800">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-center p-1 shadow-md">
-              <SolarStockEmblem className="w-8 h-8" theme="dark" />
+            <div className="w-10 h-10 rounded-xl bg-amber-400 text-neutral-950 flex items-center justify-center font-black shadow-md">
+              <Building2 className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">

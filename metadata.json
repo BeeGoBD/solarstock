@@ -1,6 +1,6 @@
 {
   "name": "SolarStock - Regional Solar Solutions | Infrastructure & Energy Platform",
-  "description": "SolarStock - We stock solar. Premier regional solar solutions, hybrid inverters, Tier-1 solar panels, energy storage, and industrial solar equipment.",
+  "description": "SolarStock connects sourcing, storage, and execution into a single coordinated system — helping teams move faster from planning to live deployment across regions.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

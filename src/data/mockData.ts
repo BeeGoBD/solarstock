@@ -1646,11 +1646,11 @@ export const DEFAULT_FOOTER_CONFIG: import('../types').FooterConfig = {
 };
 
 export const DEFAULT_BRAND_CONFIG: import('../types').BrandConfig = {
-  logoMain: 'SOLAR',
-  logoAccent: 'STOCK',
-  logoSymbol: '',
-  tagline: 'We stock solar',
-  announcementText: 'We stock solar • Tier-1 Solar Panels, Hybrid Inverters & Energy Storage Solutions',
+  logoMain: 'Solar',
+  logoAccent: 'Stock',
+  logoSymbol: '®',
+  tagline: 'Regional Solar Solutions | Infrastructure & Energy Platform',
+  announcementText: 'Regional Solar Solutions | Infrastructure & Energy Platform • 1,200 MW+ Delivered Worldwide',
   warrantyHeaderTag: 'Regional Execution & Tier-1 Warranties',
   hotlineHeader: '+66 063 323 8863 | 01306-061919',
   currencySymbol: '৳'

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Facebook, Instagram, Linkedin, Youtube, MapPin, Mail, Phone, Sun, ShieldCheck } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
-import { SolarStockLogo } from './SolarStockLogo';
 
 interface FooterProps {
   onOpenLocations: () => void;
@@ -22,14 +21,18 @@ export const Footer: React.FC<FooterProps> = ({
         {/* Brand & Social Row matching video (00:34) */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-6 border-b border-neutral-800">
           <div className="space-y-3">
-            {/* Official Brand Logo */}
-            <div className="select-none py-1">
-              <SolarStockLogo
-                variant="horizontal"
-                size="md"
-                theme="dark"
-                showTagline={true}
-              />
+            {/* Standard Brand Logo */}
+            <div className="flex items-center gap-2 select-none">
+              <div className="w-8 h-8 bg-amber-400 rounded-lg flex items-center justify-center shadow-md">
+                <Sun className="w-5 h-5 text-neutral-950 stroke-[2.5]" />
+              </div>
+              <span className="text-2xl font-extrabold tracking-tight text-white font-['Outfit',sans-serif]">
+                {brandConfig.logoMain}
+                <span className="text-amber-400">{brandConfig.logoAccent}</span>
+                <span className="text-xs font-semibold align-super ml-0.5 text-neutral-400">
+                  {brandConfig.logoSymbol}
+                </span>
+              </span>
             </div>
 
             {/* Store Location Button matching video (00:34) */}
