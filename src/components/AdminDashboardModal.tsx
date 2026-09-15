@@ -41,6 +41,7 @@ import { AdminBrandsTab } from './admin/AdminBrandsTab';
 import { AdminContentSectionsTab } from './admin/AdminContentSectionsTab';
 import { AdminSecurityTab } from './admin/AdminSecurityTab';
 import { AdminCustomersTab } from './admin/AdminCustomersTab';
+import { SolarStockEmblem } from './SolarStockLogo';
 
 interface AdminDashboardModalProps {
   isOpen: boolean;
@@ -149,8 +150,8 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
         {/* Top Header Bar */}
         <header className="bg-neutral-950 text-white px-4 sm:px-8 py-3.5 border-b border-neutral-800 flex flex-wrap items-center justify-between gap-4 shrink-0 shadow-md sticky top-0 z-40">
           <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-amber-400 text-neutral-950 flex items-center justify-center font-black shadow-md shadow-amber-400/20">
-              <Zap className="w-6 h-6 fill-neutral-950 stroke-[2.5]" />
+            <div className="w-11 h-11 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-center p-1 shadow-md">
+              <SolarStockEmblem className="w-9 h-9" theme="dark" />
             </div>
             <div>
               <div className="flex items-center gap-2.5 flex-wrap">
