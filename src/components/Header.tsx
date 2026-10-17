@@ -14,7 +14,6 @@ interface HeaderProps {
   onOpenCustomerAccess: () => void;
   onSelectProduct?: (product: Product) => void;
   onSearch: (query: string) => void;
-  onOpenAdmin?: () => void;
   activeView: string;
   setActiveView: (view: any) => void;
   allProducts?: Product[];
@@ -29,7 +28,6 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenAuth,
   onOpenCalculator,
   onOpenCustomerAccess,
-  onOpenAdmin,
   onSelectProduct,
   onSearch,
   activeView,
@@ -38,7 +36,7 @@ export const Header: React.FC<HeaderProps> = ({
   searchQuery = '',
   setSearchQuery
 }) => {
-  const { adminRole, openAdmin, currentCustomer, isGuest, guestId, logoutGuest } = useStore();
+  const { currentCustomer, isGuest, guestId, logoutGuest } = useStore();
   const [internalQuery, setInternalQuery] = useState(searchQuery);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [showGuestMenu, setShowGuestMenu] = useState(false);
@@ -402,42 +400,31 @@ export const Header: React.FC<HeaderProps> = ({
             <span>Calculator</span>
           </button>
 
-          {/* Profile / Admin / Guest Access Button */}
+          {/* Customer / Guest Account Button */}
           <div className="relative">
             <button
-              id="header-profile-admin-btn"
+              id="header-profile-btn"
               onClick={() => {
-                if (adminRole) {
-                  if (onOpenAdmin) onOpenAdmin();
-                  else openAdmin();
-                } else if (isGuest) {
+                if (isGuest) {
                   setShowGuestMenu((prev) => !prev);
                 } else {
                   onOpenAuth();
                 }
               }}
               className={`flex items-center gap-1.5 p-2 sm:px-3 sm:py-2 rounded-xl border text-xs font-bold transition-all shadow-2xs cursor-pointer ${
-                adminRole
-                  ? 'bg-amber-400 text-neutral-950 border-amber-500 hover:bg-amber-300'
-                  : isGuest
+                isGuest
                   ? 'bg-amber-100 hover:bg-amber-200 text-neutral-900 border-amber-300'
                   : 'bg-neutral-100 hover:bg-neutral-200 text-neutral-800 border-neutral-200'
               }`}
-              title={adminRole ? 'Open Admin Control Panel (solarstock.bd/admin)' : isGuest ? 'Guest Account - Click to view options' : 'Account & Admin Login'}
+              title={isGuest ? 'Guest Account - Click to view options' : 'Customer Account & Sign In'}
             >
-              {adminRole ? (
-                <ShieldAlert className="w-4 h-4 text-neutral-950" />
-              ) : isGuest ? (
+              {isGuest ? (
                 <UserCheck className="w-4 h-4 text-amber-700" />
               ) : (
                 <User className="w-4 h-4 text-neutral-700" />
               )}
               <span className="hidden md:inline font-semibold">
-                {adminRole
-                  ? adminRole === 'boss'
-                    ? 'Master Admin'
-                    : 'Admin Panel'
-                  : currentCustomer
+                {currentCustomer
                   ? currentCustomer.companyName
                   : isGuest
                   ? 'Guest'
@@ -445,9 +432,6 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
               {isGuest && (
                 <ChevronDown className="w-3.5 h-3.5 text-neutral-700 hidden md:inline ml-0.5" />
-              )}
-              {adminRole && (
-                <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
               )}
             </button>
 
@@ -472,19 +456,6 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
 
                 <div className="pt-2.5 space-y-1.5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowGuestMenu(false);
-                      if (onOpenAdmin) onOpenAdmin();
-                      else openAdmin();
-                    }}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-xs font-bold text-amber-800 hover:text-amber-950 hover:bg-amber-50 rounded-xl transition-colors text-left cursor-pointer border border-amber-200/80"
-                  >
-                    <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0" />
-                    <span>Admin Portal (solarstock.bd/admin)</span>
-                  </button>
-
                   <button
                     type="button"
                     onClick={() => {

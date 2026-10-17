@@ -10,10 +10,6 @@ interface AuthModalProps {
 
 export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const {
-    authenticateAdmin,
-    openAdmin,
-    adminRole,
-    logoutAdmin,
     isGuest,
     guestId,
     loginAsGuest,
@@ -41,22 +37,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     const enteredUsername = username.trim();
 
     setErrorMessage(null);
-
-    // Secret Admin check (completely invisible to regular users)
-    const authResult = authenticateAdmin(enteredPassword, enteredUsername);
-    if (authResult.success) {
-      setPassword('');
-      setUsername('');
-      openAdmin();
-      onClose();
-      return;
-    }
-
-    if (authResult.isWrongAdminPassword) {
-      setErrorMessage('Invalid phone/email or password. Please verify your credentials and try again.');
-      triggerShake();
-      return;
-    }
 
     // Standard user password validation
     if (enteredPassword.length < 4) {
@@ -152,36 +132,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           </div>
         ) : (
           <div className="space-y-5">
-            {/* If admin is currently active, allow opening dashboard directly */}
-            {adminRole && (
-              <div className="p-3.5 bg-amber-50 border border-amber-300 rounded-xl text-center space-y-2">
-                <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-amber-900">
-                  <ShieldCheck className="w-4 h-4 text-amber-600" />
-                  <span>Admin Session Active</span>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      openAdmin();
-                      onClose();
-                    }}
-                    className="flex-1 bg-amber-400 hover:bg-amber-300 text-neutral-950 font-bold py-2 rounded-lg text-xs flex items-center justify-center gap-1.5 shadow-2xs"
-                  >
-                    <span>Open Admin Panel</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => logoutAdmin()}
-                    className="px-3 bg-white hover:bg-rose-50 text-rose-600 border border-neutral-300 hover:border-rose-300 font-bold py-2 rounded-lg text-xs transition-colors"
-                  >
-                    Logout
-                  </button>
-                </div>
-              </div>
-            )}
-
             {/* Header Graphic */}
             <div className="flex flex-col items-center text-center">
               <div className="w-14 h-14 bg-amber-400 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-400/30 mb-2">
@@ -278,28 +228,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               <User className="w-4 h-4 text-amber-700" />
               <span>Login as Guest</span>
             </button>
-
-            {/* Direct Admin Gateway Link */}
-            <div className="pt-2 text-center border-t border-neutral-100">
-              <button
-                type="button"
-                onClick={() => {
-                  onClose();
-                  try {
-                    if (window.location.pathname !== '/admin') {
-                      window.history.pushState(null, '', '/admin');
-                      window.dispatchEvent(new PopStateEvent('popstate'));
-                    }
-                  } catch {
-                    window.location.hash = '/admin';
-                  }
-                }}
-                className="text-[11px] text-neutral-400 hover:text-amber-600 font-medium inline-flex items-center gap-1 cursor-pointer transition-colors"
-              >
-                <ShieldCheck className="w-3.5 h-3.5 text-amber-500" />
-                <span>Admin Login: <span className="font-mono font-semibold text-neutral-700 hover:text-amber-600">solarstock.bd/admin</span></span>
-              </button>
-            </div>
           </div>
         )}
       </div>

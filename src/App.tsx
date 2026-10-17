@@ -308,7 +308,6 @@ function StoreMainApp() {
         onOpenCart={() => setIsCartOpen(true)}
         onOpenAuth={() => setIsAuthOpen(true)}
         onOpenCustomerAccess={openCustomerAccess}
-        onOpenAdmin={navigateToAdmin}
         activeView={activeView}
         setActiveView={(v) => {
           setActiveView(v);
@@ -521,7 +520,6 @@ function StoreMainApp() {
         cartCount={cartItems.reduce((acc, item) => acc + item.quantity, 0)}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenAuth={() => setIsAuthOpen(true)}
-        onOpenAdmin={navigateToAdmin}
       />
 
       {/* 5. Drawers & Modals */}

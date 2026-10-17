@@ -12,8 +12,7 @@ import {
   CheckCircle2,
   AlertTriangle,
   Server,
-  Globe,
-  KeyRound
+  Globe
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 
@@ -34,7 +33,6 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
-  const [showCredentialsHint, setShowCredentialsHint] = useState(false);
 
   const triggerShake = () => {
     setIsShaking(true);
@@ -74,12 +72,6 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
         setErrorMessage('Access denied: Unrecognized admin credentials or security key.');
       }
     }
-  };
-
-  const handleQuickFill = (id: string, pass: string) => {
-    setUsername(id);
-    setPassword(pass);
-    setErrorMessage(null);
   };
 
   return (
@@ -166,21 +158,12 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label
-                  htmlFor="admin-password-input"
-                  className="block text-xs font-bold text-neutral-300 uppercase tracking-wider"
-                >
-                  Administrative Security Key
-                </label>
-                <button
-                  type="button"
-                  onClick={() => setShowCredentialsHint((prev) => !prev)}
-                  className="text-[11px] text-amber-400 hover:text-amber-300 transition-colors cursor-pointer"
-                >
-                  {showCredentialsHint ? 'Hide hints' : 'Need credentials?'}
-                </button>
-              </div>
+              <label
+                htmlFor="admin-password-input"
+                className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-1.5"
+              >
+                Administrative Security Key
+              </label>
               <div className="relative">
                 <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
                 <input
@@ -207,54 +190,6 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
                 </button>
               </div>
             </div>
-
-            {/* Quick-Fill Assistive Box (expandable) */}
-            {showCredentialsHint && (
-              <div className="p-3 bg-neutral-950/90 border border-neutral-800 rounded-xl text-xs space-y-2 animate-in fade-in">
-                <div className="flex items-center justify-between text-neutral-400 font-semibold">
-                  <span className="flex items-center gap-1.5">
-                    <KeyRound className="w-3.5 h-3.5 text-amber-400" />
-                    Authorized Access Profiles
-                  </span>
-                  <span className="text-[10px] text-neutral-500 font-mono">click to fill</span>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleQuickFill('admin@workforsolarstock.com', 'SolarStock@2026#SS')
-                    }
-                    className="text-left p-2 rounded-lg bg-neutral-900 hover:bg-neutral-800 border border-neutral-700/60 hover:border-amber-400/60 transition-all cursor-pointer group"
-                  >
-                    <div className="flex items-center justify-between">
-                      <strong className="text-amber-400 text-[11px] group-hover:underline">
-                        Store Manager
-                      </strong>
-                      <span className="text-[10px] text-neutral-400">1-Click</span>
-                    </div>
-                    <p className="text-[10px] text-neutral-400 font-mono truncate">
-                      SolarStock@2026#SS
-                    </p>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleQuickFill('master.admin', 'SS@Admin@2026#SolarSS')}
-                    className="text-left p-2 rounded-lg bg-neutral-900 hover:bg-neutral-800 border border-neutral-700/60 hover:border-amber-400/60 transition-all cursor-pointer group"
-                  >
-                    <div className="flex items-center justify-between">
-                      <strong className="text-emerald-400 text-[11px] group-hover:underline">
-                        Master Admin
-                      </strong>
-                      <span className="text-[10px] text-neutral-400">1-Click</span>
-                    </div>
-                    <p className="text-[10px] text-neutral-400 font-mono truncate">
-                      SS@Admin@2026#SolarSS
-                    </p>
-                  </button>
-                </div>
-              </div>
-            )}
 
             {/* Submit Button */}
             <button

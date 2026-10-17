@@ -1,5 +1,5 @@
 import React from 'react';
-import { Gift, ShoppingCart, User, Clock, MapPin, ShieldAlert, UserCheck } from 'lucide-react';
+import { Gift, ShoppingCart, User, Clock, MapPin, UserCheck } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 
 interface BottomNavProps {
@@ -8,7 +8,6 @@ interface BottomNavProps {
   cartCount: number;
   onOpenCart: () => void;
   onOpenAuth: () => void;
-  onOpenAdmin?: () => void;
 }
 
 export const BottomNav: React.FC<BottomNavProps> = ({
@@ -16,10 +15,9 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   setActiveView,
   cartCount,
   onOpenCart,
-  onOpenAuth,
-  onOpenAdmin
+  onOpenAuth
 }) => {
-  const { adminRole, openAdmin, isGuest } = useStore();
+  const { isGuest } = useStore();
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-neutral-200/90 shadow-lg px-2 py-1.5 flex items-center justify-around md:hidden">
@@ -61,20 +59,11 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         </span>
       </button>
 
-      {/* PROFILE / ADMIN / GUEST */}
+      {/* PROFILE / GUEST ACCOUNT */}
       <button
-        onClick={() => {
-          if (adminRole) {
-            if (onOpenAdmin) onOpenAdmin();
-            else openAdmin();
-          } else {
-            onOpenAuth();
-          }
-        }}
+        onClick={onOpenAuth}
         className={`flex flex-col items-center justify-center p-1 rounded-lg transition-colors flex-1 ${
-          adminRole
-            ? 'text-amber-600 font-black'
-            : isGuest
+          isGuest
             ? 'text-amber-600 font-black'
             : activeView === 'profile'
             ? 'text-amber-700 font-black'
@@ -82,19 +71,14 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         }`}
       >
         <div className="relative">
-          {adminRole ? (
-            <ShieldAlert className="w-5 h-5 stroke-[2.2] text-amber-600" />
-          ) : isGuest ? (
+          {isGuest ? (
             <UserCheck className="w-5 h-5 stroke-[2] text-amber-600" />
           ) : (
             <User className="w-5 h-5 stroke-[2]" />
           )}
-          {adminRole && (
-            <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-500" />
-          )}
         </div>
         <span className="text-[10px] uppercase font-bold tracking-wider mt-0.5">
-          {adminRole ? 'ADMIN' : isGuest ? 'GUEST' : 'PROFILE'}
+          {isGuest ? 'GUEST' : 'ACCOUNT'}
         </span>
       </button>
 
