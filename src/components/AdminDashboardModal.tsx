@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   X,
   Plus,
@@ -31,7 +31,14 @@ import {
   ChevronDown,
   Crown,
   LogOut,
-  Building2
+  Building2,
+  Menu,
+  ChevronRight,
+  SlidersHorizontal,
+  ArrowLeft,
+  Upload,
+  FolderPlus,
+  Image as ImageIcon
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { Product, Category, BranchLocation } from '../types';
@@ -41,6 +48,46 @@ import { AdminBrandsTab } from './admin/AdminBrandsTab';
 import { AdminContentSectionsTab } from './admin/AdminContentSectionsTab';
 import { AdminSecurityTab } from './admin/AdminSecurityTab';
 import { AdminCustomersTab } from './admin/AdminCustomersTab';
+import { ProductFormPage } from './admin/ProductFormPage';
+import { CategoryFormPage } from './admin/CategoryFormPage';
+import { BranchFormPage } from './admin/BranchFormPage';
+
+export type AdminTabId =
+  | 'overview'
+  | 'hero_slides'
+  | 'subcategories'
+  | 'brands'
+  | 'content_sections'
+  | 'products'
+  | 'add_product'
+  | 'edit_product'
+  | 'categories'
+  | 'add_category'
+  | 'edit_category'
+  | 'customers'
+  | 'flashsale'
+  | 'billboard'
+  | 'branches'
+  | 'add_branch'
+  | 'edit_branch'
+  | 'footer'
+  | 'branding'
+  | 'security';
+
+export interface NavItem {
+  id: AdminTabId;
+  label: string;
+  shortLabel: string;
+  icon: React.ElementType;
+  badge?: string | number;
+  badgeAlert?: boolean;
+  desc: string;
+}
+
+export interface NavGroup {
+  group: string;
+  items: NavItem[];
+}
 
 interface AdminDashboardModalProps {
   isOpen: boolean;
@@ -87,38 +134,19 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
     resetToDefaults
   } = useStore();
 
-  const [activeTab, setActiveTab] = useState<
-    | 'overview'
-    | 'hero_slides'
-    | 'subcategories'
-    | 'brands'
-    | 'content_sections'
-    | 'products'
-    | 'categories'
-    | 'customers'
-    | 'flashsale'
-    | 'billboard'
-    | 'branches'
-    | 'footer'
-    | 'branding'
-    | 'security'
-  >('overview');
+  const [activeTab, setActiveTab] = useState<AdminTabId>('overview');
+
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [sidebarFilter, setSidebarFilter] = useState('');
 
   const [notification, setNotification] = useState<string | null>(null);
   const [productSearch, setProductSearch] = useState('');
   const [productCategoryFilter, setProductCategoryFilter] = useState('all');
 
-  // Product Edit / Create Modal State
+  // Product / Category / Branch Edit State for Dedicated Page Views
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [isNewProductModalOpen, setIsNewProductModalOpen] = useState(false);
-
-  // Category Edit / Create Modal State
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
-  const [isNewCategoryModalOpen, setIsNewCategoryModalOpen] = useState(false);
-
-  // Branch Edit / Create Modal State
   const [editingBranch, setEditingBranch] = useState<BranchLocation | null>(null);
-  const [isNewBranchModalOpen, setIsNewBranchModalOpen] = useState(false);
 
   // Reset Confirmation State
   const [showResetConfirm, setShowResetConfirm] = useState(false);
@@ -142,146 +170,689 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
     return matchesSearch && matchesCategory;
   });
 
+  const pendingCustomerCount = customerSignupRequests.filter((r) => r.status === 'pending').length;
+
+  const navigationGroups: NavGroup[] = [
+    {
+      group: 'Core',
+      items: [
+        {
+          id: 'overview' as const,
+          label: 'Dashboard Overview',
+          shortLabel: 'Overview',
+          icon: Layout,
+          desc: 'Key metrics, catalog preview & quick actions'
+        }
+      ]
+    },
+    {
+      group: 'Catalog & Inventory',
+      items: [
+        {
+          id: 'products' as const,
+          label: 'Products Catalog',
+          shortLabel: 'Catalog',
+          icon: Package,
+          badge: products.length,
+          desc: 'Equipment pricing, stock & specs'
+        },
+        {
+          id: 'add_product' as const,
+          label: 'Upload New Product',
+          shortLabel: 'Upload Product',
+          icon: Plus,
+          desc: 'Upload images from gallery & publish'
+        },
+        {
+          id: 'categories' as const,
+          label: 'Main Categories',
+          shortLabel: 'Categories',
+          icon: Layers,
+          badge: categories.length,
+          desc: 'Solar store category taxonomy'
+        },
+        {
+          id: 'subcategories' as const,
+          label: 'Sub-Categories & SDG',
+          shortLabel: 'Sub-Categories',
+          icon: SlidersHorizontal,
+          desc: 'Product tags & clean energy SDG goals'
+        },
+        {
+          id: 'brands' as const,
+          label: 'Brand Partners',
+          shortLabel: 'Brands',
+          icon: Tag,
+          desc: 'Inverter & panel manufacturers'
+        }
+      ]
+    },
+    {
+      group: 'Merchandising & Storefront',
+      items: [
+        {
+          id: 'hero_slides' as const,
+          label: 'Hero & Slide 3',
+          shortLabel: 'Hero Showcase',
+          icon: Zap,
+          desc: 'Homepage billboard slides & cards'
+        },
+        {
+          id: 'flashsale' as const,
+          label: 'Flash Sale Promo',
+          shortLabel: 'Flash Sale',
+          icon: Flame,
+          badge: (flashSaleConfig?.activeProductIds || []).length > 0 ? `${(flashSaleConfig?.activeProductIds || []).length} Active` : undefined,
+          badgeAlert: (flashSaleConfig?.activeProductIds || []).length > 0,
+          desc: 'Beat the Clock countdown & deals'
+        },
+        {
+          id: 'content_sections' as const,
+          label: 'Guarantees & FAQs',
+          shortLabel: 'Guarantees / FAQ',
+          icon: ShieldCheck,
+          desc: 'Why SolarStock, trust seals & help'
+        }
+      ]
+    },
+    {
+      group: 'Operations & Outlets',
+      items: [
+        {
+          id: 'customers' as const,
+          label: 'Customer Approvals',
+          shortLabel: 'Customer Accounts',
+          icon: Building2,
+          badge: pendingCustomerCount > 0 ? `${pendingCustomerCount} New` : `${customerAccounts.length}`,
+          badgeAlert: pendingCustomerCount > 0,
+          desc: 'B2B/Dealer verification & approval'
+        },
+        {
+          id: 'branches' as const,
+          label: 'Store Branches',
+          shortLabel: 'Branches',
+          icon: MapPin,
+          badge: branches.length,
+          desc: 'Showrooms, hubs & Google Maps'
+        }
+      ]
+    },
+    {
+      group: 'System & Configuration',
+      items: [
+        {
+          id: 'footer' as const,
+          label: 'Footer & Policies',
+          shortLabel: 'Footer / Policy',
+          icon: FileText,
+          desc: 'Hotlines, social links, terms & warranty'
+        },
+        {
+          id: 'branding' as const,
+          label: 'Store Branding',
+          shortLabel: 'Branding',
+          icon: Sliders,
+          desc: 'Store brand name, hotline & tagline'
+        },
+        {
+          id: 'security' as const,
+          label: 'Security & Access',
+          shortLabel: 'Security',
+          icon: Settings,
+          desc: 'Admin passwords, PINs & role guards'
+        }
+      ]
+    }
+  ];
+
+  const allNavItems: NavItem[] = navigationGroups.flatMap((g) => g.items);
+  const fallbackItem: NavItem =
+    activeTab === 'edit_product'
+      ? {
+          id: 'edit_product',
+          label: `Edit Product${editingProduct ? `: ${editingProduct.name}` : ''}`,
+          shortLabel: 'Edit Product',
+          icon: Edit2,
+          desc: 'Modify specifications, prices, and gallery photos'
+        }
+      : activeTab === 'add_category'
+      ? {
+          id: 'add_category',
+          label: 'Add New Category',
+          shortLabel: 'New Category',
+          icon: Plus,
+          desc: 'Create category taxonomy and subcategories'
+        }
+      : activeTab === 'edit_category'
+      ? {
+          id: 'edit_category',
+          label: `Edit Category${editingCategory ? `: ${editingCategory.name}` : ''}`,
+          shortLabel: 'Edit Category',
+          icon: Edit2,
+          desc: 'Update category taxonomy and subcategories'
+        }
+      : activeTab === 'add_branch'
+      ? {
+          id: 'add_branch',
+          label: 'Add Store Branch',
+          shortLabel: 'New Branch',
+          icon: Plus,
+          desc: 'Add retail showroom outlet'
+        }
+      : activeTab === 'edit_branch'
+      ? {
+          id: 'edit_branch',
+          label: `Edit Branch${editingBranch ? `: ${editingBranch.name}` : ''}`,
+          shortLabel: 'Edit Branch',
+          icon: Edit2,
+          desc: 'Update outlet address and photo'
+        }
+      : allNavItems[0];
+
+  const activeItemInfo: NavItem = allNavItems.find((item) => item.id === activeTab) || fallbackItem;
+  const activeGroup = navigationGroups.find((g) => g.items.some((item) => item.id === activeTab)) || {
+    group: activeTab.includes('product')
+      ? 'Catalog & Inventory'
+      : activeTab.includes('category')
+      ? 'Catalog & Inventory'
+      : activeTab.includes('branch')
+      ? 'Operations & Outlets'
+      : 'Management',
+    items: []
+  };
+
+  const filteredGroups = navigationGroups.map((g) => ({
+    ...g,
+    items: g.items.filter((item) => {
+      if (!sidebarFilter.trim()) return true;
+      const q = sidebarFilter.toLowerCase();
+      return (
+        item.label.toLowerCase().includes(q) ||
+        item.shortLabel.toLowerCase().includes(q) ||
+        item.desc.toLowerCase().includes(q) ||
+        g.group.toLowerCase().includes(q)
+      );
+    })
+  })).filter((g) => g.items.length > 0);
+
   return (
-    <div className="min-h-screen w-full bg-neutral-100 flex flex-col text-neutral-900 antialiased selection:bg-amber-400 selection:text-neutral-950">
-      <div className="w-full min-h-screen flex flex-col bg-white">
-        
-        {/* Top Header Bar */}
-        <header className="bg-neutral-950 text-white px-4 sm:px-8 py-3.5 border-b border-neutral-800 flex flex-wrap items-center justify-between gap-4 shrink-0 shadow-md sticky top-0 z-40">
-          <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-amber-400 text-neutral-950 flex items-center justify-center font-black shadow-md shadow-amber-400/20">
-              <Zap className="w-6 h-6 fill-neutral-950 stroke-[2.5]" />
+    <div className="h-screen w-full bg-neutral-950 flex flex-col text-neutral-900 antialiased overflow-hidden selection:bg-amber-400 selection:text-neutral-950">
+      {/* Top Header Bar */}
+      <header className="bg-neutral-950 text-white px-3 sm:px-6 py-2.5 sm:py-3 border-b border-neutral-800 flex items-center justify-between gap-3 shrink-0 shadow-md z-40">
+        <div className="flex items-center gap-3 min-w-0">
+          {/* Mobile Sidebar Toggle Button */}
+          <button
+            onClick={() => setIsMobileSidebarOpen((prev) => !prev)}
+            className="lg:hidden p-2 text-neutral-300 hover:text-white rounded-xl hover:bg-neutral-850 transition-colors cursor-pointer border border-neutral-800"
+            title="Toggle Navigation Menu"
+            aria-label="Toggle Navigation Menu"
+          >
+            {isMobileSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+
+          {/* Brand Mark & Title */}
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-amber-400 text-neutral-950 flex items-center justify-center font-black shadow-md shadow-amber-400/20 shrink-0">
+              <Zap className="w-5 h-5 fill-neutral-950 stroke-[2.5]" />
             </div>
-            <div>
-              <div className="flex items-center gap-2.5 flex-wrap">
-                <h1 className="text-lg sm:text-xl font-black text-white font-['Outfit',sans-serif] tracking-tight">
-                  Solarstock Master Operations & Admin
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-sm sm:text-base font-black text-white font-['Outfit',sans-serif] tracking-tight truncate">
+                  Solarstock Operations
                 </h1>
-                <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+                <span className="hidden sm:inline-flex bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold px-2 py-0.5 rounded-full items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  Live Sync Active
+                  Live Sync
                 </span>
                 <span
-                  className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1 border ${
+                  className={`text-[10px] font-bold px-2 py-0.5 rounded-full hidden md:inline-flex items-center gap-1 border ${
                     adminRole === 'boss'
                       ? 'bg-amber-400/20 text-amber-300 border-amber-400/40'
                       : 'bg-emerald-400/20 text-emerald-300 border-emerald-400/40'
                   }`}
                 >
-                  {adminRole === 'boss' ? '👑 Master Admin (Boss)' : '⚡ Store Manager'}
+                  {adminRole === 'boss' ? '👑 Master Admin' : '⚡ Store Manager'}
                 </span>
               </div>
-              <p className="text-xs text-neutral-400">
-                Dedicated administrative console for products, hero carousels, slide 3 showcase, customer approvals, branches & system settings
-              </p>
             </div>
           </div>
-
-          <div className="flex items-center gap-2.5">
-            {/* Factory Reset */}
-            <button
-              onClick={() => setShowResetConfirm(true)}
-              className="bg-neutral-900 hover:bg-rose-950/40 text-neutral-300 hover:text-rose-300 hover:border-rose-500/50 border border-neutral-800 px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs"
-              title="Reset all store data to factory defaults"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Reset Defaults</span>
-            </button>
-
-            {/* Admin Logout */}
-            <button
-              id="admin-logout-btn"
-              onClick={() => {
-                logoutAdmin();
-                onClose();
-              }}
-              className="bg-neutral-900 hover:bg-rose-900/60 text-rose-300 hover:text-white border border-neutral-800 hover:border-rose-600 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors shadow-2xs"
-              title="Log out of Admin Panel and return to store"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-              <span>Logout</span>
-            </button>
-
-            {/* Exit & Return to Store */}
-            <button
-              onClick={onClose}
-              className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 sm:px-5 py-2 rounded-xl text-xs flex items-center gap-2 transition-all shadow-md hover:scale-102 cursor-pointer"
-            >
-              <Eye className="w-4 h-4" />
-              <span>Exit to Live Store</span>
-              <X className="w-4 h-4 ml-0.5" />
-            </button>
-          </div>
-        </header>
-
-        {/* Global Toast Notification */}
-        {notification && (
-          <div className="bg-amber-400 text-neutral-950 px-6 py-2.5 text-xs font-bold flex items-center justify-between shadow-sm sticky top-[69px] z-35">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 fill-neutral-950 text-amber-400" />
-              <span>{notification}</span>
-            </div>
-            <button onClick={() => setNotification(null)} className="p-0.5">
-              <X className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        )}
-
-        {/* Navigation Tabs Header */}
-        <div className="bg-neutral-900 border-b border-neutral-800 px-4 sm:px-8 flex items-center gap-1 overflow-x-auto scrollbar-none shrink-0 text-xs sticky top-[69px] z-30 shadow-xs">
-          {[
-            { id: 'overview', label: 'Dashboard', icon: Layout },
-            { id: 'hero_slides', label: 'Hero & Slide 3', icon: Zap },
-            { id: 'subcategories', label: 'Sub-Categories & SDG', icon: Layers },
-            { id: 'brands', label: 'Brand Partners', icon: Tag },
-            { id: 'content_sections', label: 'Guarantees & FAQs', icon: ShieldCheck },
-            { id: 'products', label: `Products (${products.length})`, icon: Package },
-            { id: 'categories', label: `Categories (${categories.length})`, icon: Layers },
-            {
-              id: 'customers',
-              label: `Customer Approvals ${
-                customerSignupRequests.filter((r) => r.status === 'pending').length > 0
-                  ? `(${customerSignupRequests.filter((r) => r.status === 'pending').length} New)`
-                  : `(${customerAccounts.length})`
-              }`,
-              icon: Building2
-            },
-            { id: 'flashsale', label: 'Flash Sale', icon: Flame },
-            { id: 'branches', label: `Store Branches (${branches.length})`, icon: MapPin },
-            { id: 'footer', label: 'Footer & Policies', icon: FileText },
-            { id: 'security', label: 'Security & Access', icon: Settings }
-          ].map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-4 py-3 font-bold border-b-2 whitespace-nowrap transition-colors ${
-                  isActive
-                    ? 'border-amber-400 text-amber-400 bg-neutral-800/80 shadow-xs'
-                    : 'border-transparent text-neutral-400 hover:text-white hover:bg-neutral-800/40'
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                <span>{tab.label}</span>
-              </button>
-            );
-          })}
         </div>
 
-        {/* Tab Content Body */}
-        <div className="flex-1 p-4 sm:p-8 space-y-6 bg-neutral-50/80 max-w-7xl w-full mx-auto">
-          {/* Custom Editable Modules */}
-          {activeTab === 'hero_slides' && <AdminHeroSlidesTab />}
-          {activeTab === 'subcategories' && <AdminSubCategoriesTab />}
-          {activeTab === 'brands' && <AdminBrandsTab />}
-          {activeTab === 'content_sections' && <AdminContentSectionsTab />}
-          {activeTab === 'security' && <AdminSecurityTab />}
-          {activeTab === 'customers' && <AdminCustomersTab showToast={showToast} />}
-          
-          {/* TAB 1: OVERVIEW */}
-          {activeTab === 'overview' && (
+        {/* Header Right Actions */}
+        <div className="flex items-center gap-2 shrink-0">
+          {/* Factory Reset Defaults */}
+          <button
+            onClick={() => setShowResetConfirm(true)}
+            className="bg-neutral-900 hover:bg-rose-950/40 text-neutral-400 hover:text-rose-300 hover:border-rose-500/40 border border-neutral-800 px-3 py-1.5 rounded-xl text-xs font-semibold hidden sm:flex items-center gap-1.5 transition-colors cursor-pointer"
+            title="Reset all store data to factory defaults"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span className="hidden md:inline">Reset Defaults</span>
+          </button>
+
+          {/* Admin Logout */}
+          <button
+            id="admin-logout-btn"
+            onClick={() => {
+              logoutAdmin();
+              onClose();
+            }}
+            className="bg-neutral-900 hover:bg-rose-900/40 text-neutral-300 hover:text-rose-200 border border-neutral-800 hover:border-rose-600/60 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+            title="Log out of Admin Panel"
+          >
+            <LogOut className="w-3.5 h-3.5 text-neutral-400" />
+            <span className="hidden sm:inline">Logout</span>
+          </button>
+
+          {/* Exit & Return to Live Store */}
+          <button
+            onClick={onClose}
+            className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-3.5 sm:px-4 py-1.5 rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-md hover:scale-102 cursor-pointer shrink-0"
+            title="Return to SolarStock Public Storefront"
+          >
+            <Eye className="w-3.5 h-3.5" />
+            <span>Exit to Store</span>
+            <X className="w-3.5 h-3.5 ml-0.5 text-neutral-900" />
+          </button>
+        </div>
+      </header>
+
+      {/* Global Toast Notification */}
+      {notification && (
+        <div className="bg-amber-400 text-neutral-950 px-6 py-2 text-xs font-bold flex items-center justify-between shadow-md shrink-0 z-45">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 fill-neutral-950 text-amber-400" />
+            <span>{notification}</span>
+          </div>
+          <button onClick={() => setNotification(null)} className="p-0.5 hover:opacity-75">
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
+      {/* Main Workspace Layout (Left Sidebar + Right Content) */}
+      <div className="flex-1 flex overflow-hidden relative">
+        {/* Mobile Backdrop Overlay */}
+        {isMobileSidebarOpen && (
+          <div
+            onClick={() => setIsMobileSidebarOpen(false)}
+            className="fixed inset-0 bg-black/70 backdrop-blur-xs z-45 lg:hidden animate-in fade-in"
+          />
+        )}
+
+        {/* LEFT NAVIGATION SIDEBAR */}
+        <aside
+          className={`fixed lg:static inset-y-0 left-0 z-50 lg:z-auto w-72 sm:w-80 lg:w-72 xl:w-76 shrink-0 bg-neutral-950 border-r border-neutral-800 text-neutral-300 flex flex-col h-full transition-transform duration-200 ease-in-out shadow-2xl lg:shadow-none ${
+            isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+          }`}
+        >
+          {/* Mobile Drawer Header */}
+          <div className="p-3.5 border-b border-neutral-800/80 flex items-center justify-between lg:hidden bg-neutral-900">
+            <div className="flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded-lg bg-amber-400 text-neutral-950 flex items-center justify-center font-black">
+                <Zap className="w-4 h-4 fill-neutral-950" />
+              </div>
+              <span className="font-bold text-xs text-white uppercase tracking-wider">
+                Admin Menu
+              </span>
+            </div>
+            <button
+              onClick={() => setIsMobileSidebarOpen(false)}
+              className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Quick Option Filter Search Bar */}
+          <div className="p-3 border-b border-neutral-900 shrink-0 bg-neutral-950">
+            <div className="relative">
+              <Search className="w-3.5 h-3.5 text-neutral-500 absolute left-3 top-2.5" />
+              <input
+                type="text"
+                placeholder="Filter menu options..."
+                value={sidebarFilter}
+                onChange={(e) => setSidebarFilter(e.target.value)}
+                className="w-full bg-neutral-900 border border-neutral-800 text-xs rounded-xl pl-8.5 pr-8 py-2 text-neutral-200 placeholder-neutral-500 outline-none focus:border-amber-400 focus:bg-neutral-850 transition-colors"
+              />
+              {sidebarFilter && (
+                <button
+                  onClick={() => setSidebarFilter('')}
+                  className="absolute right-2.5 top-2 text-neutral-400 hover:text-white p-0.5"
+                  title="Clear filter"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Grouped Options Navigation List */}
+          <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-5 scrollbar-thin scrollbar-thumb-neutral-800">
+            {filteredGroups.map((group) => (
+              <div key={group.group} className="space-y-1">
+                <span className="px-3 text-[10px] font-black uppercase tracking-wider text-neutral-500 block">
+                  {group.group}
+                </span>
+
+                <div className="space-y-1 mt-1.5">
+                  {group.items.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = activeTab === item.id;
+
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => {
+                          setActiveTab(item.id as any);
+                          setIsMobileSidebarOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs transition-all text-left group cursor-pointer ${
+                          isActive
+                            ? 'bg-amber-400 text-neutral-950 font-black shadow-md shadow-amber-400/10'
+                            : 'text-neutral-400 hover:text-white hover:bg-neutral-900 font-medium'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                          <div
+                            className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
+                              isActive
+                                ? 'bg-neutral-950 text-amber-400 shadow-2xs'
+                                : 'bg-neutral-900 text-neutral-400 group-hover:text-white group-hover:bg-neutral-800'
+                            }`}
+                          >
+                            <Icon className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <span className="block truncate font-semibold leading-tight">
+                              {item.label}
+                            </span>
+                            <span
+                              className={`block truncate text-[10px] ${
+                                isActive ? 'text-neutral-900/80' : 'text-neutral-500 group-hover:text-neutral-400'
+                              }`}
+                            >
+                              {item.shortLabel}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Badges / Active Arrow */}
+                        <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                          {item.badge !== undefined && (
+                            <span
+                              className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                                isActive
+                                  ? 'bg-neutral-950 text-amber-400'
+                                  : item.badgeAlert
+                                  ? 'bg-amber-400 text-neutral-950 font-black animate-pulse'
+                                  : 'bg-neutral-900 text-neutral-400 border border-neutral-800'
+                              }`}
+                            >
+                              {item.badge}
+                            </span>
+                          )}
+                          <ChevronRight
+                            className={`w-3.5 h-3.5 transition-transform ${
+                              isActive ? 'text-neutral-950 translate-x-0.5' : 'text-neutral-600 group-hover:text-neutral-400'
+                            }`}
+                          />
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+
+            {filteredGroups.length === 0 && (
+              <div className="text-center py-8 px-4 text-neutral-500 text-xs">
+                <p>No options match "{sidebarFilter}"</p>
+                <button
+                  onClick={() => setSidebarFilter('')}
+                  className="mt-2 text-amber-400 hover:underline font-bold text-xs"
+                >
+                  Clear filter
+                </button>
+              </div>
+            )}
+          </nav>
+
+          {/* Sidebar Footer: Active Admin Profile Card */}
+          <div className="p-3 border-t border-neutral-800/80 bg-neutral-950/80 shrink-0">
+            <div className="p-2.5 rounded-xl bg-neutral-900/80 border border-neutral-800/80 flex items-center justify-between gap-2.5">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-8 h-8 rounded-lg bg-amber-400/20 text-amber-400 border border-amber-400/30 flex items-center justify-center font-black shrink-0">
+                  <Crown className="w-4 h-4" />
+                </div>
+                <div className="min-w-0">
+                  <span className="text-xs font-bold text-white block truncate">
+                    {adminRole === 'boss' ? 'Master Admin' : 'Store Manager'}
+                  </span>
+                  <span className="text-[10px] text-emerald-400 flex items-center gap-1 font-semibold truncate">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    Authorized Access
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  logoutAdmin();
+                  onClose();
+                }}
+                className="p-1.5 text-neutral-400 hover:text-rose-400 hover:bg-neutral-800 rounded-lg transition-colors shrink-0"
+                title="Logout"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        {/* RIGHT MAIN CONTENT VIEWPORT */}
+        <main className="flex-1 min-w-0 bg-neutral-100 flex flex-col h-full overflow-y-auto">
+          {/* Active View Top Banner */}
+          <div className="bg-white border-b border-neutral-200 px-4 sm:px-8 py-3.5 flex flex-wrap items-center justify-between gap-3 shadow-2xs shrink-0 sticky top-0 z-20">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 text-xs text-neutral-500 mb-0.5">
+                <span>Console</span>
+                <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
+                <span>{activeGroup?.group || 'Section'}</span>
+                <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
+                <span className="font-bold text-neutral-900 truncate">{activeItemInfo.label}</span>
+              </div>
+              <h2 className="text-lg sm:text-xl font-black text-neutral-900 font-['Outfit',sans-serif] tracking-tight">
+                {activeItemInfo.label}
+              </h2>
+            </div>
+
+            {/* Contextual Action Buttons in View Top Banner */}
+            <div className="flex items-center gap-2 flex-wrap shrink-0">
+              {activeTab === 'products' && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingProduct(null);
+                    setActiveTab('add_product');
+                  }}
+                  className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-3.5 py-1.5 rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Upload Product</span>
+                </button>
+              )}
+              {activeTab === 'categories' && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingCategory(null);
+                    setActiveTab('add_category');
+                  }}
+                  className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-3.5 py-1.5 rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Add Category</span>
+                </button>
+              )}
+              {activeTab === 'branches' && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingBranch(null);
+                    setActiveTab('add_branch');
+                  }}
+                  className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-3.5 py-1.5 rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Add Branch</span>
+                </button>
+              )}
+              {activeTab === 'customers' && pendingCustomerCount > 0 && (
+                <span className="bg-amber-100 text-amber-900 border border-amber-300 px-3 py-1 rounded-xl text-xs font-bold flex items-center gap-1.5">
+                  <Building2 className="w-3.5 h-3.5 text-amber-700" />
+                  <span>{pendingCustomerCount} Pending Approval</span>
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Inline Reset Defaults Confirmation Banner (No Hovering Modal) */}
+          {showResetConfirm && (
+            <div className="bg-rose-50 border-b border-rose-300 px-4 sm:px-8 py-3.5 flex flex-wrap items-center justify-between gap-3 animate-in fade-in shrink-0">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-rose-600 text-white flex items-center justify-center shrink-0">
+                  <AlertTriangle className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-neutral-900">Reset Entire Store to Factory Defaults?</h4>
+                  <p className="text-[11px] text-neutral-600">
+                    This will restore all default equipment, hero slides, and branches. Custom edits will be replaced.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowResetConfirm(false)}
+                  className="px-3 py-1.5 rounded-lg bg-white hover:bg-neutral-100 text-neutral-700 text-xs font-bold border border-neutral-300 cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    resetToDefaults();
+                    setShowResetConfirm(false);
+                    showToast('Store reset to factory defaults.');
+                  }}
+                  className="px-3.5 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow-xs cursor-pointer"
+                >
+                  Yes, Reset All Data
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Tab Content Body */}
+          <div className="flex-1 p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl w-full mx-auto">
+            {/* Custom Editable Modules */}
+            {activeTab === 'hero_slides' && <AdminHeroSlidesTab />}
+            {activeTab === 'subcategories' && <AdminSubCategoriesTab />}
+            {activeTab === 'brands' && <AdminBrandsTab />}
+            {activeTab === 'content_sections' && <AdminContentSectionsTab />}
+            {activeTab === 'security' && <AdminSecurityTab />}
+            {activeTab === 'customers' && <AdminCustomersTab showToast={showToast} />}
+
+            {/* Dedicated Product Add/Edit Full-Page Views (No Hovering Modal) */}
+            {activeTab === 'add_product' && (
+              <ProductFormPage
+                product={null}
+                categories={categories}
+                onClose={() => setActiveTab('products')}
+                onSave={(prodData) => {
+                  const created = addProduct(prodData as any);
+                  showToast(`Created new product "${created.name}"`);
+                  setActiveTab('products');
+                }}
+              />
+            )}
+            {activeTab === 'edit_product' && editingProduct && (
+              <ProductFormPage
+                product={editingProduct}
+                categories={categories}
+                onClose={() => {
+                  setEditingProduct(null);
+                  setActiveTab('products');
+                }}
+                onSave={(prodData) => {
+                  updateProduct(editingProduct.id, prodData);
+                  showToast(`Updated "${prodData.name}"`);
+                  setEditingProduct(null);
+                  setActiveTab('products');
+                }}
+              />
+            )}
+
+            {/* Dedicated Category Add/Edit Full-Page Views (No Hovering Modal) */}
+            {activeTab === 'add_category' && (
+              <CategoryFormPage
+                category={null}
+                onClose={() => setActiveTab('categories')}
+                onSave={(catData) => {
+                  addCategory(catData as any);
+                  showToast(`Created category "${catData.name}"`);
+                  setActiveTab('categories');
+                }}
+              />
+            )}
+            {activeTab === 'edit_category' && editingCategory && (
+              <CategoryFormPage
+                category={editingCategory}
+                onClose={() => {
+                  setEditingCategory(null);
+                  setActiveTab('categories');
+                }}
+                onSave={(catData) => {
+                  updateCategory(editingCategory.id, catData);
+                  showToast(`Updated category "${catData.name}"`);
+                  setEditingCategory(null);
+                  setActiveTab('categories');
+                }}
+              />
+            )}
+
+            {/* Dedicated Branch Add/Edit Full-Page Views (No Hovering Modal) */}
+            {activeTab === 'add_branch' && (
+              <BranchFormPage
+                branch={null}
+                onClose={() => setActiveTab('branches')}
+                onSave={(branchData) => {
+                  addBranch(branchData as any);
+                  showToast(`Created branch "${branchData.name}"`);
+                  setActiveTab('branches');
+                }}
+              />
+            )}
+            {activeTab === 'edit_branch' && editingBranch && (
+              <BranchFormPage
+                branch={editingBranch}
+                onClose={() => {
+                  setEditingBranch(null);
+                  setActiveTab('branches');
+                }}
+                onSave={(branchData) => {
+                  updateBranch(editingBranch.id, branchData);
+                  showToast(`Updated branch "${branchData.name}"`);
+                  setEditingBranch(null);
+                  setActiveTab('branches');
+                }}
+              />
+            )}
+            
+            {/* TAB 1: OVERVIEW */}
+            {activeTab === 'overview' && (
             <div className="space-y-6">
               {/* Quick Metrics */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
@@ -325,17 +896,17 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <button
                     onClick={() => {
-                      setActiveTab('products');
-                      setIsNewProductModalOpen(true);
+                      setEditingProduct(null);
+                      setActiveTab('add_product');
                     }}
-                    className="p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100/80 border border-neutral-200 hover:border-amber-400 flex items-center gap-3 text-left transition-all group shadow-2xs"
+                    className="p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100/80 border border-neutral-200 hover:border-amber-400 flex items-center gap-3 text-left transition-all group shadow-2xs cursor-pointer"
                   >
                     <div className="w-9 h-9 rounded-lg bg-amber-400 text-neutral-950 flex items-center justify-center shrink-0 shadow-xs">
                       <Plus className="w-5 h-5" />
                     </div>
                     <div>
-                      <span className="text-xs font-bold text-neutral-900 block group-hover:text-amber-700">Add New Product</span>
-                      <span className="text-[11px] text-neutral-500">Create new solar equipment</span>
+                      <span className="text-xs font-bold text-neutral-900 block group-hover:text-amber-700">Upload New Product</span>
+                      <span className="text-[11px] text-neutral-500">Upload photos from gallery & publish</span>
                     </div>
                   </button>
 
@@ -437,11 +1008,15 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                 </div>
 
                 <button
-                  onClick={() => setIsNewProductModalOpen(true)}
-                  className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm shrink-0"
+                  type="button"
+                  onClick={() => {
+                    setEditingProduct(null);
+                    setActiveTab('add_product');
+                  }}
+                  className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-sm shrink-0 cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
-                  <span>Add New Product</span>
+                  <span>Upload New Product</span>
                 </button>
               </div>
 
@@ -537,9 +1112,12 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                           <td className="p-3 text-right">
                             <div className="flex items-center justify-end gap-1.5">
                               <button
-                                onClick={() => setEditingProduct(prod)}
-                                className="p-1.5 rounded-lg bg-neutral-100 hover:bg-amber-100 text-amber-700 border border-neutral-200 hover:border-amber-300 transition-colors"
-                                title="Edit Product"
+                                type="button"
+                                onClick={() => {
+                                  setEditingProduct(prod);
+                                  setActiveTab('edit_product');
+                                }}
+                                className="p-1.5 rounded-lg bg-neutral-100 hover:bg-amber-100 text-amber-700 border border-neutral-200 hover:border-amber-300 transition-colors cursor-pointer"
                               >
                                 <Edit2 className="w-3.5 h-3.5" />
                               </button>
@@ -577,8 +1155,12 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                   </p>
                 </div>
                 <button
-                  onClick={() => setIsNewCategoryModalOpen(true)}
-                  className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm shrink-0"
+                  type="button"
+                  onClick={() => {
+                    setEditingCategory(null);
+                    setActiveTab('add_category');
+                  }}
+                  className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-sm shrink-0 cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Add New Category</span>
@@ -603,9 +1185,12 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                         </div>
                         <div className="flex items-center gap-1">
                           <button
-                            onClick={() => setEditingCategory(cat)}
-                            className="p-1 rounded bg-neutral-100 hover:bg-amber-100 text-amber-700 border border-neutral-200"
-                            title="Edit Category"
+                            type="button"
+                            onClick={() => {
+                              setEditingCategory(cat);
+                              setActiveTab('edit_category');
+                            }}
+                            className="p-1.5 rounded-lg bg-neutral-100 hover:bg-amber-100 text-amber-700 border border-neutral-200 cursor-pointer"
                           >
                             <Edit2 className="w-3.5 h-3.5" />
                           </button>
@@ -1000,8 +1585,12 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                   </p>
                 </div>
                 <button
-                  onClick={() => setIsNewBranchModalOpen(true)}
-                  className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm shrink-0"
+                  type="button"
+                  onClick={() => {
+                    setEditingBranch(null);
+                    setActiveTab('add_branch');
+                  }}
+                  className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-sm shrink-0 cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Add New Store Branch</span>
@@ -1021,9 +1610,12 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                         </span>
                         <div className="flex items-center gap-1">
                           <button
-                            onClick={() => setEditingBranch(b)}
-                            className="p-1 rounded bg-neutral-100 hover:bg-amber-100 text-amber-700 border border-neutral-200"
-                            title="Edit Branch"
+                            type="button"
+                            onClick={() => {
+                              setEditingBranch(b);
+                              setActiveTab('edit_branch');
+                            }}
+                            className="p-1.5 rounded-lg bg-neutral-100 hover:bg-amber-100 text-amber-700 border border-neutral-200 cursor-pointer"
                           >
                             <Edit2 className="w-3.5 h-3.5" />
                           </button>
@@ -1261,659 +1853,11 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
               </div>
             </div>
           )}
-        </div>
-      </div>
-
-      {/* MODAL: ADD / EDIT PRODUCT */}
-      {(isNewProductModalOpen || editingProduct) && (
-        <ProductFormModal
-          product={editingProduct}
-          categories={categories}
-          onClose={() => {
-            setIsNewProductModalOpen(false);
-            setEditingProduct(null);
-          }}
-          onSave={(prodData) => {
-            if (editingProduct) {
-              updateProduct(editingProduct.id, prodData);
-              showToast(`Updated "${prodData.name}"`);
-            } else {
-              const created = addProduct(prodData as any);
-              showToast(`Created new product "${created.name}"`);
-            }
-            setIsNewProductModalOpen(false);
-            setEditingProduct(null);
-          }}
-        />
-      )}
-
-      {/* MODAL: ADD / EDIT CATEGORY */}
-      {(isNewCategoryModalOpen || editingCategory) && (
-        <CategoryFormModal
-          category={editingCategory}
-          onClose={() => {
-            setIsNewCategoryModalOpen(false);
-            setEditingCategory(null);
-          }}
-          onSave={(catData) => {
-            if (editingCategory) {
-              updateCategory(editingCategory.id, catData);
-              showToast(`Updated category "${catData.name}"`);
-            } else {
-              addCategory(catData as any);
-              showToast(`Created category "${catData.name}"`);
-            }
-            setIsNewCategoryModalOpen(false);
-            setEditingCategory(null);
-          }}
-        />
-      )}
-
-      {/* MODAL: ADD / EDIT BRANCH */}
-      {(isNewBranchModalOpen || editingBranch) && (
-        <BranchFormModal
-          branch={editingBranch}
-          onClose={() => {
-            setIsNewBranchModalOpen(false);
-            setEditingBranch(null);
-          }}
-          onSave={(branchData) => {
-            if (editingBranch) {
-              updateBranch(editingBranch.id, branchData);
-              showToast(`Updated branch "${branchData.name}"`);
-            } else {
-              addBranch(branchData as any);
-              showToast(`Created branch "${branchData.name}"`);
-            }
-            setIsNewBranchModalOpen(false);
-            setEditingBranch(null);
-          }}
-        />
-      )}
-
-      {/* MODAL: RESET CONFIRMATION */}
-      {showResetConfirm && (
-        <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-neutral-200 rounded-2xl max-w-md w-full p-6 text-center space-y-4 shadow-2xl animate-in zoom-in-95">
-            <div className="w-12 h-12 bg-rose-50 border border-rose-200 text-rose-600 rounded-full flex items-center justify-center mx-auto">
-              <AlertTriangle className="w-6 h-6" />
-            </div>
-            <h3 className="text-base font-bold text-neutral-900">Reset to Factory Defaults?</h3>
-            <p className="text-xs text-neutral-600">
-              This will restore all default products, categories, hero billboards, and store locations.
-              Any custom products or edits created in this session will be replaced.
-            </p>
-            <div className="flex items-center justify-center gap-3 pt-2">
-              <button
-                onClick={() => setShowResetConfirm(false)}
-                className="px-4 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-bold border border-neutral-200"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  resetToDefaults();
-                  setShowResetConfirm(false);
-                  showToast('Store reset to factory defaults.');
-                }}
-                className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow-sm"
-              >
-                Yes, Reset All Data
-              </button>
-            </div>
           </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-// SUB-COMPONENT: Product Add/Edit Modal Form
-const ProductFormModal: React.FC<{
-  product: Product | null;
-  categories: Category[];
-  onClose: () => void;
-  onSave: (prod: Partial<Product>) => void;
-}> = ({ product, categories, onClose, onSave }) => {
-  const [name, setName] = useState(product?.name || '');
-  const [category, setCategory] = useState(product?.category || categories[0]?.id || 'ips-systems');
-  const [subCategory, setSubCategory] = useState(product?.subCategory || '');
-  const [brand, setBrand] = useState(product?.brand || 'SolarStock BD');
-  const [price, setPrice] = useState(product?.price || 19990);
-  const [originalPrice, setOriginalPrice] = useState(product?.originalPrice || 24990);
-  const [warranty, setWarranty] = useState(product?.warranty || '2 Years SolarCare+ Replacement Guarantee');
-  const [tag, setTag] = useState(product?.tag || 'Hot Product');
-  const [image, setImage] = useState(
-    product?.images[0] ||
-      'https://images.unsplash.com/photo-1558441719-8b489c652790?auto=format&fit=crop&w=800&q=80'
-  );
-  const [shortDesc, setShortDesc] = useState(product?.shortDesc || '');
-  const [description, setDescription] = useState(product?.description || '');
-  const [isHot, setIsHot] = useState(product?.isHot ?? true);
-  const [isOutOfStock, setIsOutOfStock] = useState(product?.isOutOfStock ?? false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name.trim()) return;
-
-    const discountPercent =
-      originalPrice > price
-        ? Math.round(((originalPrice - price) / originalPrice) * 100)
-        : 0;
-
-    onSave({
-      name,
-      category,
-      subCategory,
-      brand,
-      price: Number(price),
-      originalPrice: Number(originalPrice),
-      discountPercent,
-      warranty,
-      tag,
-      images: [image, ...(product?.images.slice(1) || [])],
-      shortDesc,
-      description,
-      isHot,
-      isOutOfStock,
-      rating: product?.rating || 4.9,
-      reviewsCount: product?.reviewsCount || 1,
-      specs: product?.specs || {
-        'Warranty Support': warranty,
-        'Brand': brand
-      },
-      highlights: product?.highlights || [
-        'Official factory direct certified solar equipment',
-        warranty
-      ]
-    });
-  };
-
-  return (
-    <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
-      <div className="bg-white border border-neutral-200 text-neutral-900 rounded-2xl max-w-2xl w-full p-5 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl animate-in zoom-in-95">
-        <div className="flex items-center justify-between border-b border-neutral-200 pb-3">
-          <h3 className="text-base font-bold text-neutral-900">
-            {product ? `Edit "${product.name}"` : 'Add New Product'}
-          </h3>
-          <button onClick={onClose} className="p-1 rounded bg-neutral-100 hover:bg-neutral-200 text-neutral-500 hover:text-neutral-900 transition-colors">
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-          <div>
-            <label className="font-bold text-neutral-700 block mb-1">Product Title *</label>
-            <input
-              type="text"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-medium"
-              placeholder="e.g. SolarStock NEO 600L Smart Power Station"
-            />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label className="font-bold text-neutral-700 block mb-1">Category *</label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-medium"
-              >
-                {categories.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="font-bold text-neutral-700 block mb-1">Subcategory</label>
-              <input
-                type="text"
-                value={subCategory}
-                onChange={(e) => setSubCategory(e.target.value)}
-                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-medium"
-                placeholder="e.g. Portable Power Station"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div>
-              <label className="font-bold text-neutral-700 block mb-1">Brand</label>
-              <input
-                type="text"
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
-                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-medium"
-              />
-            </div>
-            <div>
-              <label className="font-bold text-neutral-700 block mb-1">Selling Price (৳)</label>
-              <input
-                type="number"
-                required
-                value={price}
-                onChange={(e) => setPrice(Number(e.target.value))}
-                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-amber-700 font-bold outline-none focus:border-amber-400 focus:bg-white font-mono"
-              />
-            </div>
-            <div>
-              <label className="font-bold text-neutral-700 block mb-1">Original / MRP Price (৳)</label>
-              <input
-                type="number"
-                value={originalPrice}
-                onChange={(e) => setOriginalPrice(Number(e.target.value))}
-                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-700 outline-none focus:border-amber-400 focus:bg-white font-mono"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label className="font-bold text-neutral-700 block mb-1">Product Tag / Badge</label>
-              <select
-                value={tag}
-                onChange={(e) => setTag(e.target.value)}
-                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-medium"
-              >
-                <option value="Hot Product">Hot Product</option>
-                <option value="Beat The Clock">Beat The Clock</option>
-                <option value="Top Selling">Top Selling</option>
-                <option value="Best Deal">Best Deal</option>
-                <option value="New Arrival">New Arrival</option>
-                <option value="Limited Time Offer">Limited Time Offer</option>
-                <option value="Out of Stock">Out of Stock</option>
-              </select>
-            </div>
-            <div>
-              <label className="font-bold text-neutral-700 block mb-1">Warranty Term</label>
-              <input
-                type="text"
-                value={warranty}
-                onChange={(e) => setWarranty(e.target.value)}
-                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-medium"
-                placeholder="e.g. 5 Years SolarCare+ Replacement"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="font-bold text-neutral-700 block mb-1">Primary Image URL</label>
-            <input
-              type="text"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-800 outline-none focus:border-amber-400 focus:bg-white font-mono text-[11px]"
-            />
-          </div>
-
-          <div>
-            <label className="font-bold text-neutral-700 block mb-1">Short Description</label>
-            <textarea
-              rows={2}
-              value={shortDesc}
-              onChange={(e) => setShortDesc(e.target.value)}
-              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
-              placeholder="Brief summary displayed on listings..."
-            />
-          </div>
-
-          <div className="flex items-center gap-6 pt-2">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={isHot}
-                onChange={(e) => setIsHot(e.target.checked)}
-                className="w-4 h-4 accent-amber-500"
-              />
-              <span className="font-bold text-neutral-800">Highlight as Featured / Hot</span>
-            </label>
-
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={isOutOfStock}
-                onChange={(e) => setIsOutOfStock(e.target.checked)}
-                className="w-4 h-4 accent-rose-600"
-              />
-              <span className="font-bold text-rose-600">Mark as Out of Stock</span>
-            </label>
-          </div>
-
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-200">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-bold border border-neutral-200"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black flex items-center gap-1.5 shadow-sm"
-            >
-              <Save className="w-4 h-4" />
-              <span>Save Product</span>
-            </button>
-          </div>
-        </form>
+        </main>
       </div>
     </div>
   );
 };
 
-// SUB-COMPONENT: Category Add/Edit Modal Form
-const CategoryFormModal: React.FC<{
-  category: Category | null;
-  onClose: () => void;
-  onSave: (cat: Partial<Category>) => void;
-}> = ({ category, onClose, onSave }) => {
-  const [name, setName] = useState(category?.name || '');
-  const [itemCount, setItemCount] = useState(category?.itemCount || 25);
-  const [subCategoriesText, setSubCategoriesText] = useState(
-    category?.subCategories?.join(', ') || 'Solar Equipment, Accessories, Inverters'
-  );
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name.trim()) return;
-
-    const subCategories = subCategoriesText
-      .split(',')
-      .map((s) => s.trim())
-      .filter(Boolean);
-
-    onSave({
-      name,
-      itemCount: Number(itemCount),
-      subCategories,
-      icon: category?.icon || 'Zap',
-      image: ''
-    });
-  };
-
-  return (
-    <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white border border-neutral-200 text-neutral-900 rounded-2xl max-w-md w-full p-5 space-y-4 shadow-2xl animate-in zoom-in-95">
-        <div className="flex items-center justify-between border-b border-neutral-200 pb-3">
-          <h3 className="text-base font-bold text-neutral-900">
-            {category ? `Edit "${category.name}"` : 'Add New Category'}
-          </h3>
-          <button onClick={onClose} className="p-1 rounded bg-neutral-100 hover:bg-neutral-200 text-neutral-500 hover:text-neutral-900 transition-colors">
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-          <div>
-            <label className="font-bold text-neutral-700 block mb-1">Category Name *</label>
-            <input
-              type="text"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-medium"
-              placeholder="e.g. Lithium Phosphate"
-            />
-          </div>
-
-          <div>
-            <label className="font-bold text-neutral-700 block mb-1">Estimated Item Count</label>
-            <input
-              type="number"
-              value={itemCount}
-              onChange={(e) => setItemCount(Number(e.target.value))}
-              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
-            />
-          </div>
-
-          <div>
-            <label className="font-bold text-neutral-700 block mb-1">
-              Subcategories (comma separated)
-            </label>
-            <textarea
-              rows={3}
-              value={subCategoriesText}
-              onChange={(e) => setSubCategoriesText(e.target.value)}
-              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
-              placeholder="e.g. 48V 100Ah LiFePO4, 51.2V Powerwall, Portable Solar Pack"
-            />
-          </div>
-
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-200">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-bold border border-neutral-200"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black flex items-center gap-1.5 shadow-sm"
-            >
-              <Save className="w-4 h-4" />
-              <span>Save Category</span>
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-};
-
-// SUB-COMPONENT: Branch Add/Edit Modal Form
-const BranchFormModal: React.FC<{
-  branch: BranchLocation | null;
-  onClose: () => void;
-  onSave: (b: Partial<BranchLocation>) => void;
-}> = ({ branch, onClose, onSave }) => {
-  const [name, setName] = useState(branch?.name || '');
-  const [badge, setBadge] = useState(branch?.badge || 'Store Outlet');
-  const [address, setAddress] = useState(branch?.address || '');
-  const [landmark, setLandmark] = useState(branch?.landmark || '');
-  const [phone, setPhone] = useState(branch?.phone || '09638001122');
-  const [offDay, setOffDay] = useState(branch?.offDay || 'Friday');
-  const [googleMapUrl, setGoogleMapUrl] = useState(
-    branch?.googleMapUrl || (branch?.address ? `https://maps.google.com/?q=${encodeURIComponent(branch.address)}` : '')
-  );
-  const [image, setImage] = useState(
-    branch?.image ||
-      'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80'
-  );
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name.trim() || !address.trim()) return;
-
-    const finalMapUrl =
-      googleMapUrl.trim() || `https://maps.google.com/?q=${encodeURIComponent(address + (landmark ? ' ' + landmark : ''))}`;
-
-    onSave({
-      name,
-      badge,
-      address,
-      landmark,
-      phone,
-      offDay,
-      googleMapUrl: finalMapUrl,
-      image
-    });
-  };
-
-  return (
-    <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white border border-neutral-200 text-neutral-900 rounded-2xl max-w-lg w-full p-5 space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl animate-in zoom-in-95">
-        <div className="flex items-center justify-between border-b border-neutral-200 pb-3">
-          <h3 className="text-base font-bold text-neutral-900">
-            {branch ? `Edit "${branch.name}"` : 'Add New Branch Outlet'}
-          </h3>
-          <button onClick={onClose} className="p-1 rounded bg-neutral-100 hover:bg-neutral-200 text-neutral-500 hover:text-neutral-900 transition-colors">
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
-          <div>
-            <label className="font-bold text-neutral-700 block mb-1">Branch Name *</label>
-            <input
-              type="text"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-medium"
-              placeholder="e.g. Solarstock Flagship - Bashundhara City"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="font-bold text-neutral-700 block mb-1">Badge / Tag</label>
-              <input
-                type="text"
-                value={badge}
-                onChange={(e) => setBadge(e.target.value)}
-                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
-                placeholder="e.g. Flagship Store"
-              />
-            </div>
-            <div>
-              <label className="font-bold text-neutral-700 block mb-1">Weekly Off-Day</label>
-              <input
-                type="text"
-                value={offDay}
-                onChange={(e) => setOffDay(e.target.value)}
-                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
-                placeholder="e.g. Tuesday"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="font-bold text-neutral-700 block mb-1">Full Address *</label>
-            <textarea
-              rows={2}
-              required
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
-              placeholder="Shop No, Level, Mall name, Area, City"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="font-bold text-neutral-700 block mb-1">Landmark</label>
-              <input
-                type="text"
-                value={landmark}
-                onChange={(e) => setLandmark(e.target.value)}
-                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
-                placeholder="e.g. Panthapath, Dhaka"
-              />
-            </div>
-            <div>
-              <label className="font-bold text-neutral-700 block mb-1">Hotline Phone</label>
-              <input
-                type="text"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white"
-                placeholder="e.g. 09638001122"
-              />
-            </div>
-          </div>
-
-          {/* Google Map Link Input */}
-          <div>
-            <div className="flex items-center justify-between mb-1">
-              <label className="font-bold text-neutral-700 block">Google Map Link / Location URL *</label>
-              {address && (
-                <button
-                  type="button"
-                  onClick={() => setGoogleMapUrl(`https://maps.google.com/?q=${encodeURIComponent(address + (landmark ? ' ' + landmark : ''))}`)}
-                  className="text-[10px] text-amber-700 hover:underline flex items-center gap-1 font-semibold"
-                >
-                  <Globe className="w-3 h-3" />
-                  Auto-generate from Address
-                </button>
-              )}
-            </div>
-            <input
-              type="text"
-              value={googleMapUrl}
-              onChange={(e) => setGoogleMapUrl(e.target.value)}
-              className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2.5 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white font-mono text-[11px]"
-              placeholder="https://maps.google.com/?q=..."
-            />
-            <p className="text-[10px] text-neutral-500 mt-1">
-              Customers can tap this link on the Store Locations page to view your shop on Google Maps directly.
-            </p>
-          </div>
-
-          {/* Shop Photo Upload / URL */}
-          <div>
-            <label className="font-bold text-neutral-700 block mb-1">Store / Shop Photo</label>
-            <div className="flex items-center gap-2">
-              <input
-                type="text"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-                className="w-full bg-neutral-50 border border-neutral-300 rounded-lg p-2 text-neutral-900 outline-none focus:border-amber-400 focus:bg-white text-xs"
-                placeholder="Image URL or upload below"
-              />
-              <label className="shrink-0 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 px-3 py-2 rounded-lg font-bold cursor-pointer transition-colors border border-neutral-300">
-                Upload
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onload = () => {
-                        if (typeof reader.result === 'string') setImage(reader.result);
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
-                />
-              </label>
-            </div>
-            {image && (
-              <div className="mt-2 w-full h-24 rounded-lg overflow-hidden border border-neutral-200 relative bg-neutral-100">
-                <img src={image} alt="Shop preview" className="w-full h-full object-cover" />
-                <span className="absolute bottom-1 right-2 text-[9px] bg-black/60 px-1.5 py-0.5 rounded text-white font-medium">
-                  Shop Photo Preview
-                </span>
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-200">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-bold border border-neutral-200"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black flex items-center gap-1.5 shadow-sm"
-            >
-              <Save className="w-4 h-4" />
-              <span>Save Branch</span>
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-};
