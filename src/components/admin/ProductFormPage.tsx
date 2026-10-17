@@ -41,6 +41,8 @@ const PRESET_GALLERY_PHOTOS = [
   }
 ];
 
+import { compressImageFile } from '../../utils/compressImage';
+
 export const ProductFormPage: React.FC<ProductFormPageProps> = ({
   product,
   categories,
@@ -76,6 +78,8 @@ export const ProductFormPage: React.FC<ProductFormPageProps> = ({
 
   const [urlInput, setUrlInput] = useState('');
   const [uploadFeedback, setUploadFeedback] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isProcessingUpload, setIsProcessingUpload] = useState(false);
 
   const [shortDesc, setShortDesc] = useState(
     product?.shortDesc ||
@@ -119,31 +123,38 @@ export const ProductFormPage: React.FC<ProductFormPageProps> = ({
   const [newSpecKey, setNewSpecKey] = useState('');
   const [newSpecVal, setNewSpecVal] = useState('');
 
-  // Handle uploading files directly from device photo gallery
+  // Process files from device gallery or dropzone with compression
+  const processFiles = async (fileList: FileList | File[]) => {
+    const rawFiles = Array.from(fileList).filter((f) => f.type.startsWith('image/'));
+    if (rawFiles.length === 0) {
+      alert('Please select valid image files (JPG, PNG, WEBP).');
+      return;
+    }
+
+    setIsProcessingUpload(true);
+    setUploadFeedback(`Optimizing ${rawFiles.length} photo(s) from gallery...`);
+
+    try {
+      const processed = await Promise.all(rawFiles.map((file) => compressImageFile(file)));
+      const validImages = processed.filter(Boolean);
+
+      if (validImages.length > 0) {
+        setImages((prev) => [...prev, ...validImages]);
+        setUploadFeedback(`Successfully uploaded ${validImages.length} photo(s) from your gallery!`);
+        setTimeout(() => setUploadFeedback(null), 4000);
+      }
+    } catch {
+      setUploadFeedback('Could not process all images. Please try again.');
+    } finally {
+      setIsProcessingUpload(false);
+    }
+  };
+
+  // Handle uploading files directly from device photo gallery input
   const handleGalleryUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
-
-    let loadedCount = 0;
-    const totalFiles = files.length;
-
-    Array.from(files).forEach((file: File) => {
-      if (!file.type.startsWith('image/')) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (typeof reader.result === 'string') {
-          const dataUrl = reader.result;
-          setImages((prev) => [...prev, dataUrl]);
-          loadedCount++;
-          if (loadedCount >= totalFiles) {
-            setUploadFeedback(`Added ${loadedCount} photo(s) from your gallery!`);
-            setTimeout(() => setUploadFeedback(null), 4000);
-          }
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-
+    if (e.target.files && e.target.files.length > 0) {
+      processFiles(e.target.files);
+    }
     e.target.value = '';
   };
 
@@ -167,11 +178,16 @@ export const ProductFormPage: React.FC<ProductFormPageProps> = ({
   };
 
   const handleRemoveImage = (index: number) => {
-    if (images.length <= 1) {
-      alert('A product must have at least 1 image.');
-      return;
-    }
     setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleClearAllImages = () => {
+    if (images.length === 0) return;
+    if (confirm('Clear all photos from this product? You can upload new ones from your gallery.')) {
+      setImages([]);
+      setUploadFeedback('All photos cleared. Choose photos from your gallery below.');
+      setTimeout(() => setUploadFeedback(null), 3000);
+    }
   };
 
   const handleAddHighlight = () => {
@@ -231,6 +247,7 @@ export const ProductFormPage: React.FC<ProductFormPageProps> = ({
       warranty: warranty.trim(),
       tag,
       images: images,
+      image: images[0] || '',
       shortDesc: shortDesc.trim(),
       description: description.trim(),
       isHot,
@@ -239,7 +256,7 @@ export const ProductFormPage: React.FC<ProductFormPageProps> = ({
       reviewsCount: product?.reviewsCount || 1,
       specs: specsObj,
       highlights: highlightsList
-    });
+    } as any);
   };
 
   return (
@@ -331,16 +348,32 @@ export const ProductFormPage: React.FC<ProductFormPageProps> = ({
           {/* Gallery Upload Box / Drag & Drop Zone */}
           <div
             onClick={() => fileInputRef.current?.click()}
-            className="border-2 border-dashed border-amber-300 hover:border-amber-500 bg-white/90 hover:bg-amber-50/50 rounded-2xl p-6 text-center transition-colors cursor-pointer group"
+            onDragOver={(e) => {
+              e.preventDefault();
+              setIsDragging(true);
+            }}
+            onDragLeave={() => setIsDragging(false)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setIsDragging(false);
+              if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                processFiles(e.dataTransfer.files);
+              }
+            }}
+            className={`border-2 border-dashed rounded-2xl p-6 text-center transition-all cursor-pointer ${
+              isDragging
+                ? 'border-amber-500 bg-amber-100/70 scale-[1.01]'
+                : 'border-amber-300 hover:border-amber-500 bg-white/90 hover:bg-amber-50/50'
+            }`}
           >
-            <div className="w-12 h-12 rounded-2xl bg-amber-100 group-hover:bg-amber-200 text-amber-700 mx-auto flex items-center justify-center transition-transform group-hover:scale-105 shadow-2xs mb-3">
-              <Upload className="w-6 h-6 stroke-[2.2]" />
+            <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 mx-auto flex items-center justify-center transition-transform shadow-2xs mb-3">
+              <Upload className={`w-6 h-6 stroke-[2.2] ${isProcessingUpload ? 'animate-bounce text-amber-600' : ''}`} />
             </div>
             <h4 className="text-sm font-bold text-neutral-900">
-              Click to browse your phone/computer photo gallery
+              {isProcessingUpload ? 'Compressing & uploading photos...' : 'Click to browse phone/computer gallery or drag & drop photos here'}
             </h4>
             <p className="text-xs text-neutral-500 mt-1 max-w-md mx-auto">
-              Select one or multiple images (JPG, PNG, WEBP). Photos will be uploaded and added to this product's gallery immediately.
+              Select one or multiple images (JPG, PNG, WEBP). Photos from your camera roll or folder are automatically optimized and added to this product's gallery immediately.
             </p>
           </div>
 
@@ -388,10 +421,21 @@ export const ProductFormPage: React.FC<ProductFormPageProps> = ({
 
           {/* CURRENT GALLERY PREVIEW GRID */}
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold text-neutral-800">
-                Active Photos ({images.length} uploaded)
-              </span>
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-neutral-800">
+                  Active Photos ({images.length} uploaded)
+                </span>
+                {images.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleClearAllImages}
+                    className="text-[11px] text-rose-600 hover:text-rose-700 font-bold hover:underline cursor-pointer"
+                  >
+                    Clear All Photos
+                  </button>
+                )}
+              </div>
               <span className="text-[11px] text-neutral-500">
                 First photo is used as primary product display
               </span>

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Save, ArrowLeft, Image as ImageIcon } from 'lucide-react';
 import { Category } from '../../types';
+import { compressImageFile } from '../../utils/compressImage';
 
 export interface CategoryFormPageProps {
   category: Category | null;
@@ -21,14 +22,11 @@ export const CategoryFormPage: React.FC<CategoryFormPageProps> = ({
   );
   const [image, setImage] = useState(category?.image || '');
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (typeof reader.result === 'string') setImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+      const compressed = await compressImageFile(file, 800, 0.88);
+      if (compressed) setImage(compressed);
     }
   };
 

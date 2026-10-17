@@ -176,3 +176,23 @@ button, a, [role="button"] {
   contain: paint;
 }
 
+/* Print Stylesheet */
+@media print {
+  header, footer, nav, aside, .no-print, [role="dialog"], button:not(.print-include) {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 12pt;
+  }
+  main {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+  a[href]:after {
+    content: "" !important;
+  }
+}
+

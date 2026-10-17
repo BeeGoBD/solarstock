@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { Category, SubCategoryItem } from '../../types';
+import { compressImageFile } from '../../utils/compressImage';
 
 export const AdminSubCategoriesTab: React.FC = () => {
   const { categories, updateSubcategories } = useStore();
@@ -54,49 +55,55 @@ export const AdminSubCategoriesTab: React.FC = () => {
     setTimeout(() => setToast(null), 3000);
   };
 
-  // Size and dimension validation for sub-category image uploads
-  const handleValidateAndUpload = (
+  // Size and dimension validation for sub-category image uploads with auto-optimization
+  const handleValidateAndUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
     onSuccess: (dataUrl: string) => void
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const sizeKb = Math.round(file.size / 1024);
+    let dataUrl = '';
+    if (file.size > 1024 * 1024) {
+      dataUrl = await compressImageFile(file, 800, 0.88);
+    } else {
+      dataUrl = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve((reader.result as string) || '');
+        reader.onerror = () => resolve('');
+        reader.readAsDataURL(file);
+      });
+    }
 
-    if (file.size > 2 * 1024 * 1024) {
+    if (!dataUrl) {
       setValidationReport({
-        fileSizeKb: sizeKb,
+        fileSizeKb: 0,
         isValid: false,
-        message: 'File is too large! Maximum allowed image size is 2MB.'
+        message: 'Could not process image file.'
       });
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const dataUrl = event.target?.result as string;
-      const img = new Image();
-      img.onload = () => {
-        const w = img.width;
-        const h = img.height;
-        const isIdealRatio = Math.abs(w - h) <= 80; // Roughly square
+    const sizeKb = Math.round((dataUrl.length * 0.75) / 1024);
+    const img = new Image();
+    img.onload = () => {
+      const w = img.width;
+      const h = img.height;
+      const isIdealRatio = Math.abs(w - h) <= 80; // Roughly square
 
-        setValidationReport({
-          fileSizeKb: sizeKb,
-          width: w,
-          height: h,
-          isValid: true,
-          message: isIdealRatio
-            ? `✓ Valid! ${w}×${h}px • ${sizeKb} KB (Optimal square ratio for sub-category)`
-            : `⚠ Uploaded: ${w}×${h}px • ${sizeKb} KB (Square 500×500px recommended)`
-        });
+      setValidationReport({
+        fileSizeKb: sizeKb,
+        width: w,
+        height: h,
+        isValid: true,
+        message: isIdealRatio
+          ? `✓ Valid! ${w}×${h}px • ${sizeKb} KB (Optimal square ratio for sub-category)`
+          : `⚠ Uploaded: ${w}×${h}px • ${sizeKb} KB (Square 500×500px recommended)`
+      });
 
-        onSuccess(dataUrl);
-      };
-      img.src = dataUrl;
+      onSuccess(dataUrl);
     };
-    reader.readAsDataURL(file);
+    img.src = dataUrl;
   };
 
   const handleSaveSubcategory = (sub: SubCategoryItem) => {

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { HeroSlideItem, Slide3ShowcaseProduct } from '../../types';
+import { compressImageFile } from '../../utils/compressImage';
 
 export const AdminHeroSlidesTab: React.FC = () => {
   const {
@@ -38,27 +39,24 @@ export const AdminHeroSlidesTab: React.FC = () => {
     setTimeout(() => setStatusMessage(null), 3000);
   };
 
-  // Image upload helper converting file to data URL
-  const handleImageUpload = (
+  // Image upload helper converting file to data URL with automatic optimization
+  const handleImageUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
     callback: (url: string) => void
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate size (max 2.5MB)
-    if (file.size > 2.5 * 1024 * 1024) {
-      alert('File size exceeds 2.5MB limit. Please select a compressed image.');
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        callback(reader.result);
+    try {
+      const compressed = await compressImageFile(file, 1600, 0.88);
+      if (compressed) {
+        callback(compressed);
+        showToast('Photo uploaded from gallery successfully!');
       }
-    };
-    reader.readAsDataURL(file);
+    } catch {
+      showToast('Could not upload photo. Please try another image.');
+    }
+    e.target.value = '';
   };
 
   return (

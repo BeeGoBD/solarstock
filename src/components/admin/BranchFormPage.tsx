@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Save, ArrowLeft, Image as ImageIcon } from 'lucide-react';
 import { BranchLocation } from '../../types';
+import { compressImageFile } from '../../utils/compressImage';
 
 export interface BranchFormPageProps {
   branch: BranchLocation | null;
@@ -26,14 +27,11 @@ export const BranchFormPage: React.FC<BranchFormPageProps> = ({
       'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80'
   );
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (typeof reader.result === 'string') setImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+      const compressed = await compressImageFile(file, 1000, 0.88);
+      if (compressed) setImage(compressed);
     }
   };
 

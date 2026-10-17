@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { BrandItem } from '../../types';
+import { compressImageFile } from '../../utils/compressImage';
 
 export const AdminBrandsTab: React.FC = () => {
   const { brandsList, updateBrandItem, addBrandItem, deleteBrandItem } = useStore();
@@ -32,48 +33,53 @@ export const AdminBrandsTab: React.FC = () => {
     setTimeout(() => setToast(null), 3000);
   };
 
-  const handleValidateAndUpload = (
+  const handleValidateAndUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
     onSuccess: (dataUrl: string) => void
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const sizeKb = Math.round(file.size / 1024);
+    let dataUrl = '';
+    if (file.size > 1024 * 1024) {
+      dataUrl = await compressImageFile(file, 800, 0.9);
+    } else {
+      dataUrl = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve((reader.result as string) || '');
+        reader.onerror = () => resolve('');
+        reader.readAsDataURL(file);
+      });
+    }
 
-    if (file.size > 1.5 * 1024 * 1024) {
+    if (!dataUrl) {
       setValidationReport({
-        fileSizeKb: sizeKb,
+        fileSizeKb: 0,
         isValid: false,
-        message: 'File too large! Brand logos should not exceed 1.5MB.'
+        message: 'Could not process image file.'
       });
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const dataUrl = event.target?.result as string;
-      const img = new Image();
-      img.onload = () => {
-        const w = img.width;
-        const h = img.height;
-        const isLandscape = w >= h;
+    const img = new Image();
+    img.onload = () => {
+      const w = img.width;
+      const h = img.height;
+      const isLandscape = w >= h;
 
-        setValidationReport({
-          fileSizeKb: sizeKb,
-          width: w,
-          height: h,
-          isValid: true,
-          message: isLandscape
-            ? `✓ Valid Brand Logo! ${w}×${h}px • ${sizeKb} KB (Proper rectangular aspect ratio)`
-            : `⚠ Uploaded: ${w}×${h}px • ${sizeKb} KB (Landscape 200×80px or 400×160px recommended for brand logos)`
-        });
+      setValidationReport({
+        fileSizeKb: Math.round(dataUrl.length * 0.75 / 1024),
+        width: w,
+        height: h,
+        isValid: true,
+        message: isLandscape
+          ? `✓ Valid Brand Logo! ${w}×${h}px (Proper aspect ratio)`
+          : `✓ Brand Logo uploaded: ${w}×${h}px (Optimized from gallery)`
+      });
 
-        onSuccess(dataUrl);
-      };
-      img.src = dataUrl;
+      onSuccess(dataUrl);
     };
-    reader.readAsDataURL(file);
+    img.src = dataUrl;
   };
 
   const handleSave = (brand: BrandItem) => {
