@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight, ShieldCheck, CheckCircle2, CreditCard, Sparkles, UserX, UserCheck } from 'lucide-react';
-import { CartItem } from '../types';
+import { CartItem, OrderItem } from '../types';
 import { useStore } from '../context/StoreContext';
 
 interface CartDrawerProps {
@@ -22,12 +22,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   onClearCart,
   onContinueShopping
 }) => {
-  const { isGuest, continueAsGuest, logoutCustomer, logoutAdmin } = useStore();
+  const { isGuest, continueAsGuest, logoutCustomer, logoutAdmin, addOrder } = useStore();
   const [couponCode, setCouponCode] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
   const [couponMessage, setCouponMessage] = useState<string | null>(null);
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const [checkoutStep, setCheckoutStep] = useState<'form' | 'success'>('form');
+  const [placedOrderId, setPlacedOrderId] = useState<string | null>(null);
 
   // Customer Checkout Details
   const [customerName, setCustomerName] = useState('');
@@ -79,6 +80,57 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       logoutAdmin();
       continueAsGuest();
     }
+
+    // Build line items
+    const orderItems: OrderItem[] = cartItems.map((item) => {
+      let itemPrice = item.product.price;
+      if (item.includeBundle && item.product.bundleOffer) {
+        itemPrice += item.product.bundleOffer.offerPrice;
+      }
+      let carePlanName: string | undefined;
+      let carePlanPrice: number | undefined;
+      if (item.selectedCarePlanId && item.product.carePlans) {
+        const plan = item.product.carePlans.find((p) => p.id === item.selectedCarePlanId);
+        if (plan) {
+          carePlanName = plan.name;
+          carePlanPrice = plan.price;
+          itemPrice += plan.price;
+        }
+      }
+      return {
+        productId: item.product.id,
+        productName: item.product.name,
+        productImage: item.product.images?.[0] || (item.product as any).image || '',
+        price: item.product.price,
+        quantity: item.quantity,
+        capacity: item.selectedCapacity,
+        voltage: item.selectedVoltage,
+        color: item.selectedColor,
+        carePlanName,
+        carePlanPrice,
+        totalPrice: itemPrice * item.quantity
+      };
+    });
+
+    const newOrder = addOrder({
+      customer: {
+        name: customerName.trim(),
+        phone: customerPhone.trim(),
+        address: customerAddress.trim(),
+        customerType: checkoutAsGuest ? 'guest' : isGuest ? 'guest' : 'regular'
+      },
+      items: orderItems,
+      subtotal,
+      deliveryFee,
+      discountAmount,
+      totalAmount: total,
+      paymentMethod,
+      paymentStatus: paymentMethod === 'cod' ? 'cod' : 'unpaid',
+      status: 'pending'
+    });
+
+    setPlacedOrderId(newOrder.id);
+    onClearCart();
     setCheckoutStep('success');
   };
 
@@ -466,7 +518,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   Order Placed Successfully!
                 </h3>
                 <p className="text-xs text-neutral-600 max-w-sm mx-auto">
-                  Thank you <strong>{customerName}</strong>! Your order ID is <span className="font-mono font-bold text-amber-700">#SS-{(Math.random() * 90000 + 10000).toFixed(0)}</span>. Our solar technician will call <strong className="text-neutral-900">{customerPhone}</strong> within 15 minutes to confirm dispatch.
+                  Thank you <strong>{customerName}</strong>! Your order ID is <span className="font-mono font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-300">#{placedOrderId || 'SS-2026-CONFIRMED'}</span>. Our solar technician will call <strong className="text-neutral-900">{customerPhone}</strong> within 15 minutes to confirm dispatch.
                 </p>
                 <div className="p-3 bg-neutral-50 rounded-xl text-xs text-neutral-500">
                   SolarCare+ Warranty Certificate and Invoice will be included in the box.

@@ -38,7 +38,8 @@ import {
   ArrowLeft,
   Upload,
   FolderPlus,
-  Image as ImageIcon
+  Image as ImageIcon,
+  ShoppingBag
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { Product, Category, BranchLocation } from '../types';
@@ -48,12 +49,14 @@ import { AdminBrandsTab } from './admin/AdminBrandsTab';
 import { AdminContentSectionsTab } from './admin/AdminContentSectionsTab';
 import { AdminSecurityTab } from './admin/AdminSecurityTab';
 import { AdminCustomersTab } from './admin/AdminCustomersTab';
+import { AdminOrdersTab } from './admin/AdminOrdersTab';
 import { ProductFormPage } from './admin/ProductFormPage';
 import { CategoryFormPage } from './admin/CategoryFormPage';
 import { BranchFormPage } from './admin/BranchFormPage';
 
 export type AdminTabId =
   | 'overview'
+  | 'orders'
   | 'hero_slides'
   | 'subcategories'
   | 'brands'
@@ -131,6 +134,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
     updatePolicy,
     customerAccounts,
     customerSignupRequests,
+    orders,
     resetToDefaults
   } = useStore();
 
@@ -171,6 +175,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
   });
 
   const pendingCustomerCount = customerSignupRequests.filter((r) => r.status === 'pending').length;
+  const pendingOrdersCount = (orders || []).filter((o) => o.status === 'pending').length;
 
   const navigationGroups: NavGroup[] = [
     {
@@ -182,6 +187,25 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
           shortLabel: 'Overview',
           icon: Layout,
           desc: 'Key metrics, catalog preview & quick actions'
+        }
+      ]
+    },
+    {
+      group: 'Orders & Fulfillment',
+      items: [
+        {
+          id: 'orders' as const,
+          label: 'Customer Orders Intake',
+          shortLabel: 'Orders Intake',
+          icon: ShoppingBag,
+          badge:
+            pendingOrdersCount > 0
+              ? `${pendingOrdersCount} New`
+              : orders && orders.length > 0
+              ? `${orders.length}`
+              : undefined,
+          badgeAlert: pendingOrdersCount > 0,
+          desc: 'Receive customer product orders, verify payments, dispatch couriers & print invoices'
         }
       ]
     },
@@ -674,6 +698,21 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
 
             {/* Contextual Action Buttons in View Top Banner */}
             <div className="flex items-center gap-2 flex-wrap shrink-0">
+              {activeTab === 'orders' && (
+                <div className="flex items-center gap-2">
+                  {pendingOrdersCount > 0 ? (
+                    <span className="bg-amber-100 text-amber-900 border border-amber-300 px-3 py-1 rounded-xl text-xs font-bold flex items-center gap-1.5 animate-pulse">
+                      <ShoppingBag className="w-3.5 h-3.5 text-amber-700" />
+                      <span>{pendingOrdersCount} New Orders To Receive</span>
+                    </span>
+                  ) : (
+                    <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1 rounded-xl text-xs font-bold flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Orders Intake Up to Date</span>
+                    </span>
+                  )}
+                </div>
+              )}
               {activeTab === 'products' && (
                 <button
                   type="button"
@@ -762,6 +801,7 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
           {/* Tab Content Body */}
           <div className="flex-1 p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl w-full mx-auto">
             {/* Custom Editable Modules */}
+            {activeTab === 'orders' && <AdminOrdersTab showToast={showToast} />}
             {activeTab === 'hero_slides' && <AdminHeroSlidesTab />}
             {activeTab === 'subcategories' && <AdminSubCategoriesTab />}
             {activeTab === 'brands' && <AdminBrandsTab />}
@@ -859,7 +899,29 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
             {activeTab === 'overview' && (
             <div className="space-y-6">
               {/* Quick Metrics */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+                <div
+                  onClick={() => setActiveTab('orders')}
+                  className={`p-4 rounded-xl border shadow-2xs cursor-pointer transition-all hover:scale-[1.01] ${
+                    pendingOrdersCount > 0
+                      ? 'bg-amber-500/10 border-amber-500/40'
+                      : 'bg-white border-neutral-200'
+                  }`}
+                >
+                  <span className="text-xs font-semibold text-neutral-500 block mb-1">Incoming Orders</span>
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-2xl font-black text-neutral-900">{(orders || []).length}</span>
+                    <span
+                      className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                        pendingOrdersCount > 0
+                          ? 'bg-amber-400 text-neutral-950 animate-pulse'
+                          : 'text-emerald-700 bg-emerald-100'
+                      }`}
+                    >
+                      {pendingOrdersCount > 0 ? `${pendingOrdersCount} Pending` : 'Up to date'}
+                    </span>
+                  </div>
+                </div>
                 <div className="p-4 rounded-xl bg-white border border-neutral-200 shadow-2xs">
                   <span className="text-xs font-semibold text-neutral-500 block mb-1">Total Live Products</span>
                   <div className="flex items-baseline justify-between">
@@ -897,7 +959,31 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                 <h3 className="text-sm font-black text-amber-600 uppercase tracking-wider mb-3">
                   Quick Actions
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  <button
+                    onClick={() => setActiveTab('orders')}
+                    className="p-3 rounded-xl bg-amber-50/80 hover:bg-amber-100/90 border border-amber-300 hover:border-amber-400 flex items-center gap-3 text-left transition-all group shadow-2xs cursor-pointer"
+                  >
+                    <div className="w-9 h-9 rounded-lg bg-amber-400 text-neutral-950 flex items-center justify-center shrink-0 shadow-xs">
+                      <ShoppingBag className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-bold text-neutral-900 block group-hover:text-amber-800">
+                          Receive Product Orders
+                        </span>
+                        {pendingOrdersCount > 0 && (
+                          <span className="bg-amber-400 text-neutral-950 text-[10px] font-black px-1.5 py-0.2 rounded-full">
+                            {pendingOrdersCount}
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-[11px] text-neutral-600">
+                        Verify customer orders & dispatch
+                      </span>
+                    </div>
+                  </button>
+
                   <button
                     onClick={() => {
                       setEditingProduct(null);
@@ -939,6 +1025,70 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                       <span className="text-[11px] text-neutral-500">Change hero slides & showcase</span>
                     </div>
                   </button>
+                </div>
+              </div>
+
+              {/* Recent Customer Orders Received */}
+              <div className="bg-white border border-neutral-200 rounded-2xl p-4 sm:p-5 shadow-2xs space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <ShoppingBag className="w-4 h-4 text-amber-500" />
+                    <h3 className="text-sm font-bold text-neutral-900">
+                      Recent Orders Received
+                    </h3>
+                    {pendingOrdersCount > 0 && (
+                      <span className="bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                        {pendingOrdersCount} Pending Intake
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => setActiveTab('orders')}
+                    className="text-xs text-amber-700 hover:text-amber-800 hover:underline font-bold"
+                  >
+                    Manage All Orders & Print Invoices →
+                  </button>
+                </div>
+
+                <div className="divide-y divide-neutral-100">
+                  {(orders || []).slice(0, 4).map((order) => (
+                    <div
+                      key={order.id}
+                      onClick={() => setActiveTab('orders')}
+                      className="py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-neutral-50 px-2 rounded-xl transition-colors cursor-pointer"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono font-bold text-xs text-neutral-900 bg-neutral-100 px-2 py-1 rounded-md">
+                          {order.id}
+                        </span>
+                        <div>
+                          <p className="text-xs font-bold text-neutral-900">
+                            {order.customer.name}
+                          </p>
+                          <p className="text-[11px] text-neutral-500 truncate max-w-xs sm:max-w-md">
+                            {order.items.map((i) => `${i.productName} (x${i.quantity})`).join(', ')}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3 self-end sm:self-center">
+                        <span className="text-xs font-black text-amber-600">
+                          ৳ {(order.totalAmount || 0).toLocaleString()}
+                        </span>
+                        <span
+                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full capitalize ${
+                            order.status === 'pending'
+                              ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                              : order.status === 'delivered'
+                              ? 'bg-emerald-100 text-emerald-800'
+                              : 'bg-blue-100 text-blue-800'
+                          }`}
+                        >
+                          {order.status}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 

@@ -313,3 +313,54 @@ export interface CustomerSignupRequest {
   status: 'pending' | 'approved' | 'rejected';
 }
 
+export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+export type PaymentStatus = 'unpaid' | 'paid' | 'partially_paid' | 'cod';
+
+export interface OrderItem {
+  productId: string;
+  productName: string;
+  productImage: string;
+  price: number;
+  quantity: number;
+  capacity?: string;
+  voltage?: string;
+  color?: string;
+  carePlanName?: string;
+  carePlanPrice?: number;
+  totalPrice: number;
+}
+
+export interface Order {
+  id: string; // e.g. "SS-2026-8910"
+  createdAt: string; // formatted or ISO date string
+  customer: {
+    name: string;
+    phone: string;
+    email?: string;
+    address: string;
+    district?: string;
+    division?: string;
+    customerType?: 'regular' | 'guest' | 'corporate_b2b';
+  };
+  items: OrderItem[];
+  subtotal: number;
+  deliveryFee: number;
+  discountAmount: number;
+  totalAmount: number;
+  paymentMethod: 'cod' | 'bkash' | 'nagad' | 'bank_transfer' | 'emi';
+  paymentStatus: PaymentStatus;
+  status: OrderStatus;
+  statusHistory?: {
+    status: OrderStatus;
+    timestamp: string;
+    note?: string;
+  }[];
+  courierTracking?: {
+    courierName: string; // e.g. "Steadfast Courier", "RedX", "Sundarban Courier", "Pathao Logistics"
+    trackingNumber: string;
+    dispatchedDate?: string;
+  };
+  customerNotes?: string;
+  adminNotes?: string;
+}
+

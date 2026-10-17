@@ -18,8 +18,13 @@ import {
   BlogPost,
   SubCategoryItem,
   CustomerAccount,
-  CustomerSignupRequest
+  CustomerSignupRequest,
+  Order,
+  OrderItem,
+  OrderStatus,
+  PaymentStatus
 } from '../types';
+import { INITIAL_ORDERS } from '../data/mockOrders';
 import {
   PRODUCTS as INITIAL_PRODUCTS,
   CATEGORIES as INITIAL_CATEGORIES,
@@ -214,6 +219,16 @@ interface StoreState {
   logoutGuest: () => void;
   continueAsGuest: () => void;
   resetGuest: () => void;
+
+  // Orders & Commerce
+  orders: Order[];
+  addOrder: (order: Omit<Order, 'id' | 'createdAt'>) => Order;
+  updateOrderStatus: (orderId: string, status: OrderStatus, note?: string) => void;
+  updateOrderPaymentStatus: (orderId: string, status: PaymentStatus) => void;
+  updateOrderCourier: (orderId: string, courierName: string, trackingNumber: string) => void;
+  updateOrderAdminNotes: (orderId: string, notes: string) => void;
+  deleteOrder: (orderId: string) => void;
+  createManualOrder: (order: Order) => void;
 
   // Reset
   resetToDefaults: () => void;
@@ -600,6 +615,91 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     logoutGuest();
   };
 
+  // Orders & Commerce State
+  const [orders, setOrders] = useState<Order[]>(() => {
+    if (saved?.orders && Array.isArray(saved.orders) && saved.orders.length > 0) {
+      return saved.orders;
+    }
+    return INITIAL_ORDERS;
+  });
+
+  const addOrder = (orderData: Omit<Order, 'id' | 'createdAt'>) => {
+    const randomId = Math.floor(1000 + Math.random() * 9000);
+    const id = `SS-2026-${randomId}`;
+    const newOrder: Order = {
+      ...orderData,
+      id,
+      createdAt: new Date().toISOString(),
+      statusHistory: orderData.statusHistory && orderData.statusHistory.length > 0 ? orderData.statusHistory : [
+        {
+          status: orderData.status || 'pending',
+          timestamp: new Date().toISOString(),
+          note: 'Customer order placed online.'
+        }
+      ]
+    };
+    setOrders((prev) => [newOrder, ...prev]);
+    return newOrder;
+  };
+
+  const updateOrderStatus = (orderId: string, status: OrderStatus, note?: string) => {
+    setOrders((prev) =>
+      prev.map((ord) => {
+        if (ord.id !== orderId) return ord;
+        const newHistory = [
+          ...(ord.statusHistory || []),
+          {
+            status,
+            timestamp: new Date().toISOString(),
+            note: note || `Order status updated to ${status}.`
+          }
+        ];
+        return {
+          ...ord,
+          status,
+          statusHistory: newHistory
+        };
+      })
+    );
+  };
+
+  const updateOrderPaymentStatus = (orderId: string, paymentStatus: PaymentStatus) => {
+    setOrders((prev) =>
+      prev.map((ord) => (ord.id === orderId ? { ...ord, paymentStatus } : ord))
+    );
+  };
+
+  const updateOrderCourier = (orderId: string, courierName: string, trackingNumber: string) => {
+    setOrders((prev) =>
+      prev.map((ord) =>
+        ord.id === orderId
+          ? {
+              ...ord,
+              courierTracking: {
+                courierName,
+                trackingNumber,
+                dispatchedDate: new Date().toISOString().split('T')[0]
+              }
+            }
+          : ord
+      )
+    );
+  };
+
+  const updateOrderAdminNotes = (orderId: string, adminNotes: string) => {
+    setOrders((prev) =>
+      prev.map((ord) => (ord.id === orderId ? { ...ord, adminNotes } : ord))
+    );
+  };
+
+  const deleteOrder = (orderId: string) => {
+    setOrders((prev) => prev.filter((ord) => ord.id !== orderId));
+  };
+
+  const createManualOrder = (order: Order) => {
+    setOrders((prev) => [order, ...prev]);
+  };
+
   // Save changes to localStorage on any state change
   useEffect(() => {
     try {
@@ -621,7 +721,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         faqs,
         blogs,
         customerAccounts,
-        customerSignupRequests
+        customerSignupRequests,
+        orders
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
     } catch (e) {
@@ -645,7 +746,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     faqs,
     blogs,
     customerAccounts,
-    customerSignupRequests
+    customerSignupRequests,
+    orders
   ]);
 
   const authenticateAdmin = (inputPw: string, inputId?: string) => {
@@ -1126,6 +1228,14 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         logoutGuest,
         continueAsGuest,
         resetGuest,
+        orders,
+        addOrder,
+        updateOrderStatus,
+        updateOrderPaymentStatus,
+        updateOrderCourier,
+        updateOrderAdminNotes,
+        deleteOrder,
+        createManualOrder,
         resetToDefaults
       }}
     >

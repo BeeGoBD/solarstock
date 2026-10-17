@@ -23,13 +23,11 @@ import { useStore } from '../context/StoreContext';
 interface CustomerAccessModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onOpenAdmin?: () => void;
 }
 
 export const CustomerAccessModal: React.FC<CustomerAccessModalProps> = ({
   isOpen,
-  onClose,
-  onOpenAdmin
+  onClose
 }) => {
   const {
     currentCustomer,
@@ -398,27 +396,22 @@ export const CustomerAccessModal: React.FC<CustomerAccessModalProps> = ({
                         <span>SolarStock Enterprise Review Process:</span>
                       </div>
                       <p className="text-neutral-600 text-[11px] leading-relaxed">
-                        SolarStock compliance officers review commercial applications from the admin panel before granting access. Once approved, you can immediately log in using <strong>{email}</strong> without waiting for an activation email.
+                        SolarStock compliance officers review commercial applications before granting access. Once approved, you can immediately log in using <strong>{email}</strong>.
                       </p>
                     </div>
 
                     <div className="flex items-center justify-center gap-3 pt-2">
-                      {onOpenAdmin && (
-                        <button
-                          onClick={() => {
-                            onClose();
-                            onOpenAdmin();
-                          }}
-                          className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-neutral-950 font-extrabold text-xs transition-colors shadow-2xs"
-                        >
-                          Review in Admin Panel →
-                        </button>
-                      )}
                       <button
                         onClick={resetForm}
-                        className="px-4 py-2 rounded-xl border border-neutral-300 text-neutral-700 hover:bg-neutral-100 font-bold text-xs transition-colors"
+                        className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-neutral-950 font-extrabold text-xs transition-colors shadow-sm"
                       >
                         Submit Another Application
+                      </button>
+                      <button
+                        onClick={onClose}
+                        className="px-4 py-2 rounded-xl border border-neutral-300 text-neutral-700 hover:bg-neutral-100 font-bold text-xs transition-colors"
+                      >
+                        Close
                       </button>
                     </div>
                   </div>
@@ -429,7 +422,7 @@ export const CustomerAccessModal: React.FC<CustomerAccessModalProps> = ({
                         Request SolarStock Customer Approval
                       </h3>
                       <p className="text-xs text-neutral-500">
-                        New customers must submit company details and compliance documents; SolarStock reviews applications from the admin panel before granting wholesale access.
+                        New customers must submit company details and compliance documents; SolarStock reviews applications before granting wholesale access.
                       </p>
                     </div>
 

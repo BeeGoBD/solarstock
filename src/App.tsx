@@ -574,7 +574,6 @@ function StoreMainApp() {
       <CustomerAccessModal
         isOpen={isCustomerAccessOpen}
         onClose={closeCustomerAccess}
-        onOpenAdmin={() => openAdmin()}
       />
 
       {/* Solar & IPS Load Calculator Modal */}
