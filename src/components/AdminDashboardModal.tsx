@@ -404,6 +404,10 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   Live Sync
                 </span>
+                <span className="hidden lg:inline-flex bg-neutral-900 border border-neutral-800 text-[10px] font-mono px-2 py-0.5 rounded-full text-amber-400 items-center gap-1">
+                  <span className="text-neutral-500">domain:</span>
+                  <span>solarstock.bd/admin</span>
+                </span>
                 <span
                   className={`text-[10px] font-bold px-2 py-0.5 rounded-full hidden md:inline-flex items-center gap-1 border ${
                     adminRole === 'boss'

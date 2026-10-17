@@ -8,6 +8,7 @@ interface BottomNavProps {
   cartCount: number;
   onOpenCart: () => void;
   onOpenAuth: () => void;
+  onOpenAdmin?: () => void;
 }
 
 export const BottomNav: React.FC<BottomNavProps> = ({
@@ -15,7 +16,8 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   setActiveView,
   cartCount,
   onOpenCart,
-  onOpenAuth
+  onOpenAuth,
+  onOpenAdmin
 }) => {
   const { adminRole, openAdmin, isGuest } = useStore();
 
@@ -63,7 +65,8 @@ export const BottomNav: React.FC<BottomNavProps> = ({
       <button
         onClick={() => {
           if (adminRole) {
-            openAdmin();
+            if (onOpenAdmin) onOpenAdmin();
+            else openAdmin();
           } else {
             onOpenAuth();
           }

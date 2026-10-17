@@ -27,10 +27,18 @@ import { LivePurchaseToast } from './components/LivePurchaseToast';
 import { SolarCalculatorModal } from './components/SolarCalculatorModal';
 import { ProductCard } from './components/ProductCard';
 import { AdminDashboardModal } from './components/AdminDashboardModal';
+import { AdminLoginPage } from './components/AdminLoginPage';
 import { CustomerAccessModal } from './components/CustomerAccessModal';
 
 import { Product, CartItem } from './types';
 import { ArrowLeft, Filter, Sparkles, Sun, ShieldCheck } from 'lucide-react';
+
+const checkIsAdminPath = () => {
+  if (typeof window === 'undefined') return false;
+  const path = window.location.pathname.toLowerCase().replace(/\/+$/, '');
+  const hash = window.location.hash.toLowerCase();
+  return path === '/admin' || hash === '#/admin' || hash === '#admin';
+};
 
 function StoreMainApp() {
   const {
@@ -51,6 +59,67 @@ function StoreMainApp() {
   const [activeView, setActiveView] = useState<'home' | 'offers' | 'pre-order' | 'locations'>('home');
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // URL Route Detection for /admin (e.g. solarstock.bd/admin)
+  const [isAdminRoute, setIsAdminRoute] = useState<boolean>(() => checkIsAdminPath());
+
+  const navigateToAdmin = () => {
+    setIsAdminRoute(true);
+    try {
+      if (window.location.pathname !== '/admin') {
+        window.history.pushState(null, '', '/admin');
+      }
+    } catch {
+      window.location.hash = '/admin';
+    }
+    if (adminRole) {
+      openAdmin();
+    }
+  };
+
+  const handleExitAdmin = () => {
+    closeAdmin();
+    setIsAdminRoute(false);
+    try {
+      if (window.location.pathname === '/admin') {
+        window.history.pushState(null, '', '/');
+      }
+    } catch {
+      window.location.hash = '';
+    }
+  };
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const isAtAdmin = checkIsAdminPath();
+      setIsAdminRoute(isAtAdmin);
+      if (isAtAdmin) {
+        if (adminRole) {
+          openAdmin();
+        }
+      } else {
+        if (isAdminOpen) {
+          closeAdmin();
+        }
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('hashchange', handlePopState);
+
+    // Initial check on mount
+    if (checkIsAdminPath()) {
+      setIsAdminRoute(true);
+      if (adminRole) {
+        openAdmin();
+      }
+    }
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('hashchange', handlePopState);
+    };
+  }, [adminRole, openAdmin, closeAdmin, isAdminOpen]);
 
   // Modals & Drawers State
   const [isCategoryDrawerOpen, setIsCategoryDrawerOpen] = useState(false);
@@ -199,16 +268,33 @@ function StoreMainApp() {
   const recentProducts = useMemo(() => products.filter((p) => p.isNewArrival || p.isHot).slice(0, 8), [products]);
   const trendingProducts = useMemo(() => products.filter((p) => (p.rating || 0) >= 4.7).slice(0, 8), [products]);
 
-  // Dedicated Full-Page Admin Dashboard view (replaces entire background store)
-  if (isAdminOpen) {
+  // Dedicated Full-Page Admin Dashboard view (if user is authenticated as admin)
+  if ((isAdminRoute || isAdminOpen) && adminRole) {
     return (
       <AdminDashboardModal
         isOpen={true}
-        onClose={closeAdmin}
+        onClose={handleExitAdmin}
         onSelectCategory={(catId) => {
-          closeAdmin();
+          handleExitAdmin();
           handleSelectCategory(catId);
         }}
+      />
+    );
+  }
+
+  // Dedicated solarstock.bd/admin Login Portal (when visiting /admin while not authenticated)
+  if (isAdminRoute && !adminRole) {
+    return (
+      <AdminLoginPage
+        onSuccess={() => {
+          setIsAdminRoute(true);
+          try {
+            if (window.location.pathname !== '/admin') {
+              window.history.pushState(null, '', '/admin');
+            }
+          } catch {}
+        }}
+        onReturnToStore={handleExitAdmin}
       />
     );
   }
@@ -222,6 +308,7 @@ function StoreMainApp() {
         onOpenCart={() => setIsCartOpen(true)}
         onOpenAuth={() => setIsAuthOpen(true)}
         onOpenCustomerAccess={openCustomerAccess}
+        onOpenAdmin={navigateToAdmin}
         activeView={activeView}
         setActiveView={(v) => {
           setActiveView(v);
@@ -413,7 +500,7 @@ function StoreMainApp() {
         )}
       </main>
 
-      {/* 3. Global Footer with 5-Click Admin Trigger on Logo */}
+      {/* 3. Global Footer with 5-Click Admin Trigger on Logo & Direct Admin Portal link */}
       <Footer
         onOpenLocations={() => {
           setActiveView('locations');
@@ -421,6 +508,7 @@ function StoreMainApp() {
         }}
         onSelectCategory={handleSelectCategory}
         onOpenCalculator={() => setIsCalculatorOpen(true)}
+        onOpenAdmin={navigateToAdmin}
       />
 
       {/* 4. Mobile Fixed Bottom Navigation Bar */}
@@ -433,6 +521,7 @@ function StoreMainApp() {
         cartCount={cartItems.reduce((acc, item) => acc + item.quantity, 0)}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenAuth={() => setIsAuthOpen(true)}
+        onOpenAdmin={navigateToAdmin}
       />
 
       {/* 5. Drawers & Modals */}

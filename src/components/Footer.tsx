@@ -6,12 +6,14 @@ interface FooterProps {
   onOpenLocations: () => void;
   onSelectCategory: (categoryId: string) => void;
   onOpenCalculator: () => void;
+  onOpenAdmin?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
   onOpenLocations,
   onSelectCategory,
-  onOpenCalculator
+  onOpenCalculator,
+  onOpenAdmin
 }) => {
   const { branches, footerConfig, brandConfig } = useStore();
 
@@ -114,6 +116,19 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li><a href="#tracking" className="hover:text-white transition-colors">Order Tracking</a></li>
               <li><a href="#tradein" className="hover:text-white transition-colors">IPS Battery Trade In</a></li>
+              <li className="pt-1">
+                <a
+                  href="/admin"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (onOpenAdmin) onOpenAdmin();
+                  }}
+                  className="text-neutral-400 hover:text-amber-400 font-mono text-[11px] flex items-center gap-1.5 transition-colors"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Admin Portal (solarstock.bd/admin)</span>
+                </a>
+              </li>
             </ul>
           </div>
 

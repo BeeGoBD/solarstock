@@ -278,6 +278,28 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               <User className="w-4 h-4 text-amber-700" />
               <span>Login as Guest</span>
             </button>
+
+            {/* Direct Admin Gateway Link */}
+            <div className="pt-2 text-center border-t border-neutral-100">
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  try {
+                    if (window.location.pathname !== '/admin') {
+                      window.history.pushState(null, '', '/admin');
+                      window.dispatchEvent(new PopStateEvent('popstate'));
+                    }
+                  } catch {
+                    window.location.hash = '/admin';
+                  }
+                }}
+                className="text-[11px] text-neutral-400 hover:text-amber-600 font-medium inline-flex items-center gap-1 cursor-pointer transition-colors"
+              >
+                <ShieldCheck className="w-3.5 h-3.5 text-amber-500" />
+                <span>Admin Login: <span className="font-mono font-semibold text-neutral-700 hover:text-amber-600">solarstock.bd/admin</span></span>
+              </button>
+            </div>
           </div>
         )}
       </div>

@@ -14,6 +14,7 @@ interface HeaderProps {
   onOpenCustomerAccess: () => void;
   onSelectProduct?: (product: Product) => void;
   onSearch: (query: string) => void;
+  onOpenAdmin?: () => void;
   activeView: string;
   setActiveView: (view: any) => void;
   allProducts?: Product[];
@@ -28,6 +29,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenAuth,
   onOpenCalculator,
   onOpenCustomerAccess,
+  onOpenAdmin,
   onSelectProduct,
   onSearch,
   activeView,
@@ -406,7 +408,8 @@ export const Header: React.FC<HeaderProps> = ({
               id="header-profile-admin-btn"
               onClick={() => {
                 if (adminRole) {
-                  openAdmin();
+                  if (onOpenAdmin) onOpenAdmin();
+                  else openAdmin();
                 } else if (isGuest) {
                   setShowGuestMenu((prev) => !prev);
                 } else {
@@ -420,7 +423,7 @@ export const Header: React.FC<HeaderProps> = ({
                   ? 'bg-amber-100 hover:bg-amber-200 text-neutral-900 border-amber-300'
                   : 'bg-neutral-100 hover:bg-neutral-200 text-neutral-800 border-neutral-200'
               }`}
-              title={adminRole ? 'Open Admin Control Panel' : isGuest ? 'Guest Account - Click to view options' : 'Account & Admin Login'}
+              title={adminRole ? 'Open Admin Control Panel (solarstock.bd/admin)' : isGuest ? 'Guest Account - Click to view options' : 'Account & Admin Login'}
             >
               {adminRole ? (
                 <ShieldAlert className="w-4 h-4 text-neutral-950" />
@@ -473,12 +476,25 @@ export const Header: React.FC<HeaderProps> = ({
                     type="button"
                     onClick={() => {
                       setShowGuestMenu(false);
+                      if (onOpenAdmin) onOpenAdmin();
+                      else openAdmin();
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-xs font-bold text-amber-800 hover:text-amber-950 hover:bg-amber-50 rounded-xl transition-colors text-left cursor-pointer border border-amber-200/80"
+                  >
+                    <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0" />
+                    <span>Admin Portal (solarstock.bd/admin)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowGuestMenu(false);
                       logoutGuest();
                     }}
                     className="w-full flex items-center gap-2 px-3 py-2 text-xs font-bold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xl transition-colors text-left cursor-pointer border border-transparent hover:border-rose-200"
                   >
                     <LogOut className="w-4 h-4 text-rose-600 shrink-0" />
-                    <span>Logout</span>
+                    <span>Logout Guest</span>
                   </button>
 
                   <button

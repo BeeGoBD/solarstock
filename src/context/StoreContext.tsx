@@ -737,13 +737,36 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return true;
   };
 
-  const openAdmin = () => setIsAdminOpen(true);
-  const closeAdmin = () => setIsAdminOpen(false);
+  const openAdmin = () => {
+    setIsAdminOpen(true);
+    try {
+      if (typeof window !== 'undefined' && window.location.pathname !== '/admin') {
+        window.history.pushState(null, '', '/admin');
+      }
+    } catch {
+      // Ignore history state errors in restricted environments
+    }
+  };
+
+  const closeAdmin = () => {
+    setIsAdminOpen(false);
+    try {
+      if (typeof window !== 'undefined' && window.location.pathname === '/admin') {
+        window.history.pushState(null, '', '/');
+      }
+    } catch {
+      // Ignore
+    }
+  };
+
   const logoutAdmin = () => {
     setAdminRole(null);
     setIsAdminOpen(false);
     try {
       localStorage.removeItem('solarstock_admin_role');
+      if (typeof window !== 'undefined' && window.location.pathname === '/admin') {
+        window.history.pushState(null, '', '/');
+      }
     } catch {
       // Ignore
     }
